@@ -1,0 +1,40 @@
+﻿{
+  "recordset": [
+  {
+    "FYEAR":"2024-2025",
+    "STATUS":"C",
+    "BDATE":"2024-07-01",
+    "EDATE":"2025-06-30",
+    "PERIOD":"2025",
+    "COM_ID":1,
+    "ENT_BY":1,
+    "ENT_DATE":"2024-02-04",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "FYEAR":"2023-2024",
+    "STATUS":"C",
+    "BDATE":"2023-07-01",
+    "EDATE":"2024-06-30",
+    "PERIOD":"2024",
+    "COM_ID":1,
+    "ENT_BY":1,
+    "ENT_DATE":"2024-02-04",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "FYEAR":"2025-2026",
+    "STATUS":"A",
+    "BDATE":"2025-07-01",
+    "EDATE":"2026-06-30",
+    "PERIOD":"2026",
+    "COM_ID":1,
+    "ENT_BY":1,
+    "ENT_DATE":"2025-02-04",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  }
+  ]
+}

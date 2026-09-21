@@ -1,0 +1,24 @@
+﻿{
+  "recordset": [
+  {
+    "ID":1,
+    "GROUP_NAME":"Admin"
+  },
+  {
+    "ID":2,
+    "GROUP_NAME":"Staff"
+  },
+  {
+    "ID":3,
+    "GROUP_NAME":"Users"
+  },
+  {
+    "ID":0,
+    "GROUP_NAME":"Programmer"
+  },
+  {
+    "ID":10,
+    "GROUP_NAME":"Lottery"
+  }
+  ]
+}

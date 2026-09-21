@@ -1,0 +1,254 @@
+﻿{
+  "recordset": [
+  {
+    "ID":1,
+    "BCODE":"010",
+    "BNAME":"AGRANI BANK PLC"
+  },
+  {
+    "ID":2,
+    "BCODE":"080",
+    "BNAME":"COMMERCIAL BANK OF"
+  },
+  {
+    "ID":3,
+    "BCODE":"090",
+    "BNAME":"DUTCH-BANGLA BANK LTD"
+  },
+  {
+    "ID":4,
+    "BCODE":"245",
+    "BNAME":"UNITED COMMERCIAL B"
+  },
+  {
+    "ID":5,
+    "BCODE":"040",
+    "BNAME":"BANGLADESH SAMABAY BANK PLC"
+  },
+  {
+    "ID":6,
+    "BCODE":"115",
+    "BNAME":"HONGKONG & SHANGHA"
+  },
+  {
+    "ID":7,
+    "BCODE":"160",
+    "BNAME":"NATIONAL CREDIT & CO"
+  },
+  {
+    "ID":8,
+    "BCODE":"255",
+    "BNAME":"WOORI BANK"
+  },
+  {
+    "ID":9,
+    "BCODE":"230",
+    "BNAME":"ICB ISLAMIC BANK LTD"
+  },
+  {
+    "ID":10,
+    "BCODE":"240",
+    "BNAME":"TRUST BANK PLC"
+  },
+  {
+    "ID":11,
+    "BCODE":"020",
+    "BNAME":"AB BANK LTD."
+  },
+  {
+    "ID":12,
+    "BCODE":"047",
+    "BNAME":"BANGLADESH DEVELOPMENT BANK PLC"
+  },
+  {
+    "ID":13,
+    "BCODE":"075",
+    "BNAME":"CITI BANK PLC"
+  },
+  {
+    "ID":14,
+    "BCODE":"405",
+    "BNAME":"OFFICE OF THE CONTRO"
+  },
+  {
+    "ID":15,
+    "BCODE":"015",
+    "BNAME":"AL-ARAFAH ISLAMI BANK PLC"
+  },
+  {
+    "ID":16,
+    "BCODE":"070",
+    "BNAME":"BANK ASIA LTD."
+  },
+  {
+    "ID":17,
+    "BCODE":"100",
+    "BNAME":"EXIM BANK LTD."
+  },
+  {
+    "ID":18,
+    "BCODE":"110",
+    "BNAME":"HABIB BANK LTD."
+  },
+  {
+    "ID":19,
+    "BCODE":"165",
+    "BNAME":"ONE BANK LTD."
+  },
+  {
+    "ID":20,
+    "BCODE":"145",
+    "BNAME":"MUTUAL TRUST BANK LT"
+  },
+  {
+    "ID":21,
+    "BCODE":"195",
+    "BNAME":"SOCIAL INVESTMENT BA"
+  },
+  {
+    "ID":22,
+    "BCODE":"250",
+    "BNAME":"UTTARA BANK LTD."
+  },
+  {
+    "ID":23,
+    "BCODE":"215",
+    "BNAME":"STANDARD CHARTERED"
+  },
+  {
+    "ID":24,
+    "BCODE":"030",
+    "BNAME":"BANGLADESH COMMERCE BANK PLC"
+  },
+  {
+    "ID":25,
+    "BCODE":"105",
+    "BNAME":"FIRST SECURITY BANK L"
+  },
+  {
+    "ID":26,
+    "BCODE":"175",
+    "BNAME":"PUBALI BANK LTD."
+  },
+  {
+    "ID":27,
+    "BCODE":"210",
+    "BNAME":"STANDARD BANK LTD."
+  },
+  {
+    "ID":28,
+    "BCODE":"055",
+    "BNAME":"BASIC BANK LTD."
+  },
+  {
+    "ID":29,
+    "BCODE":"060",
+    "BNAME":"BRAC BANK LTD."
+  },
+  {
+    "ID":30,
+    "BCODE":"125",
+    "BNAME":"ISLAMI BANK BANGLADESH PLC"
+  },
+  {
+    "ID":31,
+    "BCODE":"130",
+    "BNAME":"JAMUNA BANK PLC"
+  },
+  {
+    "ID":32,
+    "BCODE":"065",
+    "BNAME":"BANK AL-FALAH LTD"
+  },
+  {
+    "ID":33,
+    "BCODE":"095",
+    "BNAME":"EASTERN BANK LTD."
+  },
+  {
+    "ID":34,
+    "BCODE":"170",
+    "BNAME":"PRIME BANK LTD."
+  },
+  {
+    "ID":35,
+    "BCODE":"200",
+    "BNAME":"SONALI BANK LTD."
+  },
+  {
+    "ID":36,
+    "BCODE":"235",
+    "BNAME":"THE PREMIER BANK LTD"
+  },
+  {
+    "ID":37,
+    "BCODE":"025",
+    "BNAME":"BANGLADESH BANK"
+  },
+  {
+    "ID":38,
+    "BCODE":"085",
+    "BNAME":"DHAKA BANK LTD."
+  },
+  {
+    "ID":39,
+    "BCODE":"135",
+    "BNAME":"JANATA BANK LTD."
+  },
+  {
+    "ID":40,
+    "BCODE":"155",
+    "BNAME":"NATIONAL BANK OF PAK"
+  },
+  {
+    "ID":41,
+    "BCODE":"180",
+    "BNAME":"RAJSHAHI KRISHI UNNA"
+  },
+  {
+    "ID":42,
+    "BCODE":"185",
+    "BNAME":"RUPALI BANK LTD."
+  },
+  {
+    "ID":43,
+    "BCODE":"205",
+    "BNAME":"SOUTHEAST BANK LTD."
+  },
+  {
+    "ID":44,
+    "BCODE":"220",
+    "BNAME":"STATE BANK OF INDIA"
+  },
+  {
+    "ID":45,
+    "BCODE":"225",
+    "BNAME":"THE CITY BANK LTD."
+  },
+  {
+    "ID":46,
+    "BCODE":"035",
+    "BNAME":"BANGLADESH KRISHI BANK PLC"
+  },
+  {
+    "ID":47,
+    "BCODE":"120",
+    "BNAME":"IFIC BANK LTD."
+  },
+  {
+    "ID":48,
+    "BCODE":"140",
+    "BNAME":"MERCANTILE BANK LTD."
+  },
+  {
+    "ID":49,
+    "BCODE":"150",
+    "BNAME":"NATIONAL BANK LTD."
+  },
+  {
+    "ID":50,
+    "BCODE":"190",
+    "BNAME":"SHAHJALAL ISLAMI BAN"
+  }
+  ]
+}

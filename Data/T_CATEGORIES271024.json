@@ -1,0 +1,94 @@
+﻿{
+  "recordset": [
+  {
+    "ID":3,
+    "CNAME":"Tiles ",
+    "ENT_BY":1,
+    "ENT_DATE":"2024-10-25",
+    "UPD_BY":null,
+    "UPD_DATE":null,
+    "COM_ID":1
+  },
+  {
+    "ID":5,
+    "CNAME":"Floor Waterline-Pipe And Feeting",
+    "ENT_BY":1,
+    "ENT_DATE":"2024-10-25",
+    "UPD_BY":null,
+    "UPD_DATE":null,
+    "COM_ID":1
+  },
+  {
+    "ID":4,
+    "CNAME":"Rod",
+    "ENT_BY":1,
+    "ENT_DATE":"2024-10-25",
+    "UPD_BY":null,
+    "UPD_DATE":null,
+    "COM_ID":1
+  },
+  {
+    "ID":6,
+    "CNAME":"Roof Electritic-Line Pipe And Feeting ",
+    "ENT_BY":1,
+    "ENT_DATE":"2024-10-25",
+    "UPD_BY":null,
+    "UPD_DATE":null,
+    "COM_ID":1
+  },
+  {
+    "ID":7,
+    "CNAME":"Main Water-line Pipe And Feeting",
+    "ENT_BY":1,
+    "ENT_DATE":"2024-10-25",
+    "UPD_BY":null,
+    "UPD_DATE":null,
+    "COM_ID":1
+  },
+  {
+    "ID":8,
+    "CNAME":"Main Electritic-line Pipe And Feeting",
+    "ENT_BY":1,
+    "ENT_DATE":"2024-10-25",
+    "UPD_BY":null,
+    "UPD_DATE":null,
+    "COM_ID":1
+  },
+  {
+    "ID":9,
+    "CNAME":"Water-Tank",
+    "ENT_BY":1,
+    "ENT_DATE":"2024-10-25",
+    "UPD_BY":null,
+    "UPD_DATE":null,
+    "COM_ID":1
+  },
+  {
+    "ID":10,
+    "CNAME":"Sub-Mersible Machine",
+    "ENT_BY":1,
+    "ENT_DATE":"2024-10-25",
+    "UPD_BY":null,
+    "UPD_DATE":null,
+    "COM_ID":1
+  },
+  {
+    "ID":1,
+    "CNAME":"Cement",
+    "ENT_BY":1,
+    "ENT_DATE":"2024-10-24",
+    "UPD_BY":null,
+    "UPD_DATE":null,
+    "COM_ID":1
+  },
+  {
+    "ID":2,
+    "CNAME":"Senitary ",
+    "ENT_BY":1,
+    "ENT_DATE":"2024-10-24",
+    "UPD_BY":null,
+    "UPD_DATE":null,
+    "COM_ID":1
+  }
+  ]
+}

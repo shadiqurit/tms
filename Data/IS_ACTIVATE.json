@@ -1,0 +1,12 @@
+﻿{
+  "recordset": [
+  {
+    "OID":1,
+    "STATUS":"Active"
+  },
+  {
+    "OID":2,
+    "STATUS":"In Active"
+  }
+  ]
+}

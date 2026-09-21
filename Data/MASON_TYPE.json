@@ -1,0 +1,85 @@
+﻿{
+  "recordset": [
+  {
+    "ID":9,
+    "TYPE_NAME":"Tube-well Mistry Payment",
+    "ENT_BY":null,
+    "ENT_DATE":"2025-09-17",
+    "UPD_BY":null,
+    "UPD_DATE":null,
+    "COM_ID":null
+  },
+  {
+    "ID":1,
+    "TYPE_NAME":"Raj Mistry",
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-09",
+    "UPD_BY":null,
+    "UPD_DATE":null,
+    "COM_ID":null
+  },
+  {
+    "ID":6,
+    "TYPE_NAME":"Paint Mistry",
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-10",
+    "UPD_BY":null,
+    "UPD_DATE":null,
+    "COM_ID":null
+  },
+  {
+    "ID":2,
+    "TYPE_NAME":"Electric Mistry",
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-10",
+    "UPD_BY":null,
+    "UPD_DATE":null,
+    "COM_ID":null
+  },
+  {
+    "ID":3,
+    "TYPE_NAME":"Tiles Mistry",
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-10",
+    "UPD_BY":null,
+    "UPD_DATE":null,
+    "COM_ID":null
+  },
+  {
+    "ID":4,
+    "TYPE_NAME":"Sanitary Mistry",
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-10",
+    "UPD_BY":null,
+    "UPD_DATE":null,
+    "COM_ID":null
+  },
+  {
+    "ID":5,
+    "TYPE_NAME":"Boring Mistry",
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-10",
+    "UPD_BY":null,
+    "UPD_DATE":null,
+    "COM_ID":null
+  },
+  {
+    "ID":7,
+    "TYPE_NAME":"Roof Electric pipe Wearing  Mistry",
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-10",
+    "UPD_BY":null,
+    "UPD_DATE":null,
+    "COM_ID":null
+  },
+  {
+    "ID":8,
+    "TYPE_NAME":"Ringwell Mistry",
+    "ENT_BY":null,
+    "ENT_DATE":"2025-02-16",
+    "UPD_BY":null,
+    "UPD_DATE":null,
+    "COM_ID":null
+  }
+  ]
+}

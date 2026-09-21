@@ -1,0 +1,14 @@
+﻿{
+  "recordset": [
+  {
+    "CONF_ID":"MAIN",
+    "CONF_PROTOCOL":"http",
+    "CONF_SERVER":"localhost",
+    "CONF_PORT":"8080",
+    "CONF_CONTEXT_PATH":"jri",
+    "CONF_WALLET_PATH":null,
+    "CONF_WALLET_PWD":null,
+    "CONF_HTTP_TRANSFER_TIMEOUT":60
+  }
+  ]
+}

@@ -1,0 +1,3442 @@
+﻿{
+  "recordset": [
+  {
+    "ID":223,
+    "EXPNAME":"Excess Sanitary Pipe And Freetings Return",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-03-18",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":236,
+    "EXPNAME":"Door Pin",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-04-06",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":246,
+    "EXPNAME":"Local Tin Sheet Angle Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-04-30",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":256,
+    "EXPNAME":"Bush Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-05-31",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":257,
+    "EXPNAME":"School Peon",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-06-02",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":261,
+    "EXPNAME":"Local Pan Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-06-02",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":275,
+    "EXPNAME":"MB Writting Bill",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-06-27",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":281,
+    "EXPNAME":"Gram",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-07-30",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":282,
+    "EXPNAME":"Local Tubewell-Head Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-08-03",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":286,
+    "EXPNAME":"Gum Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-08-11",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":292,
+    "EXPNAME":"Tube-well Mistry Payment",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-09-17",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":293,
+    "EXPNAME":"Tube-well Mistry Payment",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-09-17",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":302,
+    "EXPNAME":"3/4 And 1/2 Albo",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-11-27",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":303,
+    "EXPNAME":"Guna purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-11-27",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":316,
+    "EXPNAME":"Bike Mobil change",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-12-07",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":317,
+    "EXPNAME":"Teacher Gift",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-12-07",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":318,
+    "EXPNAME":"Site preparation costs",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-12-07",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":328,
+    "EXPNAME":"1''T purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-01-05",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":329,
+    "EXPNAME":"Water Test Goush",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-01-15",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":335,
+    "EXPNAME":"Vixol Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-01-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":336,
+    "EXPNAME":"Sirij Paper",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-01-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":337,
+    "EXPNAME":"Ala-Mati Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-01-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":338,
+    "EXPNAME":"Markin kapor Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-01-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":351,
+    "EXPNAME":"Handover Lunch Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-04-11",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":352,
+    "EXPNAME":"1Gang Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-04-19",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":353,
+    "EXPNAME":"2Gang Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-04-19",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":356,
+    "EXPNAME":"Local Tanki And Submersible Freeting Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-04-25",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":357,
+    "EXPNAME":"Local Tanki And Submersible Freeting Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-04-25",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":365,
+    "EXPNAME":"Time Extension Pass Gush",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-05-19",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":366,
+    "EXPNAME":"3'' kelam Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-05-19",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":374,
+    "EXPNAME":"Handover Entertainment Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-06-27",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":381,
+    "EXPNAME":"Tin Sheet Angle Purpose Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-07-14",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":386,
+    "EXPNAME":"Soap-dish Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-08-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":387,
+    "EXPNAME":"Angle Stop Cork",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-08-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":388,
+    "EXPNAME":null,
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-08-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":219,
+    "EXPNAME":"Handover Goods Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-03-11",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":220,
+    "EXPNAME":"Low Down Nat",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-03-11",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":225,
+    "EXPNAME":"Local Pipe And Freeting Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-03-22",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":226,
+    "EXPNAME":"Handover Electricity Bill",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-03-22",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":227,
+    "EXPNAME":"Handover peon Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-03-22",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":228,
+    "EXPNAME":"Handover Labaur Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-03-22",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":229,
+    "EXPNAME":"Local 4''Pipe Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-03-22",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":230,
+    "EXPNAME":"Local 4''Brene Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-03-22",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":231,
+    "EXPNAME":"Local 4'' Offset Brene Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-03-22",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":233,
+    "EXPNAME":"Local Namplat transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-03-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":251,
+    "EXPNAME":"Boring Wash Socket",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-05-16",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":252,
+    "EXPNAME":"Boring Wash Mistry Payment",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-05-16",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":255,
+    "EXPNAME":"Local Looking Glass Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-05-31",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":270,
+    "EXPNAME":"Making a seal",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-06-06",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":271,
+    "EXPNAME":"File Purcherse",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-06-06",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":272,
+    "EXPNAME":"ODIT Objection",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-06-06",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":276,
+    "EXPNAME":"Sanitary Repairing Mistry",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-07-06",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":284,
+    "EXPNAME":"Hotel Rent",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-08-07",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":285,
+    "EXPNAME":"Gaibanda Tube-Well",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-08-07",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":294,
+    "EXPNAME":"Big-Cork",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-09-19",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":295,
+    "EXPNAME":"Door Hasbol",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-09-19",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":296,
+    "EXPNAME":"Kechigate Mobil",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-09-19",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":297,
+    "EXPNAME":"Repairing Mistry Bill",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-09-19",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":298,
+    "EXPNAME":"Repairing Mistry Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-09-19",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":299,
+    "EXPNAME":"picket Broken Cost for Chips",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-09-29",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":300,
+    "EXPNAME":"GI Pipe Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-11-26",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":301,
+    "EXPNAME":"Circuit Braker Box",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-11-27",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":304,
+    "EXPNAME":"Sweeper clearing Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-11-27",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":305,
+    "EXPNAME":"Well-fare",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-11-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":306,
+    "EXPNAME":"Rod Unload Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-11-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":307,
+    "EXPNAME":"Cememt Unload Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-11-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":308,
+    "EXPNAME":"Cement Unload Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-11-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":311,
+    "EXPNAME":"SO Extra Work Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-11-29",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":312,
+    "EXPNAME":"Repairing Product Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-11-29",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":313,
+    "EXPNAME":"Local Electricity Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-12-02",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":314,
+    "EXPNAME":"Water Test Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-12-03",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":315,
+    "EXPNAME":"Local Submersible Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-12-03",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":319,
+    "EXPNAME":"1.5'' Screw",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-12-08",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":323,
+    "EXPNAME":"Boring Cap",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-01-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":324,
+    "EXPNAME":"Local Safty Grill Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-01-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":331,
+    "EXPNAME":"GI Bush",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-01-17",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":333,
+    "EXPNAME":"Tube-well unload Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-01-21",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":339,
+    "EXPNAME":"Flower Top",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-01-30",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":340,
+    "EXPNAME":"Railing Purchase From Teacher",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-01-30",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":342,
+    "EXPNAME":"MB Book Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-02-17",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":346,
+    "EXPNAME":"Pilar-Cork",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-03-14",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":347,
+    "EXPNAME":"Towel Railing",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-03-14",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":354,
+    "EXPNAME":"Nameplate purchase Advanced",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-04-25",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":360,
+    "EXPNAME":"2'' Screw",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-05-14",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":355,
+    "EXPNAME":"Local Electric Product Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-04-25",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":359,
+    "EXPNAME":"Local 40mm Pipe Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-05-14",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":361,
+    "EXPNAME":"Pannel Light",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-05-14",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":362,
+    "EXPNAME":"Normal Light",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-05-14",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":375,
+    "EXPNAME":"Thread pipe",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-06-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":383,
+    "EXPNAME":"40mm Pipe",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-07-20",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":217,
+    "EXPNAME":"kostap",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-03-10",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":224,
+    "EXPNAME":"1''= Pipe",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-03-22",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":234,
+    "EXPNAME":"Local Pattern-Stone transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-03-29",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":235,
+    "EXPNAME":"Disable Ralling",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-04-02",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":238,
+    "EXPNAME":"Local Sand Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-04-12",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":239,
+    "EXPNAME":"Moving Goods From One Place to Another",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-04-12",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":240,
+    "EXPNAME":"Local 4''Pipe Cup Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-04-12",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":242,
+    "EXPNAME":"Local Cable  Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-04-14",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":250,
+    "EXPNAME":"Local Nameplate Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-05-16",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":262,
+    "EXPNAME":"Hose Pipe",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-06-03",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":277,
+    "EXPNAME":"Rocket Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-07-11",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":289,
+    "EXPNAME":"Bill Photocopy",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-08-23",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":309,
+    "EXPNAME":"Water Testing Bottle",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-11-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":310,
+    "EXPNAME":"GI-Pipe Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-11-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":330,
+    "EXPNAME":"Boring Capacitor",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-01-16",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":341,
+    "EXPNAME":"Corporate Door Unload Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-02-03",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":358,
+    "EXPNAME":"Mistry invitation Gift",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-05-08",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":363,
+    "EXPNAME":"4'' Albo Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-05-16",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":364,
+    "EXPNAME":"Boring Re-pairing mistry  payment",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-05-16",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":367,
+    "EXPNAME":"Local Paint Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-06-04",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":368,
+    "EXPNAME":"Electric Line Repearing Gov. free",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-06-04",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":371,
+    "EXPNAME":"Nameplate purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-06-05",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":372,
+    "EXPNAME":"Local Wall Tiles Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-06-05",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":376,
+    "EXPNAME":"Brifecall Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-07-02",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":379,
+    "EXPNAME":"Estimator Goush",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-07-13",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":380,
+    "EXPNAME":"Sanitary Mistry Mechinary Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-07-13",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":385,
+    "EXPNAME":"Yearly Bank Service",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-08-15",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":32,
+    "EXPNAME":"water line",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":33,
+    "EXPNAME":"Mistry Bakshish",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":35,
+    "EXPNAME":"site Electricity Bill",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":36,
+    "EXPNAME":"Product transfar cost ( site to site )",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":45,
+    "EXPNAME":"car rental",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-30",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":46,
+    "EXPNAME":"Lota pipe",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":50,
+    "EXPNAME":"Sanitary mistry payment",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-05",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":52,
+    "EXPNAME":"Classroom clean",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-05",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":59,
+    "EXPNAME":"Korean service",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-09",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":60,
+    "EXPNAME":"Corporate carring cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-13",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":72,
+    "EXPNAME":"pattern stone labour bakshish",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-02",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":73,
+    "EXPNAME":"Doptory  bakshish",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-02",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":74,
+    "EXPNAME":"Brick labour bakshish",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-02",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":75,
+    "EXPNAME":"Cement  labour bakshish",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-02",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":1,
+    "EXPNAME":"Transport cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-05-31",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":49,
+    "EXPNAME":"Floor waterline Goods purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-03",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":3,
+    "EXPNAME":"Entertainment ( Nasta ,Tea, Coffe)",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-05-31",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":34,
+    "EXPNAME":"Nat bolto",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":53,
+    "EXPNAME":"Bikash cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-06",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":31,
+    "EXPNAME":"School water line goods and repairing",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":43,
+    "EXPNAME":"Site enginner Bank charage",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-30",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":44,
+    "EXPNAME":"Measurement Tap",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-30",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":48,
+    "EXPNAME":"Rod repairing",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":57,
+    "EXPNAME":"Grill mistiri Advanced",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-06",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":58,
+    "EXPNAME":"chips advanced( Faruq)",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-06",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":77,
+    "EXPNAME":"Corporate unload car rental cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-12",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":78,
+    "EXPNAME":"intertransfar product carring cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-14",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":79,
+    "EXPNAME":"Roof pipeline Goods purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-14",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":80,
+    "EXPNAME":"Roof pipeline mistry payment",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-14",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":81,
+    "EXPNAME":"illegal gift ( ghus)",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-14",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":47,
+    "EXPNAME":"Shahriyer Momin purpose",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":55,
+    "EXPNAME":"pulling goods (পণ্য টানা দেওয়া )",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-06",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":56,
+    "EXPNAME":"Purchase bike",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-06",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":51,
+    "EXPNAME":"Boring mistry  payment",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-05",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":66,
+    "EXPNAME":"Site road repairing",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-16",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":67,
+    "EXPNAME":"Driver bakshish",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-25",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":69,
+    "EXPNAME":"Chips labour bakshish",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":70,
+    "EXPNAME":"Sand labour bakshish",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":71,
+    "EXPNAME":"Rod labour bakshish",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":7,
+    "EXPNAME":"soil test",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":8,
+    "EXPNAME":"drowing photocopy",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":9,
+    "EXPNAME":"stationary purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":10,
+    "EXPNAME":"Bike oil",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":11,
+    "EXPNAME":"SO layout cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":12,
+    "EXPNAME":"Mechanique layout cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":13,
+    "EXPNAME":"Lunch ( dupurer khabar)",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":14,
+    "EXPNAME":"Labour boksis",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":15,
+    "EXPNAME":"Unload cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":16,
+    "EXPNAME":"product scale cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":17,
+    "EXPNAME":"Neightguard bakshish",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":18,
+    "EXPNAME":"Chain purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":19,
+    "EXPNAME":"Lock (tala) purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":20,
+    "EXPNAME":"So gift ( bakshish)",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":21,
+    "EXPNAME":"Local product carrying cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":22,
+    "EXPNAME":"Brize tool",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":23,
+    "EXPNAME":"bike Repairing",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":24,
+    "EXPNAME":"Electrical goods",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":25,
+    "EXPNAME":"Polythene purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":26,
+    "EXPNAME":"SO site visit payment",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":27,
+    "EXPNAME":"Mechanique site visit payment",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":28,
+    "EXPNAME":"Dalai Labour bakshish",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":29,
+    "EXPNAME":"Rajmistry (রাজমিস্ত্রী ) payment",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":30,
+    "EXPNAME":"Site labour Bakshish",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":37,
+    "EXPNAME":"Electric mistry payment",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":38,
+    "EXPNAME":"Mobile bill site eng",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":39,
+    "EXPNAME":"Broom ( jharu) purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":40,
+    "EXPNAME":"water line mistry payment",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-29",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":41,
+    "EXPNAME":"Eid bonus",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-29",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":42,
+    "EXPNAME":"Site eng salary",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-06-29",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":61,
+    "EXPNAME":"Corporate unload labour cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-13",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":62,
+    "EXPNAME":"Nagad cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-15",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":63,
+    "EXPNAME":"Corporate product transport cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-15",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":64,
+    "EXPNAME":"Corporate carring cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-15",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":65,
+    "EXPNAME":"Site mistry bakshis",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-07-15",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":76,
+    "EXPNAME":"Steel Rod",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-02",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":97,
+    "EXPNAME":"Grill Repearing",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-30",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":98,
+    "EXPNAME":"kechigate  Repearing",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-30",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":99,
+    "EXPNAME":"Door Repearing",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-30",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":100,
+    "EXPNAME":"Boring Mistry Bakshish",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-30",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":101,
+    "EXPNAME":"Sanitary Tanki purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-30",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":102,
+    "EXPNAME":"SO Bill PC",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-30",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":126,
+    "EXPNAME":"Vaksol Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-10",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":127,
+    "EXPNAME":"Sirix Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-10",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":128,
+    "EXPNAME":"Safety Grill Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-10",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":129,
+    "EXPNAME":"Mistry Layout Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-10",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":130,
+    "EXPNAME":"Alamaty Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-10",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":131,
+    "EXPNAME":"Redoxide Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-10",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":132,
+    "EXPNAME":"Korean Puting Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-10",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":133,
+    "EXPNAME":"Floor Offset Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-10",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":134,
+    "EXPNAME":"Screw Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-10",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":135,
+    "EXPNAME":"Low-down Screw Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-10",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":136,
+    "EXPNAME":"Site Eng Raincourt",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-10",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":141,
+    "EXPNAME":"Saltbant Cement",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-12",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":142,
+    "EXPNAME":"Mango Sent Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-12",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":155,
+    "EXPNAME":"Chaater chala ( ছালা ) for Curing",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-13",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":156,
+    "EXPNAME":"Non tender item Work",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-17",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":157,
+    "EXPNAME":"Kaharole Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-20",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":158,
+    "EXPNAME":"Chips Netting",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-20",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":159,
+    "EXPNAME":"Extra Cost for Save Goods",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-20",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":161,
+    "EXPNAME":"Locally Purchase rods repayable ( Baki / বাকি )",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-24",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":162,
+    "EXPNAME":"Locally Purchase Cement  repayable ( Baki / বাকি )",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-24",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":163,
+    "EXPNAME":"Locally Purchase patternstone",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-25",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":164,
+    "EXPNAME":"Chada",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-25",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":165,
+    "EXPNAME":"Locally Purchase Sand",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-25",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":166,
+    "EXPNAME":"Locally Purchase Syhet Sand",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-25",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":167,
+    "EXPNAME":"Locally Purchase Brick",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-26",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":168,
+    "EXPNAME":"Locally Purchase Chips",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-26",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":169,
+    "EXPNAME":"SO Site Ready Purpose",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-10-03",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":173,
+    "EXPNAME":"Hridoy Death Car Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-10-13",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":174,
+    "EXPNAME":"Hridoy Death Janaja Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-10-13",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":175,
+    "EXPNAME":"Hridoy Death other Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-10-13",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":178,
+    "EXPNAME":"Aggrement Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-11-02",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":187,
+    "EXPNAME":"Office clerk",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-01-24",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":188,
+    "EXPNAME":"Gang Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-01-24",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":103,
+    "EXPNAME":"Tiles white Cement",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-30",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":104,
+    "EXPNAME":"Tiles line feetings",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-30",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":107,
+    "EXPNAME":"Chips Neet and Clean Labour Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-06",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":108,
+    "EXPNAME":"Neet purchease",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-06",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":109,
+    "EXPNAME":"Handover  Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-06",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":111,
+    "EXPNAME":"Ringwell Mistry Payment",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-06",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":112,
+    "EXPNAME":"Ringwell Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-06",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":121,
+    "EXPNAME":"Looking Glass Purchases",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-10",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":122,
+    "EXPNAME":"Glass carring Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-10",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":123,
+    "EXPNAME":"Union Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-10",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":124,
+    "EXPNAME":"Plug Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-10",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":143,
+    "EXPNAME":"Handover product( Badna+ Balti+Brash+Jhuri)",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-12",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":144,
+    "EXPNAME":"Handover Paper  Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-12",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":170,
+    "EXPNAME":"Side Masterpline",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-10-12",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":176,
+    "EXPNAME":"Handover Site Repairing",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-10-17",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":183,
+    "EXPNAME":"SO Master-plan",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-12-20",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":189,
+    "EXPNAME":"3'' Normal Filter",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-01-24",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":190,
+    "EXPNAME":"3'' Boring Filter",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-01-24",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":191,
+    "EXPNAME":"Submersible Boring Mistry Payment",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-01-24",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":192,
+    "EXPNAME":"Kuriyer Goods Unload",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-01-24",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":195,
+    "EXPNAME":"Water Tangki Acid",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-02-16",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":207,
+    "EXPNAME":"Local Boring Pipe Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-02-22",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":208,
+    "EXPNAME":null,
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-02-22",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":84,
+    "EXPNAME":"Eng house rent",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":171,
+    "EXPNAME":"Hridoy Death Embulance cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-10-13",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":86,
+    "EXPNAME":"Packet goods ( বস্তা করা )",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":91,
+    "EXPNAME":"paint mistry payment",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":92,
+    "EXPNAME":"Tiles mistry payment",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":105,
+    "EXPNAME":"Pay the remaining amount ( বাকি টাকা পরিশোধ করা )",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-31",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":110,
+    "EXPNAME":"Tiles Form Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-06",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":172,
+    "EXPNAME":"Hridoy Death  Mother",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-10-13",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":185,
+    "EXPNAME":"Grill",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-01-09",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":186,
+    "EXPNAME":"Kechigate",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-01-09",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":197,
+    "EXPNAME":"Sanitary Feetings Unload Labour",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-02-19",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":198,
+    "EXPNAME":"Local Rod transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-02-19",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":199,
+    "EXPNAME":"Local Cement transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-02-19",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":200,
+    "EXPNAME":"Local Brick transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-02-19",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":201,
+    "EXPNAME":"Local White Sand transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-02-19",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":202,
+    "EXPNAME":"Local Sylhet transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-02-19",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":203,
+    "EXPNAME":"Local Sanitary Goods Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-02-19",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":204,
+    "EXPNAME":"Local Ringwell transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-02-20",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":205,
+    "EXPNAME":"Local Ringwell Slab transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-02-20",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":82,
+    "EXPNAME":"Boring pipe purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":83,
+    "EXPNAME":"Boring pipeline  Goods purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":87,
+    "EXPNAME":"purchase of bricks for making chips",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":88,
+    "EXPNAME":"Sanitary pipe and feeting purchases",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":89,
+    "EXPNAME":"Sanitary pipe purchases",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":90,
+    "EXPNAME":"Sanitary feeting purchases",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":95,
+    "EXPNAME":"Token Money",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-29",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":113,
+    "EXPNAME":"Ringwell purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-06",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":114,
+    "EXPNAME":"Ringwell slab purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-06",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":115,
+    "EXPNAME":"Local Catdoor Carring Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-06",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":117,
+    "EXPNAME":"Tiles Unload Labour Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-09",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":118,
+    "EXPNAME":"Tiles Puting And Markin kapor",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-10",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":119,
+    "EXPNAME":"Sanitary Tanki Unload Labour Bakshish",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-10",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":120,
+    "EXPNAME":"Sanitary Pipe Unload Labour",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-10",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":125,
+    "EXPNAME":"Donation",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-10",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":137,
+    "EXPNAME":"Cutting Plus Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-10",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":138,
+    "EXPNAME":"Steel Tarkata Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-10",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":139,
+    "EXPNAME":"Excess Local Product Return Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-11",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":140,
+    "EXPNAME":"DB Box Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-11",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":149,
+    "EXPNAME":"Handover Mechanique Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-13",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":150,
+    "EXPNAME":"Handover SO Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-13",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":151,
+    "EXPNAME":"Handover Teacher Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-13",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":152,
+    "EXPNAME":"Handover TO Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-13",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":153,
+    "EXPNAME":"Handover ATO Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-13",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":154,
+    "EXPNAME":"Safety Grill Setup Mistry payment",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-13",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":160,
+    "EXPNAME":"Excess Electritic Goods return",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-23",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":177,
+    "EXPNAME":"Cost of water supply on the roof",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-10-25",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":193,
+    "EXPNAME":"School Clerk",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-01-29",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":194,
+    "EXPNAME":"3'' Reducer",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-01-29",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":93,
+    "EXPNAME":"Grill mistry Bakshish",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":94,
+    "EXPNAME":"Loading goods inside (  মালামাল ভিতরে প্রবেশ করানো )",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":96,
+    "EXPNAME":"Doors and Kachigates carring and  installing",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-29",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":106,
+    "EXPNAME":"Corporate Tiles unload labour",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-08-31",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":116,
+    "EXPNAME":"Tiles Unload Labour Bakshish",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-09",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":145,
+    "EXPNAME":"Bike Halmate purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-12",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":146,
+    "EXPNAME":"Bike Raincourd Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-12",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":147,
+    "EXPNAME":"Handover product( Parpick)",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-12",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":148,
+    "EXPNAME":"Handover product( papus)",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-09-12",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":179,
+    "EXPNAME":"Sanitary Feetings purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-11-19",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":180,
+    "EXPNAME":"Godown Goods Transfar",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-11-19",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":181,
+    "EXPNAME":"Water Line Feetings Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-12-20",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":182,
+    "EXPNAME":"Sylinder Test",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2024-12-20",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":184,
+    "EXPNAME":"Eng Gift",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-01-06",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":196,
+    "EXPNAME":"Submersible Cap",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-02-18",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":206,
+    "EXPNAME":"Local Tiles transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-02-21",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":209,
+    "EXPNAME":"Wear Clip",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-03-05",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":210,
+    "EXPNAME":"welding or Dhalai Demarage",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-03-05",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":211,
+    "EXPNAME":"Local Kechigate Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-03-05",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":212,
+    "EXPNAME":"Local Door Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-03-05",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":213,
+    "EXPNAME":"Local Grill Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-03-05",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":214,
+    "EXPNAME":"Local Water Tanki Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-03-08",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":215,
+    "EXPNAME":"GI Tar",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-03-10",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":216,
+    "EXPNAME":"Cutting Beld",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-03-10",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":218,
+    "EXPNAME":"Electrical Mistry Transport",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-03-10",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":221,
+    "EXPNAME":"1'' Screw",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-03-11",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":222,
+    "EXPNAME":"Handover School President Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-03-14",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":232,
+    "EXPNAME":"Namplate Made Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-03-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":237,
+    "EXPNAME":"Local 2''Pipe Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-04-09",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":241,
+    "EXPNAME":"Local Chips Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-04-12",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":243,
+    "EXPNAME":"Godown Rent",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-04-25",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":244,
+    "EXPNAME":"Parking Tiles Mistry Payment",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-04-30",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":245,
+    "EXPNAME":"Local Parking Tiles Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-04-30",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":247,
+    "EXPNAME":"Tin Sheet Mistry Payment",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-04-30",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":248,
+    "EXPNAME":"Raj-Mistry Extra-Floor",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-04-30",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":249,
+    "EXPNAME":"Soil Or Earth filling labor",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-05-09",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":253,
+    "EXPNAME":null,
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-05-16",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":254,
+    "EXPNAME":"Local Railing Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-05-31",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":258,
+    "EXPNAME":"Gass Pipe",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-06-02",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":259,
+    "EXPNAME":null,
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-06-02",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":260,
+    "EXPNAME":"Handover product( Basket)",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-06-02",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":263,
+    "EXPNAME":"Door Hasbol Nut",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-06-05",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":264,
+    "EXPNAME":"Local Finishing Product Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-06-05",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":265,
+    "EXPNAME":"Soil Level Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-06-05",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":266,
+    "EXPNAME":"Stand-Besin Purcheres",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-06-05",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":267,
+    "EXPNAME":"Glass Self Purcheres",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-06-05",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":268,
+    "EXPNAME":"Pipe Net Purcheres",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-06-05",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":269,
+    "EXPNAME":"Light Purcheres",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-06-05",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":273,
+    "EXPNAME":"Sanitary Unload Labour",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-06-20",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":274,
+    "EXPNAME":"Material Test",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-06-24",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":278,
+    "EXPNAME":"Local Sand Transfar",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-07-17",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":279,
+    "EXPNAME":"Local Brick Transfar",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-07-17",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":280,
+    "EXPNAME":"Local Chips Transfar",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-07-17",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":283,
+    "EXPNAME":"Tube-well Head Unload Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-08-04",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":287,
+    "EXPNAME":"GI Pipe Repairing",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-08-17",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":288,
+    "EXPNAME":"Local GI Pipe Unload Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-08-17",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":290,
+    "EXPNAME":"Bank Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-08-23",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":291,
+    "EXPNAME":"Final Bill Xen Sir Speed Money",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-09-09",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":320,
+    "EXPNAME":"Glass Clip",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-12-27",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":321,
+    "EXPNAME":"Local Floor Tiles Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-12-27",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":322,
+    "EXPNAME":"Royal Bolt",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2025-12-27",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":325,
+    "EXPNAME":"Local Safty Railing Transport Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-01-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":326,
+    "EXPNAME":"Safty Grill And Railing Setup Mistry Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-01-01",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":327,
+    "EXPNAME":"Water Test Report Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-01-02",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":332,
+    "EXPNAME":"Push Shawer",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-01-18",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":334,
+    "EXPNAME":"Safty Grill And Railing Repairing Mistry Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-01-23",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":343,
+    "EXPNAME":"1'' Albo Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-02-17",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":344,
+    "EXPNAME":"Thai Glass Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-03-04",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":345,
+    "EXPNAME":"bike Repairing mistry",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-03-04",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":348,
+    "EXPNAME":"Local 3''Pipe Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-04-10",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":349,
+    "EXPNAME":"CP Bush Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-04-11",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":350,
+    "EXPNAME":"Handover Making Stairs Cost",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-04-11",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":373,
+    "EXPNAME":"4'' Pipe Net Purcheres",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-06-06",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":369,
+    "EXPNAME":"Handover product Key Ring",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-06-04",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":370,
+    "EXPNAME":"Local Holder Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-06-04",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":377,
+    "EXPNAME":"4'' Kawyal Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-07-03",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":378,
+    "EXPNAME":"Local Submersible Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-07-12",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":382,
+    "EXPNAME":"1.5'' Boring Filter Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-07-17",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":384,
+    "EXPNAME":"40mm Albo Purchase",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-07-20",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  },
+  {
+    "ID":389,
+    "EXPNAME":"Handover Photocopy",
+    "COM_ID":1,
+    "ENT_BY":null,
+    "ENT_DATE":"2026-08-28",
+    "UPD_BY":null,
+    "UPD_DATE":null
+  }
+  ]
+}

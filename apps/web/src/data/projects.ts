@@ -1,0 +1,33 @@
+export interface ProjectRecord {
+  id: number;
+  code: string;
+  tenderId: string;
+  name: string;
+  location: string;
+  address: string;
+  sites: number;
+  value: number;
+  progress: number;
+  color: string;
+  startDate: string;
+  endDate: string;
+  status: 'active' | 'planned' | 'completed' | 'on_hold';
+}
+
+export const projects: ProjectRecord[] = [
+  { id: 1, code: 'PEDB4/WB-1592', tenderId: '830653', name: 'Number 4, Aleeza enterprise. দ্বিতলা ওয়াশব্লক 2 Storied RCC Wash Block Having 2 Storied Foundation', location: 'Fulbaria, Dinajpur', address: 'Fulbaria, Dinajpur', sites: 15, value: 27417180.76, progress: 91, color: 'rose', startDate: '2024-01-23', endDate: '', status: 'active' },
+  { id: 2, code: 'PEDB4/WB-1803', tenderId: '794739', name: 'Number 3 Khandakar Enterprise. একতালা ওয়াশব্লক isolated 2 Storied RCC Wash Block Having 2 Storied Foundation', location: 'Dinajpur (Setabganj + Kaharole)', address: 'Dinajpur (Setabganj + Kaharole)', sites: 18, value: 23861264.49, progress: 64, color: 'blue', startDate: '2024-01-01', endDate: '', status: 'active' },
+  { id: 3, code: 'WB-1014', tenderId: '518432', name: 'Number 1, Khandakar Enterprise দ্বিতলা ওয়াশব্লক 2 Storied RCC Wash Block Having 2 Storied Foundation', location: 'Dinajpur (Setabganj + Fulbari + Nobabganj)', address: 'Dinajpur (Setabganj + Fulbari + Nobabganj)', sites: 16, value: 16794112.68, progress: 87, color: 'amber', startDate: '2022-11-17', endDate: '', status: 'active' },
+  { id: 4, code: 'PEDP4/WB-1605', tenderId: '761613', name: 'Number 2, Innaya Construction. একতলা ওয়াশব্লক isolated 2 Storied RCC Wash Block Having 2 Storied Foundation', location: 'Dinajpur (Setabganj + Kaharole)', address: 'Dinajpur (Setabganj + Kaharole)', sites: 25, value: 22827722.72, progress: 78, color: 'emerald', startDate: '2023-05-27', endDate: '', status: 'active' },
+  { id: 5, code: 'PEDP4/WB-1752', tenderId: '846914', name: 'Number 6, Khandakar Enterprise. একতালা ওয়াশব্লক isolated 2 Storied RCC Wash Block Having 2 Storied Foundation', location: 'Panchagarh', address: 'Panchagarh', sites: 0, value: 8161257.53, progress: 8, color: 'cyan', startDate: '', endDate: '', status: 'active' },
+  { id: 6, code: 'PEDB4/WB-1602', tenderId: '939796', name: 'Number 5, Aleeza Enterprise — Construction of Combined RCC WASH Block having 2 storied foundation for MT & boys and FT & girls including all associated construction in Dinajpur District', location: 'Dinajpur', address: 'Dinajpur', sites: 16, value: 22799477.78, progress: 56, color: 'purple', startDate: '2024-05-19', endDate: '', status: 'active' },
+  { id: 7, code: 'Not final and starting now', tenderId: '962963', name: 'Number 7, Aleeza Enterprise — Construction of RCC WASH Block for MT & Boys and FT & Girls including all associated construction works at different Upazila in Gaibandha District under PEDP-4 Project', location: 'Gaibandha (being processed)', address: 'Gaibandha (being processed)', sites: 0, value: 10867516.22, progress: 5, color: 'rose', startDate: '', endDate: '', status: 'active' },
+  { id: 8, code: '1043/PSWSC-3384', tenderId: '1006857', name: 'Number 8, Khandakar Enterprise — Installation of 84 Nos. Shallow Tube Well No Hand Pump (38mm dia) at Fulchari Upazila of Gaibandha District under Safe Water Supply Throughout the Country (SWSC) Project of DPHE', location: 'Fulchari, Gaibandha', address: 'Fulchari, Gaibandha', sites: 1, value: 2039561.25, progress: 42, color: 'blue', startDate: '2025-01-23', endDate: '', status: 'active' },
+  { id: 9, code: '2000/PSWSC-3386', tenderId: 'Proposal ID: 1006859', name: 'Number 9, Khandakar Enterprise — Installation of 180 Nos. Shallow Tube Well No. 6 Hand Pump (38mm dia) at Sundarganj Upazila of Gaibandha District under Safe Water Supply', location: 'Sundarganj, Gaibandha', address: 'Sundarganj, Gaibandha', sites: 1, value: 4522299.66, progress: 36, color: 'amber', startDate: '2025-01-23', endDate: '', status: 'active' },
+  { id: 10, code: 'Memo-341', tenderId: '1222939', name: 'Construction of improved latrine (Twin pit latrine) for the poor at Bochaganj Upazila (690) in Dinajpur District under Rural Sanitation Project during FY 2025-26', location: 'Bochaganj, Dinajpur', address: 'Bochaganj, Dinajpur', sites: 0, value: 37900000, progress: 18, color: 'cyan', startDate: '2026-04-20', endDate: '', status: 'active' },
+];
+
+export function formatMoney(value: number) {
+  if (value >= 1_000_000) return `৳${(value / 1_000_000).toFixed(2)}M`;
+  return new Intl.NumberFormat('en-BD', { style: 'currency', currency: 'BDT', maximumFractionDigits: 0 }).format(value);
+}

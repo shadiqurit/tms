@@ -1,0 +1,38 @@
+﻿{
+  "recordset": [
+  {
+    "ID":1,
+    "CODE":"ALZ",
+    "CNAME":"Aleeza Enterprise",
+    "ADDRESS":"Mohammadpur, Dhaka, Bangladesh",
+    "BRAND":"tender",
+    "PHONE":"01996200797",
+    "FAX":null,
+    "EMAIL":"aleezaenterprise2@gmail.com",
+    "TEL":"01996200797",
+    "BIN":"001495151-0103",
+    "SRV":"http://apex.picosaas.com/apps/report?",
+    "PDF":"&_repFormat=pdf",
+    "XLS":"&_repFormat=xlsx",
+    "SRC":"&_dataSource=tms",
+    "RL":"&_repLocale=en_US"
+  },
+  {
+    "ID":10,
+    "CODE":"IPI",
+    "CNAME":"IPI Lottery",
+    "ADDRESS":"Mohammadpur, Dhaka, Bangladesh",
+    "BRAND":"tender",
+    "PHONE":"01996200797",
+    "FAX":null,
+    "EMAIL":"shadiq1297@gmail.com",
+    "TEL":"01996200797",
+    "BIN":"001495151-0103",
+    "SRV":"http://apex.picosaas.com/apps/report?",
+    "PDF":"&_repFormat=pdf",
+    "XLS":"&_repFormat=xlsx",
+    "SRC":"&_dataSource=tms",
+    "RL":"&_repLocale=en_US"
+  }
+  ]
+}

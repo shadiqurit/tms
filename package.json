@@ -1,0 +1,20 @@
+{
+  "name": "tms-redevelopment",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n api,web -c cyan,green \"npm run dev -w @tms/api\" \"npm run dev -w @tms/web\"",
+    "dev:web": "npm run dev -w @tms/web",
+    "dev:api": "npm run dev -w @tms/api",
+    "build": "npm run build -w @tms/api && npm run build -w @tms/web",
+    "typecheck": "npm run typecheck -w @tms/api && npm run typecheck -w @tms/web",
+    "import:legacy": "npm run import:legacy -w @tms/api",
+    "db:setup": "npm run db:setup -w @tms/api"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
