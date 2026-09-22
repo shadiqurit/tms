@@ -6,7 +6,7 @@ import ProjectSearchSelect from '../components/ProjectSearchSelect.vue';
 import { projects as demoProjects } from '../data/projects';
 import { projectSites as demoSites } from '../data/projectSites';
 import { supplierOptions as demoSuppliers, unitOptions as demoUnits } from '../data/sitePurchases';
-import { corporateCategories as demoCategories, corporateLines, corporateProducts as demoProducts, corporatePurchaseRecords, corporateSubcategories as demoSubcategories, nextCorporateLineId, nextCorporatePurchaseId } from '../data/corporatePurchases';
+import { corporateCategories as demoCategories, corporateLines, corporateProducts as demoProducts, corporatePurchaseRecords, nextCorporateLineId, nextCorporatePurchaseId } from '../data/corporatePurchases';
 const route = useRoute();
 const router = useRouter();
 const editing = computed(() => route.name === 'corporate-purchase-edit');
@@ -16,7 +16,6 @@ const projects = ref(demoProjects.map(({ id, code, name, tenderId, location }) =
 const sites = ref(demoSites.map(({ id, projectId, name, address }) => ({ id, projectId, name, address })));
 const suppliers = ref([...demoSuppliers]);
 const categories = ref([...demoCategories]);
-const subcategories = ref([...demoSubcategories]);
 const products = ref([...demoProducts]);
 const units = ref([...demoUnits]);
 const loading = ref(false);
@@ -40,9 +39,8 @@ const deleteText = ref('');
 const deleting = ref(false);
 const summary = reactive({ itemCount: 0, totalAmount: 0 });
 const form = reactive({ projectId: Number(route.query.projectId || 0), siteId: null, supplierId: null, purchaseNo: '', localSupplier: '', supplierAddress: '', purchaseDate: today, purchaseType: 'corporate', challanNo: '', challanDate: '', notes: '', status: 'posted' });
-const lineForm = reactive({ id: null, categoryId: null, subcategoryId: null, productId: 0, unitId: null, siteId: null, quantity: 1, unitPrice: '', discount: '', notes: '' });
+const lineForm = reactive({ id: null, categoryId: null, productId: 0, unitId: null, siteId: null, quantity: 1, unitPrice: '', discount: '', notes: '' });
 const availableSites = computed(() => sites.value.filter((site) => site.projectId === form.projectId));
-const availableSubcategories = computed(() => subcategories.value.filter((item) => !lineForm.categoryId || item.categoryId === lineForm.categoryId));
 const availableProducts = computed(() => {
     const term = productSearch.value.trim().toLowerCase();
     return products.value.filter((item) => (!lineForm.categoryId || item.categoryId === lineForm.categoryId) && (!term || item.name.toLowerCase().includes(term)));
@@ -102,7 +100,6 @@ onMounted(async () => {
             sites.value = options.sites;
             suppliers.value = options.suppliers;
             categories.value = options.categories;
-            subcategories.value = options.subcategories;
             products.value = options.products;
             units.value = options.units;
         }
@@ -127,8 +124,6 @@ function supplierChanged() { const supplier = suppliers.value.find((item) => ite
 function categoryChanged() {
     if (lineForm.productId && !products.value.some((item) => item.id === lineForm.productId && item.categoryId === lineForm.categoryId))
         lineForm.productId = 0;
-    if (lineForm.subcategoryId && !availableSubcategories.value.some((item) => item.id === lineForm.subcategoryId))
-        lineForm.subcategoryId = null;
 }
 function productChanged() {
     const product = products.value.find((item) => item.id === lineForm.productId);
@@ -139,9 +134,10 @@ function productChanged() {
     if (product.defaultPrice !== null && product.defaultPrice !== undefined)
         lineForm.unitPrice = Number(product.defaultPrice);
 }
-function resetLineForm() { Object.assign(lineForm, { id: null, categoryId: null, subcategoryId: null, productId: 0, unitId: null, siteId: form.siteId, quantity: 1, unitPrice: '', discount: '', notes: '' }); productSearch.value = ''; }
-function addLine() { resetLineForm(); lineFormOpen.value = true; }
-function editLine(item) { Object.assign(lineForm, { id: item.id, categoryId: item.categoryId, subcategoryId: item.subcategoryId, productId: item.productId ?? 0, unitId: item.unitId, siteId: item.siteId, quantity: Number(item.quantity), unitPrice: Number(item.unitPrice), discount: Number(item.discount), notes: item.notes ?? '' }); productSearch.value = ''; lineFormOpen.value = true; }
+function resetLineForm() { Object.assign(lineForm, { id: null, categoryId: null, productId: 0, unitId: null, siteId: form.siteId, quantity: 1, unitPrice: '', discount: '', notes: '' }); productSearch.value = ''; }
+function closeLineForm() { lineFormOpen.value = false; error.value = ''; }
+function addLine() { error.value = ''; resetLineForm(); lineFormOpen.value = true; }
+function editLine(item) { error.value = ''; Object.assign(lineForm, { id: item.id, categoryId: item.categoryId, productId: item.productId ?? 0, unitId: item.unitId, siteId: item.siteId, quantity: Number(item.quantity), unitPrice: Number(item.unitPrice), discount: Number(item.discount), notes: item.notes ?? '' }); productSearch.value = ''; lineFormOpen.value = true; }
 async function saveHeader() {
     if (!form.projectId || !form.purchaseDate) {
         error.value = 'Project and purchase date are required.';
@@ -189,16 +185,15 @@ async function saveLine() {
     lineSaving.value = true;
     error.value = '';
     try {
-        const payload = { categoryId: lineForm.categoryId, subcategoryId: lineForm.subcategoryId, productId: lineForm.productId, unitId: lineForm.unitId, siteId: lineForm.siteId, quantity: Number(lineForm.quantity), unitPrice: Number(lineForm.unitPrice), discount: Number(lineForm.discount || 0), notes: lineForm.notes };
+        const payload = { categoryId: lineForm.categoryId, productId: lineForm.productId, unitId: lineForm.unitId, siteId: lineForm.siteId, quantity: Number(lineForm.quantity), unitPrice: Number(lineForm.unitPrice), discount: Number(lineForm.discount || 0), notes: lineForm.notes };
         if (import.meta.env.VITE_DEMO_MODE === 'false')
             await api(lineForm.id ? `/corporate-purchases/${purchaseId.value}/lines/${lineForm.id}` : `/corporate-purchases/${purchaseId.value}/lines`, { method: lineForm.id ? 'PUT' : 'POST', body: JSON.stringify(payload) });
         else {
             const product = products.value.find((item) => item.id === payload.productId);
             const category = categories.value.find((item) => item.id === payload.categoryId);
-            const subcategory = subcategories.value.find((item) => item.id === payload.subcategoryId);
             const unit = units.value.find((item) => item.id === payload.unitId);
             const site = sites.value.find((item) => item.id === payload.siteId);
-            const record = { id: lineForm.id ?? nextCorporateLineId(), purchaseId: purchaseId.value, categoryId: payload.categoryId, categoryName: category?.name ?? '', subcategoryId: payload.subcategoryId, subcategoryName: subcategory?.name ?? '', productId: product.id, productName: product.name, unitId: payload.unitId, unitName: unit?.name ?? '', siteId: payload.siteId, siteName: site?.name ?? '', quantity: payload.quantity, unitPrice: payload.unitPrice, discount: payload.discount, totalAmount: lineTotal.value, notes: payload.notes };
+            const record = { id: lineForm.id ?? nextCorporateLineId(), purchaseId: purchaseId.value, categoryId: payload.categoryId, categoryName: category?.name ?? '', productId: product.id, productName: product.name, unitId: payload.unitId, unitName: unit?.name ?? '', siteId: payload.siteId, siteName: site?.name ?? '', quantity: payload.quantity, unitPrice: payload.unitPrice, discount: payload.discount, totalAmount: lineTotal.value, notes: payload.notes };
             const index = corporateLines.findIndex((item) => item.id === record.id);
             if (index >= 0)
                 corporateLines[index] = record;
@@ -645,231 +640,6 @@ if (__VLS_ctx.editing) {
     const __VLS_45 = __VLS_44({
         size: (16),
     }, ...__VLS_functionalComponentArgsRest(__VLS_44));
-    if (__VLS_ctx.lineFormOpen) {
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.form, __VLS_intrinsicElements.form)({
-            ...{ onSubmit: (__VLS_ctx.saveLine) },
-            ...{ class: "purchase-line-form corporate-line-form" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.header, __VLS_intrinsicElements.header)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
-        const __VLS_47 = {}.PackagePlus;
-        /** @type {[typeof __VLS_components.PackagePlus, ]} */ ;
-        // @ts-ignore
-        const __VLS_48 = __VLS_asFunctionalComponent(__VLS_47, new __VLS_47({
-            size: (18),
-        }));
-        const __VLS_49 = __VLS_48({
-            size: (18),
-        }, ...__VLS_functionalComponentArgsRest(__VLS_48));
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
-        (__VLS_ctx.lineForm.id ? 'Modify product line' : 'Add corporate product');
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
-            ...{ onClick: (...[$event]) => {
-                    if (!(__VLS_ctx.editing))
-                        return;
-                    if (!(__VLS_ctx.lineFormOpen))
-                        return;
-                    __VLS_ctx.lineFormOpen = false;
-                } },
-            type: "button",
-        });
-        const __VLS_51 = {}.X;
-        /** @type {[typeof __VLS_components.X, ]} */ ;
-        // @ts-ignore
-        const __VLS_52 = __VLS_asFunctionalComponent(__VLS_51, new __VLS_51({
-            size: (17),
-        }));
-        const __VLS_53 = __VLS_52({
-            size: (17),
-        }, ...__VLS_functionalComponentArgsRest(__VLS_52));
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
-            ...{ class: "form-grid three" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-            ...{ class: "form-field" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
-            ...{ onChange: (__VLS_ctx.categoryChanged) },
-            value: (__VLS_ctx.lineForm.categoryId),
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-            value: (null),
-        });
-        for (const [item] of __VLS_getVForSourceType((__VLS_ctx.categories))) {
-            __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-                key: (item.id),
-                value: (item.id),
-            });
-            (item.name);
-        }
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-            ...{ class: "form-field" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
-            value: (__VLS_ctx.lineForm.subcategoryId),
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-            value: (null),
-        });
-        for (const [item] of __VLS_getVForSourceType((__VLS_ctx.availableSubcategories))) {
-            __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-                key: (item.id),
-                value: (item.id),
-            });
-            (item.name);
-        }
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-            ...{ class: "form-field" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
-        const __VLS_55 = {}.Search;
-        /** @type {[typeof __VLS_components.Search, ]} */ ;
-        // @ts-ignore
-        const __VLS_56 = __VLS_asFunctionalComponent(__VLS_55, new __VLS_55({
-            size: (15),
-        }));
-        const __VLS_57 = __VLS_56({
-            size: (15),
-        }, ...__VLS_functionalComponentArgsRest(__VLS_56));
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
-            placeholder: "Type product name…",
-        });
-        (__VLS_ctx.productSearch);
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-            ...{ class: "form-field full" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.b, __VLS_intrinsicElements.b)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
-            ...{ onChange: (__VLS_ctx.productChanged) },
-            value: (__VLS_ctx.lineForm.productId),
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-            value: (0),
-            disabled: true,
-        });
-        (__VLS_ctx.availableProducts.length);
-        for (const [item] of __VLS_getVForSourceType((__VLS_ctx.availableProducts))) {
-            __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-                key: (item.id),
-                value: (item.id),
-            });
-            (item.name);
-            (item.unitName ? ` — ${item.unitName}` : '');
-        }
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-            ...{ class: "form-field" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
-            value: (__VLS_ctx.lineForm.siteId),
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-            value: (null),
-        });
-        for (const [site] of __VLS_getVForSourceType((__VLS_ctx.availableSites))) {
-            __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-                key: (site.id),
-                value: (site.id),
-            });
-            (site.name);
-        }
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-            ...{ class: "form-field" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
-            value: (__VLS_ctx.lineForm.unitId),
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-            value: (null),
-        });
-        for (const [unit] of __VLS_getVForSourceType((__VLS_ctx.units))) {
-            __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-                key: (unit.id),
-                value: (unit.id),
-            });
-            (unit.name);
-        }
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-            ...{ class: "form-field" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.b, __VLS_intrinsicElements.b)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
-            type: "number",
-            min: "0.0001",
-            step: "0.0001",
-        });
-        (__VLS_ctx.lineForm.quantity);
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-            ...{ class: "form-field" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.b, __VLS_intrinsicElements.b)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
-            type: "number",
-            min: "0",
-            step: "0.0001",
-        });
-        (__VLS_ctx.lineForm.unitPrice);
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-            ...{ class: "form-field" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
-            type: "number",
-            min: "0",
-            step: "0.01",
-        });
-        (__VLS_ctx.lineForm.discount);
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-            ...{ class: "form-field full" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
-            placeholder: "Optional product notes",
-        });
-        (__VLS_ctx.lineForm.notes);
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.footer, __VLS_intrinsicElements.footer)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
-        (__VLS_ctx.money(__VLS_ctx.lineTotal));
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
-            ...{ onClick: (...[$event]) => {
-                    if (!(__VLS_ctx.editing))
-                        return;
-                    if (!(__VLS_ctx.lineFormOpen))
-                        return;
-                    __VLS_ctx.lineFormOpen = false;
-                } },
-            type: "button",
-            ...{ class: "secondary-button" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
-            ...{ class: "primary-button" },
-            disabled: (__VLS_ctx.lineSaving),
-        });
-        const __VLS_59 = {}.Check;
-        /** @type {[typeof __VLS_components.Check, ]} */ ;
-        // @ts-ignore
-        const __VLS_60 = __VLS_asFunctionalComponent(__VLS_59, new __VLS_59({
-            size: (15),
-        }));
-        const __VLS_61 = __VLS_60({
-            size: (15),
-        }, ...__VLS_functionalComponentArgsRest(__VLS_60));
-        (__VLS_ctx.lineSaving ? 'Saving…' : 'Save product');
-    }
     __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
         ...{ class: "purchase-lines-table-wrap" },
     });
@@ -894,26 +664,42 @@ if (__VLS_ctx.editing) {
         __VLS_asFunctionalElement(__VLS_intrinsicElements.tr, __VLS_intrinsicElements.tr)({
             key: (item.id),
         });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({
+            'data-label': "Product",
+        });
         __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
         (item.productName);
         __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
-        (item.subcategoryName || item.notes);
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+        (item.notes);
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({
+            'data-label': "Category",
+        });
         (item.categoryName || '—');
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({
+            'data-label': "Site",
+        });
         (item.siteName || 'General project');
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({
+            'data-label': "Quantity",
+        });
         (Number(item.quantity).toLocaleString());
         (item.unitName);
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({
+            'data-label': "Unit price",
+        });
         (__VLS_ctx.money(item.unitPrice));
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({
+            'data-label': "Discount",
+        });
         (__VLS_ctx.money(item.discount));
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({
+            'data-label': "Total",
+        });
         __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
         (__VLS_ctx.money(item.totalAmount));
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({
+            'data-label': "Actions",
+        });
         __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
             ...{ class: "line-actions" },
         });
@@ -925,15 +711,15 @@ if (__VLS_ctx.editing) {
                 } },
             type: "button",
         });
-        const __VLS_63 = {}.Pencil;
+        const __VLS_47 = {}.Pencil;
         /** @type {[typeof __VLS_components.Pencil, ]} */ ;
         // @ts-ignore
-        const __VLS_64 = __VLS_asFunctionalComponent(__VLS_63, new __VLS_63({
+        const __VLS_48 = __VLS_asFunctionalComponent(__VLS_47, new __VLS_47({
             size: (14),
         }));
-        const __VLS_65 = __VLS_64({
+        const __VLS_49 = __VLS_48({
             size: (14),
-        }, ...__VLS_functionalComponentArgsRest(__VLS_64));
+        }, ...__VLS_functionalComponentArgsRest(__VLS_48));
         __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
             ...{ onClick: (...[$event]) => {
                     if (!(__VLS_ctx.editing))
@@ -943,15 +729,15 @@ if (__VLS_ctx.editing) {
             type: "button",
             ...{ class: "danger" },
         });
-        const __VLS_67 = {}.Trash2;
+        const __VLS_51 = {}.Trash2;
         /** @type {[typeof __VLS_components.Trash2, ]} */ ;
         // @ts-ignore
-        const __VLS_68 = __VLS_asFunctionalComponent(__VLS_67, new __VLS_67({
+        const __VLS_52 = __VLS_asFunctionalComponent(__VLS_51, new __VLS_51({
             size: (14),
         }));
-        const __VLS_69 = __VLS_68({
+        const __VLS_53 = __VLS_52({
             size: (14),
-        }, ...__VLS_functionalComponentArgsRest(__VLS_68));
+        }, ...__VLS_functionalComponentArgsRest(__VLS_52));
     }
     if (!__VLS_ctx.lines.length) {
         __VLS_asFunctionalElement(__VLS_intrinsicElements.tr, __VLS_intrinsicElements.tr)({});
@@ -961,15 +747,15 @@ if (__VLS_ctx.editing) {
         __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
             ...{ class: "site-empty" },
         });
-        const __VLS_71 = {}.PackagePlus;
+        const __VLS_55 = {}.PackagePlus;
         /** @type {[typeof __VLS_components.PackagePlus, ]} */ ;
         // @ts-ignore
-        const __VLS_72 = __VLS_asFunctionalComponent(__VLS_71, new __VLS_71({
+        const __VLS_56 = __VLS_asFunctionalComponent(__VLS_55, new __VLS_55({
             size: (22),
         }));
-        const __VLS_73 = __VLS_72({
+        const __VLS_57 = __VLS_56({
             size: (22),
-        }, ...__VLS_functionalComponentArgsRest(__VLS_72));
+        }, ...__VLS_functionalComponentArgsRest(__VLS_56));
         __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
         __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
     }
@@ -989,15 +775,15 @@ if (__VLS_ctx.editing) {
         type: "button",
         disabled: (__VLS_ctx.linePage === 1),
     });
-    const __VLS_75 = {}.ChevronLeft;
+    const __VLS_59 = {}.ChevronLeft;
     /** @type {[typeof __VLS_components.ChevronLeft, ]} */ ;
     // @ts-ignore
-    const __VLS_76 = __VLS_asFunctionalComponent(__VLS_75, new __VLS_75({
+    const __VLS_60 = __VLS_asFunctionalComponent(__VLS_59, new __VLS_59({
         size: (16),
     }));
-    const __VLS_77 = __VLS_76({
+    const __VLS_61 = __VLS_60({
         size: (16),
-    }, ...__VLS_functionalComponentArgsRest(__VLS_76));
+    }, ...__VLS_functionalComponentArgsRest(__VLS_60));
     __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
     (__VLS_ctx.linePage);
     (__VLS_ctx.linePageCount);
@@ -1011,15 +797,221 @@ if (__VLS_ctx.editing) {
         type: "button",
         disabled: (__VLS_ctx.linePage === __VLS_ctx.linePageCount),
     });
-    const __VLS_79 = {}.ChevronRight;
+    const __VLS_63 = {}.ChevronRight;
     /** @type {[typeof __VLS_components.ChevronRight, ]} */ ;
     // @ts-ignore
-    const __VLS_80 = __VLS_asFunctionalComponent(__VLS_79, new __VLS_79({
+    const __VLS_64 = __VLS_asFunctionalComponent(__VLS_63, new __VLS_63({
         size: (16),
     }));
-    const __VLS_81 = __VLS_80({
+    const __VLS_65 = __VLS_64({
         size: (16),
+    }, ...__VLS_functionalComponentArgsRest(__VLS_64));
+}
+if (__VLS_ctx.lineFormOpen) {
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+        ...{ onClick: (__VLS_ctx.closeLineForm) },
+        ...{ class: "modal-backdrop" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.form, __VLS_intrinsicElements.form)({
+        ...{ onSubmit: (__VLS_ctx.saveLine) },
+        ...{ class: "purchase-line-form purchase-line-modal corporate-line-form" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.header, __VLS_intrinsicElements.header)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
+    const __VLS_67 = {}.PackagePlus;
+    /** @type {[typeof __VLS_components.PackagePlus, ]} */ ;
+    // @ts-ignore
+    const __VLS_68 = __VLS_asFunctionalComponent(__VLS_67, new __VLS_67({
+        size: (18),
+    }));
+    const __VLS_69 = __VLS_68({
+        size: (18),
+    }, ...__VLS_functionalComponentArgsRest(__VLS_68));
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+    (__VLS_ctx.lineForm.id ? 'Modify product line' : 'Add corporate product');
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
+        ...{ onClick: (__VLS_ctx.closeLineForm) },
+        type: "button",
+    });
+    const __VLS_71 = {}.X;
+    /** @type {[typeof __VLS_components.X, ]} */ ;
+    // @ts-ignore
+    const __VLS_72 = __VLS_asFunctionalComponent(__VLS_71, new __VLS_71({
+        size: (17),
+    }));
+    const __VLS_73 = __VLS_72({
+        size: (17),
+    }, ...__VLS_functionalComponentArgsRest(__VLS_72));
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+        ...{ class: "form-grid three" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
+        ...{ class: "form-field" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
+        ...{ onChange: (__VLS_ctx.categoryChanged) },
+        value: (__VLS_ctx.lineForm.categoryId),
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+        value: (null),
+    });
+    for (const [item] of __VLS_getVForSourceType((__VLS_ctx.categories))) {
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+            key: (item.id),
+            value: (item.id),
+        });
+        (item.name);
+    }
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
+        ...{ class: "form-field" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
+    const __VLS_75 = {}.Search;
+    /** @type {[typeof __VLS_components.Search, ]} */ ;
+    // @ts-ignore
+    const __VLS_76 = __VLS_asFunctionalComponent(__VLS_75, new __VLS_75({
+        size: (15),
+    }));
+    const __VLS_77 = __VLS_76({
+        size: (15),
+    }, ...__VLS_functionalComponentArgsRest(__VLS_76));
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
+        placeholder: "Type product name…",
+    });
+    (__VLS_ctx.productSearch);
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
+        ...{ class: "form-field" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.b, __VLS_intrinsicElements.b)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
+        ...{ onChange: (__VLS_ctx.productChanged) },
+        value: (__VLS_ctx.lineForm.productId),
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+        value: (0),
+        disabled: true,
+    });
+    (__VLS_ctx.availableProducts.length);
+    for (const [item] of __VLS_getVForSourceType((__VLS_ctx.availableProducts))) {
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+            key: (item.id),
+            value: (item.id),
+        });
+        (item.name);
+        (item.unitName ? ` — ${item.unitName}` : '');
+    }
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
+        ...{ class: "form-field" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
+        value: (__VLS_ctx.lineForm.siteId),
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+        value: (null),
+    });
+    for (const [site] of __VLS_getVForSourceType((__VLS_ctx.availableSites))) {
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+            key: (site.id),
+            value: (site.id),
+        });
+        (site.name);
+    }
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
+        ...{ class: "form-field" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
+        value: (__VLS_ctx.lineForm.unitId),
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+        value: (null),
+    });
+    for (const [unit] of __VLS_getVForSourceType((__VLS_ctx.units))) {
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+            key: (unit.id),
+            value: (unit.id),
+        });
+        (unit.name);
+    }
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
+        ...{ class: "form-field" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.b, __VLS_intrinsicElements.b)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
+        type: "number",
+        min: "0.0001",
+        step: "0.0001",
+    });
+    (__VLS_ctx.lineForm.quantity);
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
+        ...{ class: "form-field" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.b, __VLS_intrinsicElements.b)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
+        type: "number",
+        min: "0",
+        step: "0.0001",
+    });
+    (__VLS_ctx.lineForm.unitPrice);
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
+        ...{ class: "form-field" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
+        type: "number",
+        min: "0",
+        step: "0.01",
+    });
+    (__VLS_ctx.lineForm.discount);
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
+        ...{ class: "form-field full" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
+        placeholder: "Optional product notes",
+    });
+    (__VLS_ctx.lineForm.notes);
+    if (__VLS_ctx.error) {
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.p, __VLS_intrinsicElements.p)({
+            ...{ class: "form-error modal-error" },
+        });
+        (__VLS_ctx.error);
+    }
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.footer, __VLS_intrinsicElements.footer)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+    (__VLS_ctx.money(__VLS_ctx.lineTotal));
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
+        ...{ onClick: (__VLS_ctx.closeLineForm) },
+        type: "button",
+        ...{ class: "secondary-button" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
+        ...{ class: "primary-button" },
+        disabled: (__VLS_ctx.lineSaving),
+    });
+    const __VLS_79 = {}.Check;
+    /** @type {[typeof __VLS_components.Check, ]} */ ;
+    // @ts-ignore
+    const __VLS_80 = __VLS_asFunctionalComponent(__VLS_79, new __VLS_79({
+        size: (15),
+    }));
+    const __VLS_81 = __VLS_80({
+        size: (15),
     }, ...__VLS_functionalComponentArgsRest(__VLS_80));
+    (__VLS_ctx.lineSaving ? 'Saving…' : __VLS_ctx.lineForm.id ? 'Update product' : 'Add product');
 }
 if (__VLS_ctx.pendingLineDelete) {
     __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
@@ -1257,24 +1249,6 @@ if (__VLS_ctx.deleteOpen) {
 /** @type {__VLS_StyleScopedClasses['table-search']} */ ;
 /** @type {__VLS_StyleScopedClasses['secondary-button']} */ ;
 /** @type {__VLS_StyleScopedClasses['primary-button']} */ ;
-/** @type {__VLS_StyleScopedClasses['purchase-line-form']} */ ;
-/** @type {__VLS_StyleScopedClasses['corporate-line-form']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-grid']} */ ;
-/** @type {__VLS_StyleScopedClasses['three']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
-/** @type {__VLS_StyleScopedClasses['full']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
-/** @type {__VLS_StyleScopedClasses['full']} */ ;
-/** @type {__VLS_StyleScopedClasses['secondary-button']} */ ;
-/** @type {__VLS_StyleScopedClasses['primary-button']} */ ;
 /** @type {__VLS_StyleScopedClasses['purchase-lines-table-wrap']} */ ;
 /** @type {__VLS_StyleScopedClasses['site-table']} */ ;
 /** @type {__VLS_StyleScopedClasses['purchase-lines-table']} */ ;
@@ -1285,6 +1259,26 @@ if (__VLS_ctx.deleteOpen) {
 /** @type {__VLS_StyleScopedClasses['site-empty']} */ ;
 /** @type {__VLS_StyleScopedClasses['table-pagination']} */ ;
 /** @type {__VLS_StyleScopedClasses['purchase-line-pagination']} */ ;
+/** @type {__VLS_StyleScopedClasses['modal-backdrop']} */ ;
+/** @type {__VLS_StyleScopedClasses['purchase-line-form']} */ ;
+/** @type {__VLS_StyleScopedClasses['purchase-line-modal']} */ ;
+/** @type {__VLS_StyleScopedClasses['corporate-line-form']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-grid']} */ ;
+/** @type {__VLS_StyleScopedClasses['three']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
+/** @type {__VLS_StyleScopedClasses['full']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-error']} */ ;
+/** @type {__VLS_StyleScopedClasses['modal-error']} */ ;
+/** @type {__VLS_StyleScopedClasses['secondary-button']} */ ;
+/** @type {__VLS_StyleScopedClasses['primary-button']} */ ;
 /** @type {__VLS_StyleScopedClasses['modal-backdrop']} */ ;
 /** @type {__VLS_StyleScopedClasses['delete-modal']} */ ;
 /** @type {__VLS_StyleScopedClasses['modal-close']} */ ;
@@ -1349,7 +1343,6 @@ const __VLS_self = (await import('vue')).defineComponent({
             form: form,
             lineForm: lineForm,
             availableSites: availableSites,
-            availableSubcategories: availableSubcategories,
             availableProducts: availableProducts,
             lineTotal: lineTotal,
             linePageCount: linePageCount,
@@ -1358,6 +1351,7 @@ const __VLS_self = (await import('vue')).defineComponent({
             supplierChanged: supplierChanged,
             categoryChanged: categoryChanged,
             productChanged: productChanged,
+            closeLineForm: closeLineForm,
             addLine: addLine,
             editLine: editLine,
             saveHeader: saveHeader,

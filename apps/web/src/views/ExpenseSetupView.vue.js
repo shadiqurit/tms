@@ -428,9 +428,9 @@ else {
         if (__VLS_ctx.tab === 'general') {
             __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
             __VLS_asFunctionalElement(__VLS_intrinsicElements.em, __VLS_intrinsicElements.em)({});
-            (item.phase === 'pre_award' ? 'Pre-award' : 'Project cost');
+            (item.phase === 'pre_award' ? 'Before cost' : 'Project cost');
             __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
-            (item.refundable ? 'Refundable' : 'Non-refundable');
+            (item.refundable ? 'Returnable' : 'Non-returnable');
         }
         else {
             __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});

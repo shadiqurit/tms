@@ -1,16 +1,13 @@
 import { computed, ref, watch } from 'vue';
 import { CalendarDays, ChevronLeft, ChevronRight, Pencil, Plus, ReceiptText, RotateCcw, Search } from 'lucide-vue-next';
-import { useRoute } from 'vue-router';
 import { api } from '../services/api';
 import { expenseRecords } from '../data/expenses';
 import { projects } from '../data/projects';
-const route = useRoute();
-const phase = computed(() => route.name === 'pre-award-expenses' ? 'pre_award' : 'execution');
-const title = computed(() => phase.value === 'pre_award' ? 'Pre-award expenses' : 'Project costs');
-const description = computed(() => phase.value === 'pre_award' ? 'Tender, security, estimate, and contract costs before project execution.' : 'Costs incurred after the project has started.');
 const items = ref([]);
 const search = ref('');
 const projectFilter = ref('all');
+const stageFilter = ref('all');
+const returnableFilter = ref('all');
 const statusFilter = ref('all');
 const loading = ref(false);
 const error = ref('');
@@ -18,15 +15,20 @@ const page = ref(1);
 const pageSize = 15;
 function demoItems() {
     return expenseRecords.flatMap((item) => {
-        const lines = item.lines.filter((line) => line.phase === phase.value && line.expenseTypeId);
+        const lines = item.lines;
         if (!lines.length)
             return [];
         return [{
                 id: item.id, paymentNo: item.paymentNo, paymentDate: item.paymentDate, payTo: item.payTo,
                 referenceNo: item.referenceNo, notes: item.notes, status: item.status, projectId: item.projectId,
                 projectCode: item.projectCode, projectName: item.projectName, lineCount: lines.length,
+                beforeCostCount: lines.filter((line) => line.phase === 'pre_award').length,
+                projectCostCount: lines.filter((line) => line.phase === 'execution').length,
+                returnableLineCount: lines.filter((line) => line.returnableSource === 'YES').length,
+                nonReturnableLineCount: lines.filter((line) => line.returnableSource === 'NO').length,
+                unspecifiedReturnableCount: lines.filter((line) => line.returnableSource === null).length,
                 grossAmount: lines.reduce((sum, line) => sum + line.amount, 0),
-                returnedAmount: lines.reduce((sum, line) => sum + line.returnedAmount, 0),
+                returnedAmount: lines.reduce((sum, line) => sum + (line.returnable ? line.returnedAmount : 0), 0),
                 totalAmount: lines.reduce((sum, line) => sum + line.totalAmount, 0),
             }];
     });
@@ -40,24 +42,31 @@ async function load() {
     loading.value = true;
     error.value = '';
     try {
-        const result = await api(`/expenses?phase=${phase.value}`);
+        const result = await api('/expenses');
         items.value = result.expenses;
     }
     catch (reason) {
-        error.value = reason instanceof Error ? reason.message : 'Could not load expenses.';
+        error.value = reason instanceof Error ? reason.message : 'Could not load project costs.';
     }
     finally {
         loading.value = false;
     }
 }
-watch(() => route.name, load, { immediate: true });
+void load();
 const filtered = computed(() => {
     const term = search.value.trim().toLowerCase();
     return items.value.filter((item) => {
         const matchesSearch = !term || [item.paymentNo, item.payTo, item.referenceNo, item.projectCode, item.projectName, item.notes].some((value) => String(value ?? '').toLowerCase().includes(term));
         const matchesProject = projectFilter.value === 'all' || item.projectId === Number(projectFilter.value);
+        const matchesStage = stageFilter.value === 'all'
+            || (stageFilter.value === 'pre_award' && Number(item.beforeCostCount) > 0)
+            || (stageFilter.value === 'execution' && Number(item.projectCostCount) > 0);
+        const matchesReturnable = returnableFilter.value === 'all'
+            || (returnableFilter.value === 'yes' && Number(item.returnableLineCount) > 0)
+            || (returnableFilter.value === 'no' && Number(item.nonReturnableLineCount) > 0)
+            || (returnableFilter.value === 'unset' && Number(item.unspecifiedReturnableCount) > 0);
         const matchesStatus = statusFilter.value === 'all' || item.status === statusFilter.value;
-        return matchesSearch && matchesProject && matchesStatus;
+        return matchesSearch && matchesProject && matchesStage && matchesReturnable && matchesStatus;
     });
 });
 const total = computed(() => filtered.value.reduce((sum, item) => sum + Number(item.totalAmount), 0));
@@ -65,7 +74,7 @@ const pageCount = computed(() => Math.max(1, Math.ceil(filtered.value.length / p
 const visible = computed(() => filtered.value.slice((page.value - 1) * pageSize, page.value * pageSize));
 const rangeStart = computed(() => filtered.value.length ? (page.value - 1) * pageSize + 1 : 0);
 const rangeEnd = computed(() => Math.min(page.value * pageSize, filtered.value.length));
-watch([search, projectFilter, statusFilter], () => { page.value = 1; });
+watch([search, projectFilter, stageFilter, returnableFilter, statusFilter], () => { page.value = 1; });
 function money(value) { return new Intl.NumberFormat('en-BD', { style: 'currency', currency: 'BDT', maximumFractionDigits: 0 }).format(Number(value)); }
 function date(value) { return value ? new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(value)) : '—'; }
 debugger; /* PartiallyEnd: #3632/scriptSetup.vue */
@@ -90,9 +99,7 @@ const __VLS_2 = __VLS_1({
 }, ...__VLS_functionalComponentArgsRest(__VLS_1));
 __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
 __VLS_asFunctionalElement(__VLS_intrinsicElements.h2, __VLS_intrinsicElements.h2)({});
-(__VLS_ctx.title);
 __VLS_asFunctionalElement(__VLS_intrinsicElements.p, __VLS_intrinsicElements.p)({});
-(__VLS_ctx.description);
 __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
 (__VLS_ctx.money(__VLS_ctx.total));
 __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
@@ -105,11 +112,11 @@ const __VLS_4 = {}.RouterLink;
 /** @type {[typeof __VLS_components.RouterLink, typeof __VLS_components.RouterLink, ]} */ ;
 // @ts-ignore
 const __VLS_5 = __VLS_asFunctionalComponent(__VLS_4, new __VLS_4({
-    to: (__VLS_ctx.phase === 'pre_award' ? '/expenses/pre-award/new' : '/expenses/project/new'),
+    to: "/expenses/project-costs/new",
     ...{ class: "primary-button" },
 }));
 const __VLS_6 = __VLS_5({
-    to: (__VLS_ctx.phase === 'pre_award' ? '/expenses/pre-award/new' : '/expenses/project/new'),
+    to: "/expenses/project-costs/new",
     ...{ class: "primary-button" },
 }, ...__VLS_functionalComponentArgsRest(__VLS_5));
 __VLS_7.slots.default;
@@ -124,7 +131,7 @@ const __VLS_10 = __VLS_9({
 }, ...__VLS_functionalComponentArgsRest(__VLS_9));
 var __VLS_7;
 __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
-    ...{ class: "site-toolbar panel" },
+    ...{ class: "site-toolbar panel project-cost-toolbar" },
 });
 __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
     ...{ class: "table-search" },
@@ -155,6 +162,33 @@ for (const [project] of __VLS_getVForSourceType((__VLS_ctx.projects))) {
     });
     (project.code);
 }
+__VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
+    value: (__VLS_ctx.stageFilter),
+});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+    value: "all",
+});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+    value: "pre_award",
+});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+    value: "execution",
+});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
+    value: (__VLS_ctx.returnableFilter),
+});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+    value: "all",
+});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+    value: "yes",
+});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+    value: "no",
+});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+    value: "unset",
+});
 __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
     value: (__VLS_ctx.statusFilter),
 });
@@ -190,6 +224,8 @@ else {
     });
     __VLS_asFunctionalElement(__VLS_intrinsicElements.thead, __VLS_intrinsicElements.thead)({});
     __VLS_asFunctionalElement(__VLS_intrinsicElements.tr, __VLS_intrinsicElements.tr)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.th, __VLS_intrinsicElements.th)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.th, __VLS_intrinsicElements.th)({});
     __VLS_asFunctionalElement(__VLS_intrinsicElements.th, __VLS_intrinsicElements.th)({});
     __VLS_asFunctionalElement(__VLS_intrinsicElements.th, __VLS_intrinsicElements.th)({});
     __VLS_asFunctionalElement(__VLS_intrinsicElements.th, __VLS_intrinsicElements.th)({});
@@ -245,6 +281,46 @@ else {
         });
         (item.lineCount);
         __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+            ...{ class: "expense-cost-mix" },
+        });
+        if (Number(item.beforeCostCount)) {
+            __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({
+                ...{ class: "before" },
+            });
+            (item.beforeCostCount);
+        }
+        if (Number(item.projectCostCount)) {
+            __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({
+                ...{ class: "project" },
+            });
+            (item.projectCostCount);
+        }
+        if (Number(item.lineCount) > Number(item.beforeCostCount) + Number(item.projectCostCount)) {
+            __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({
+                ...{ class: "unknown" },
+            });
+            (Number(item.lineCount) - Number(item.beforeCostCount) - Number(item.projectCostCount));
+        }
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+            ...{ class: "expense-returnable-mix" },
+        });
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({
+            ...{ class: "yes" },
+        });
+        (item.returnableLineCount);
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({
+            ...{ class: "no" },
+        });
+        (item.nonReturnableLineCount);
+        if (Number(item.unspecifiedReturnableCount)) {
+            __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({
+                ...{ class: "unset" },
+            });
+            (item.unspecifiedReturnableCount);
+        }
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
         __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({
             ...{ class: "expense-returned" },
         });
@@ -274,14 +350,14 @@ else {
         /** @type {[typeof __VLS_components.RouterLink, typeof __VLS_components.RouterLink, ]} */ ;
         // @ts-ignore
         const __VLS_25 = __VLS_asFunctionalComponent(__VLS_24, new __VLS_24({
-            to: (`/expenses/${item.id}/edit?phase=${__VLS_ctx.phase}`),
+            to: (`/expenses/${item.id}/edit`),
             ...{ class: "card-edit" },
-            title: "Modify expense",
+            title: "Modify project cost",
         }));
         const __VLS_26 = __VLS_25({
-            to: (`/expenses/${item.id}/edit?phase=${__VLS_ctx.phase}`),
+            to: (`/expenses/${item.id}/edit`),
             ...{ class: "card-edit" },
-            title: "Modify expense",
+            title: "Modify project cost",
         }, ...__VLS_functionalComponentArgsRest(__VLS_25));
         __VLS_27.slots.default;
         const __VLS_28 = {}.Pencil;
@@ -298,7 +374,7 @@ else {
     if (!__VLS_ctx.visible.length) {
         __VLS_asFunctionalElement(__VLS_intrinsicElements.tr, __VLS_intrinsicElements.tr)({});
         __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({
-            colspan: "8",
+            colspan: "10",
         });
         __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
             ...{ class: "site-empty" },
@@ -313,7 +389,6 @@ else {
             size: (24),
         }, ...__VLS_functionalComponentArgsRest(__VLS_33));
         __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
-        (__VLS_ctx.title.toLowerCase());
         __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
     }
 }
@@ -373,6 +448,7 @@ if (!__VLS_ctx.loading && __VLS_ctx.filtered.length) {
 /** @type {__VLS_StyleScopedClasses['primary-button']} */ ;
 /** @type {__VLS_StyleScopedClasses['site-toolbar']} */ ;
 /** @type {__VLS_StyleScopedClasses['panel']} */ ;
+/** @type {__VLS_StyleScopedClasses['project-cost-toolbar']} */ ;
 /** @type {__VLS_StyleScopedClasses['table-search']} */ ;
 /** @type {__VLS_StyleScopedClasses['form-error']} */ ;
 /** @type {__VLS_StyleScopedClasses['site-load-error']} */ ;
@@ -387,6 +463,14 @@ if (!__VLS_ctx.loading && __VLS_ctx.filtered.length) {
 /** @type {__VLS_StyleScopedClasses['site-project-cell']} */ ;
 /** @type {__VLS_StyleScopedClasses['expense-payee']} */ ;
 /** @type {__VLS_StyleScopedClasses['expense-line-count']} */ ;
+/** @type {__VLS_StyleScopedClasses['expense-cost-mix']} */ ;
+/** @type {__VLS_StyleScopedClasses['before']} */ ;
+/** @type {__VLS_StyleScopedClasses['project']} */ ;
+/** @type {__VLS_StyleScopedClasses['unknown']} */ ;
+/** @type {__VLS_StyleScopedClasses['expense-returnable-mix']} */ ;
+/** @type {__VLS_StyleScopedClasses['yes']} */ ;
+/** @type {__VLS_StyleScopedClasses['no']} */ ;
+/** @type {__VLS_StyleScopedClasses['unset']} */ ;
 /** @type {__VLS_StyleScopedClasses['expense-returned']} */ ;
 /** @type {__VLS_StyleScopedClasses['expense-amount']} */ ;
 /** @type {__VLS_StyleScopedClasses['status-chip']} */ ;
@@ -406,11 +490,10 @@ const __VLS_self = (await import('vue')).defineComponent({
             RotateCcw: RotateCcw,
             Search: Search,
             projects: projects,
-            phase: phase,
-            title: title,
-            description: description,
             search: search,
             projectFilter: projectFilter,
+            stageFilter: stageFilter,
+            returnableFilter: returnableFilter,
             statusFilter: statusFilter,
             loading: loading,
             error: error,

@@ -2,7 +2,6 @@ import legacyPurchases from '../../../../Data/COR_PURCHASE_MST.json';
 import legacyLines from '../../../../Data/COR_PURCHASE_DTL.json';
 import legacyProducts from '../../../../Data/CORP_PRODUCTS.json';
 import legacyCategories from '../../../../Data/T_CATEGORIES.json';
-import legacySubcategories from '../../../../Data/T_SUBCAT.json';
 import { projects } from './projects';
 import { projectSites } from './projectSites';
 import { supplierOptions, unitOptions, type PurchaseOption } from './sitePurchases';
@@ -31,15 +30,12 @@ export interface CorporatePurchaseRecord {
 }
 
 export interface CorporateCategoryOption { id: number; name: string }
-export interface CorporateSubcategoryOption { id: number; categoryId: number; name: string }
 export interface CorporateProductOption extends PurchaseOption { categoryId: number | null; defaultPrice: number | null; description?: string }
 export interface CorporateLineRecord {
   id: number;
   purchaseId?: number;
   categoryId: number | null;
   categoryName: string;
-  subcategoryId: number | null;
-  subcategoryName: string;
   productId: number | null;
   productName: string;
   unitId: number | null;
@@ -57,10 +53,8 @@ interface LegacyPurchase { ID: number; PUR_NO: string | null; SUPP_ID: number | 
 interface LegacyLine { ID: number; PID: number; CAT_ID: number | null; SUB_CAT_ID: number | null; PROD_ID: number | null; UOM: number | null; QTY: number | null; PRICE: number | null; DISCOUNT: number | null; TOTAL: number | null; NOTES: string | null; SITE_ID: number | null }
 interface LegacyProduct { ID: number; CAT_ID: number | null; PNAME: string; DESCRIPTION: string | null; PRICE: number | null; UOM: number | null }
 interface LegacyCategory { ID: number; CNAME: string }
-interface LegacySubcategory { ID: number; CAT_ID: number; SCNAME: string }
 
 export const corporateCategories: CorporateCategoryOption[] = (legacyCategories.recordset as LegacyCategory[]).map((item) => ({ id: Number(item.ID), name: item.CNAME }));
-export const corporateSubcategories: CorporateSubcategoryOption[] = (legacySubcategories.recordset as LegacySubcategory[]).map((item) => ({ id: Number(item.ID), categoryId: Number(item.CAT_ID), name: item.SCNAME }));
 export const corporateProducts: CorporateProductOption[] = (legacyProducts.recordset as LegacyProduct[]).map((item) => ({
   id: Number(item.ID), name: item.PNAME, categoryId: item.CAT_ID ? Number(item.CAT_ID) : null,
   unitId: item.UOM ? Number(item.UOM) : null, unitName: unitOptions.find((unit) => unit.id === Number(item.UOM))?.name ?? '',
@@ -69,14 +63,12 @@ export const corporateProducts: CorporateProductOption[] = (legacyProducts.recor
 
 export const corporateLines: CorporateLineRecord[] = (legacyLines.recordset as LegacyLine[]).map((item) => {
   const category = corporateCategories.find((entry) => entry.id === Number(item.CAT_ID));
-  const subcategory = corporateSubcategories.find((entry) => entry.id === Number(item.SUB_CAT_ID));
   const product = corporateProducts.find((entry) => entry.id === Number(item.PROD_ID));
   const unit = unitOptions.find((entry) => entry.id === Number(item.UOM));
   const site = projectSites.find((entry) => entry.id === Number(item.SITE_ID));
   return {
     id: Number(item.ID), purchaseId: Number(item.PID), categoryId: item.CAT_ID ? Number(item.CAT_ID) : null,
-    categoryName: category?.name ?? '', subcategoryId: item.SUB_CAT_ID ? Number(item.SUB_CAT_ID) : null,
-    subcategoryName: subcategory?.name ?? '', productId: item.PROD_ID ? Number(item.PROD_ID) : null,
+    categoryName: category?.name ?? '', productId: item.PROD_ID ? Number(item.PROD_ID) : null,
     productName: product?.name ?? category?.name ?? 'Unspecified item', unitId: item.UOM ? Number(item.UOM) : null,
     unitName: unit?.name ?? '', siteId: item.SITE_ID ? Number(item.SITE_ID) : null, siteName: site?.name ?? '',
     quantity: Number(item.QTY ?? 0), unitPrice: Number(item.PRICE ?? 0), discount: Number(item.DISCOUNT ?? 0),

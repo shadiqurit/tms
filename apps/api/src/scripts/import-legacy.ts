@@ -25,10 +25,12 @@ function slug(name: string) {
 }
 
 const routeByPage: Record<string, string> = {
-  '1': '/dashboard', '2': '/projects', '9': '/expenses/setup', '12': '/suppliers', '14': '/workforce/employees',
-  '15': '/expenses/pre-award', '24': '/purchases/site-engineer', '25': '/projects/sites',
-  '26': '/expenses/setup', '50': '/finance/providers', '55': '/inventory/catalogue',
+  '1': '/dashboard', '2': '/projects', '4': '/admin/master-data', '6': '/admin/master-data',
+  '9': '/expenses/setup', '12': '/admin/master-data', '14': '/workforce/employees',
+  '15': '/expenses/project-costs', '24': '/purchases/site-engineer', '25': '/projects/sites',
+  '26': '/expenses/setup', '50': '/finance/providers', '55': '/admin/master-data',
   '56': '/purchases/corporate', '63': '/billing', '80': '/admin/banks',
+  '70': '/purchases/transfers',
   '99': '/admin/menus', '992': '/admin/access', '902': '/reports/engineers',
   '903': '/reports/loans', '904': '/reports/mason-payments', '905': '/reports/corporate',
   '906': '/reports/final', '67': '/reports/summary',
@@ -125,6 +127,9 @@ async function main() {
       ['corporate_purchases.view', 'View corporate purchases', 'Procurement'],
       ['corporate_purchases.manage', 'Create and modify corporate purchases', 'Procurement'],
       ['corporate_purchases.delete', 'Delete corporate purchases', 'Procurement'],
+      ['corporate_transfers.view', 'View corporate transfers', 'Procurement'],
+      ['corporate_transfers.manage', 'Create and modify corporate transfers', 'Procurement'],
+      ['corporate_transfers.delete', 'Delete corporate transfers', 'Procurement'],
     ];
     for (const permission of systemPermissions) {
       await connection.query(
@@ -141,7 +146,7 @@ async function main() {
          VALUES (?, ?, ?, ?, ?, ?, ?, ?)
          ON DUPLICATE KEY UPDATE label=VALUES(label), label_bn=VALUES(label_bn), route=VALUES(route),
            icon=VALUES(icon), sort_order=VALUES(sort_order), active=VALUES(active), permission_id=VALUES(permission_id)`,
-        [legacyId, menu.MENU_NAME, menu.MENU_NAME_BANGLA, routeByPage[String(menu.MENU_LINK)] ?? `/legacy/page-${menu.MENU_LINK || legacyId}`,
+        [legacyId, legacyId === 13 ? 'Project Costs' : menu.MENU_NAME, menu.MENU_NAME_BANGLA, routeByPage[String(menu.MENU_LINK)] ?? `/legacy/page-${menu.MENU_LINK || legacyId}`,
           menu.ICON_IMG, menu.SORT_BY ?? 0, String(menu.STATUS) === '1' ? 1 : 0, permissionMap.get(legacyId) ?? null],
       );
       const [[saved]] = await connection.query<RowDataPacket[]>('SELECT id FROM app_menu_items WHERE legacy_id = ?', [legacyId]);
@@ -181,6 +186,7 @@ async function main() {
     await inheritLegacyMenuAccess(27, ['expense_setup.view', 'expense_setup.manage']);
     await inheritLegacyMenuAccess(29, ['site_purchases.view', 'site_purchases.manage']);
     await inheritLegacyMenuAccess(14, ['corporate_purchases.view', 'corporate_purchases.manage']);
+    await inheritLegacyMenuAccess(41, ['corporate_transfers.view', 'corporate_transfers.manage']);
     const programmerId = [...roleMap.entries()].find(([legacy]) => legacy === 0)?.[1];
     if (programmerId) {
       await connection.query(
@@ -229,8 +235,9 @@ async function main() {
          ON DUPLICATE KEY UPDATE name=VALUES(name), phase=VALUES(phase), refundable=VALUES(refundable),
            default_rate=VALUES(default_rate), default_amount=VALUES(default_amount),
            default_return_amount=VALUES(default_return_amount)`,
-        [row.ID, companyId, row.EXPNAME, row.COST_TIME === 'Before' ? 'pre_award' : 'execution',
-          row.TYP === 'YES' ? 1 : 0, row.RATE, row.AMT, row.RET],
+        [row.ID, companyId, row.EXPNAME,
+          String(row.COST_TIME ?? '').trim().toUpperCase() === 'BEFORE' ? 'pre_award' : 'execution',
+          String(row.TYP ?? '').trim().toUpperCase() === 'YES' ? 1 : 0, row.RATE, row.AMT, row.RET],
       );
       const [[saved]] = await connection.query<RowDataPacket[]>(
         'SELECT id FROM app_expense_types WHERE company_id = ? AND legacy_id = ?', [companyId, row.ID],
@@ -286,7 +293,8 @@ async function main() {
            contact_person=VALUES(contact_person), phone=VALUES(phone), email=VALUES(email),
            supplier_type=VALUES(supplier_type)`,
         [row.ID, companyId, row.CODE, row.SNAME, [row.ADDRESS_1, row.ADDRESS_2].filter(Boolean).join(', '),
-          row.CONTACT_PERSON, row.PHONE, row.EMAIL, row.TYP],
+          row.CONTACT_PERSON, row.PHONE, row.EMAIL,
+          ['L', 'C', 'I', 'O'].includes(String(row.TYP ?? '').toUpperCase()) ? String(row.TYP).toUpperCase() : 'O'],
       );
       const [[saved]] = await connection.query<RowDataPacket[]>(
         'SELECT id FROM app_suppliers WHERE company_id = ? AND legacy_id = ?', [companyId, row.ID],
@@ -417,6 +425,55 @@ async function main() {
       );
     }
 
+    const corporateTransferMap = new Map<number, number>();
+    for (const row of await records('COR_TRANSFER_MST.json')) {
+      const fromProjectId = projectMap.get(Number(row.FRM_PRJ_ID));
+      const receiveProjectId = projectMap.get(Number(row.RCV_PRJ_ID));
+      if (!fromProjectId || !receiveProjectId || !row.TRNSF_DATE) continue;
+      await connection.query(
+        `INSERT INTO app_corporate_transfers
+           (legacy_id, company_id, transfer_no, from_project_id, from_site_id,
+            receive_project_id, receive_site_id, transfer_date, notes, legacy_project_id,
+            legacy_transfer_group, engineer_id, status)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'posted')
+         ON DUPLICATE KEY UPDATE transfer_no=VALUES(transfer_no), from_project_id=VALUES(from_project_id),
+           from_site_id=VALUES(from_site_id), receive_project_id=VALUES(receive_project_id),
+           receive_site_id=VALUES(receive_site_id), transfer_date=VALUES(transfer_date),
+           notes=VALUES(notes), legacy_project_id=VALUES(legacy_project_id),
+           legacy_transfer_group=VALUES(legacy_transfer_group), engineer_id=VALUES(engineer_id)`,
+        [row.ID, companyId, row.TRN_NO, fromProjectId, siteMap.get(Number(row.FRM_SITE_ID)) ?? null,
+          receiveProjectId, siteMap.get(Number(row.RCV_SITE_ID)) ?? null, row.TRNSF_DATE, row.NOTES,
+          row.PRJ_ID, row.TRN_ID, employeeMap.get(Number(row.SE_ID)) ?? null],
+      );
+      const [[saved]] = await connection.query<RowDataPacket[]>(
+        'SELECT id FROM app_corporate_transfers WHERE company_id = ? AND legacy_id = ?', [companyId, row.ID],
+      );
+      corporateTransferMap.set(Number(row.ID), Number(saved!.id));
+    }
+    for (const row of await records('COR_TRANSFER_DTL.json')) {
+      const transferId = corporateTransferMap.get(Number(row.PID));
+      if (!transferId) continue;
+      await connection.query(
+        `INSERT INTO app_corporate_transfer_lines
+           (legacy_id, transfer_id, category_id, product_id, unit_id, destination_site_id,
+            quantity, unit_price, other_cost, other_expense, total_amount, notes,
+            transfer_date, legacy_project_id, engineer_id)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+         ON DUPLICATE KEY UPDATE transfer_id=VALUES(transfer_id), category_id=VALUES(category_id),
+           product_id=VALUES(product_id), unit_id=VALUES(unit_id),
+           destination_site_id=VALUES(destination_site_id), quantity=VALUES(quantity),
+           unit_price=VALUES(unit_price), other_cost=VALUES(other_cost),
+           other_expense=VALUES(other_expense), total_amount=VALUES(total_amount),
+           notes=VALUES(notes), transfer_date=VALUES(transfer_date),
+           legacy_project_id=VALUES(legacy_project_id), engineer_id=VALUES(engineer_id)`,
+        [row.ID, transferId, corporateCategoryMap.get(Number(row.CAT_ID)) ?? null,
+          corporateProductMap.get(Number(row.PROD_ID)) ?? null, unitMap.get(Number(row.UOM)) ?? null,
+          siteMap.get(Number(row.S_ID)) ?? null, row.QTY ?? 0, row.PRICE ?? 0,
+          row.OTHER_COST ?? 0, row.OTHER_EXP ?? 0, row.TOTAL ?? 0, row.NOTES,
+          row.TDT, row.PRJ_ID, employeeMap.get(Number(row.SE_ID)) ?? null],
+      );
+    }
+
     const expenseHeadMap = new Map<number, number>();
     for (const row of await records('ENG_EXPHEAD.json')) {
       await connection.query(
@@ -454,17 +511,24 @@ async function main() {
     for (const row of await records('EXPAY_DTL.json')) {
       const paymentId = expensePaymentMap.get(Number(row.PID));
       if (!paymentId) continue;
+      const amount = Number(row.AMT ?? 0);
+      const discount = Number(row.DISCOUNT ?? 0);
+      const returnedAmount = Number(row.RTN_AMT ?? 0);
+      const returnable = row.CTYPE === 'YES' ? 1 : row.CTYPE === 'NO' ? 0 : null;
+      const totalAmount = row.TOTAL ?? Math.max(0, amount - discount - returnedAmount);
       await connection.query(
         `INSERT INTO app_expense_payment_lines
-           (legacy_id, payment_id, expense_type_id, quantity, unit_name, amount, discount,
+           (legacy_id, payment_id, company_id, expense_type_id, cost_id, returnable, quantity, unit_name, amount, discount,
             returned_amount, total_amount, return_date, notes)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-         ON DUPLICATE KEY UPDATE payment_id=VALUES(payment_id), expense_type_id=VALUES(expense_type_id),
-           quantity=VALUES(quantity), unit_name=VALUES(unit_name), amount=VALUES(amount),
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+         ON DUPLICATE KEY UPDATE payment_id=VALUES(payment_id), company_id=VALUES(company_id),
+           expense_type_id=VALUES(expense_type_id), cost_id=VALUES(cost_id),
+           returnable=VALUES(returnable), quantity=VALUES(quantity), unit_name=VALUES(unit_name), amount=VALUES(amount),
            discount=VALUES(discount), returned_amount=VALUES(returned_amount),
            total_amount=VALUES(total_amount), return_date=VALUES(return_date), notes=VALUES(notes)`,
-        [row.ID, paymentId, expenseTypeMap.get(Number(row.COST_ID)) ?? null, row.QTY, row.UOM,
-          row.AMT, row.DISCOUNT, row.RTN_AMT, row.TOTAL ?? 0, row.RTN_DATE, row.NOTES],
+        [row.ID, paymentId, companyId, expenseTypeMap.get(Number(row.COST_ID)) ?? null,
+          row.COST_ID ?? null, returnable, row.QTY, row.UOM, row.AMT, row.DISCOUNT,
+          row.RTN_AMT, totalAmount, row.RTN_DATE, row.NOTES],
       );
     }
 

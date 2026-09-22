@@ -1,17 +1,28 @@
-import { computed, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { ChevronDown } from 'lucide-vue-next';
 import { navigation } from '../data/navigation';
+import { api } from '../services/api';
+import { useAuthStore } from '../stores/auth';
 import AppIcon from './AppIcon.vue';
 const __VLS_props = defineProps();
 const emit = defineEmits();
 const route = useRoute();
+const auth = useAuthStore();
 const openGroups = ref([]);
+const configuredNavigation = ref(navigation);
+function allowed(item) { return auth.hasPermission(item.permission); }
+const visibleNavigation = computed(() => configuredNavigation.value.flatMap((item) => {
+    if (!item.children)
+        return allowed(item) ? [item] : [];
+    const children = item.children.filter(allowed);
+    return children.length && allowed(item) ? [{ ...item, children }] : [];
+}));
 function containsRoute(item) {
     return item.route === route.path || item.children?.some((child) => child.route === route.path);
 }
 watch(() => route.path, () => {
-    const active = navigation.find((item) => containsRoute(item));
+    const active = visibleNavigation.value.find((item) => containsRoute(item));
     if (active?.children && !openGroups.value.includes(active.id))
         openGroups.value.push(active.id);
 }, { immediate: true });
@@ -21,6 +32,22 @@ function toggle(id) {
         : [...openGroups.value, id];
 }
 const isOpen = computed(() => (id) => openGroups.value.includes(id));
+async function loadNavigation() {
+    try {
+        const result = await api('/navigation');
+        configuredNavigation.value = result.items;
+    }
+    catch {
+        configuredNavigation.value = navigation;
+    }
+}
+function navigationChanged() { void loadNavigation(); }
+onMounted(() => {
+    void loadNavigation();
+    window.addEventListener('tms:navigation-changed', navigationChanged);
+});
+onBeforeUnmount(() => window.removeEventListener('tms:navigation-changed', navigationChanged));
+watch(() => auth.permissions.join('|'), () => void loadNavigation());
 debugger; /* PartiallyEnd: #3632/scriptSetup.vue */
 const __VLS_ctx = {};
 let __VLS_components;
@@ -29,7 +56,7 @@ __VLS_asFunctionalElement(__VLS_intrinsicElements.nav, __VLS_intrinsicElements.n
     ...{ class: "side-nav" },
     'aria-label': "Main navigation",
 });
-for (const [item] of __VLS_getVForSourceType((__VLS_ctx.navigation))) {
+for (const [item] of __VLS_getVForSourceType((__VLS_ctx.visibleNavigation))) {
     (item.id);
     if (!item.children) {
         const __VLS_0 = {}.RouterLink;
@@ -178,9 +205,9 @@ const __VLS_self = (await import('vue')).defineComponent({
     setup() {
         return {
             ChevronDown: ChevronDown,
-            navigation: navigation,
             AppIcon: AppIcon,
             emit: emit,
+            visibleNavigation: visibleNavigation,
             containsRoute: containsRoute,
             toggle: toggle,
             isOpen: isOpen,

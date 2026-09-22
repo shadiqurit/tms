@@ -6,6 +6,7 @@ import type { RowDataPacket } from 'mysql2';
 import { db } from '../db.js';
 import { config } from '../config.js';
 import { authenticate } from '../middleware/auth.js';
+import { effectivePermissionKeys } from '../services/permissions.js';
 import type { AuthRequest } from '../types.js';
 
 interface UserRow extends RowDataPacket {
@@ -54,9 +55,11 @@ authRouter.post('/login', async (req, res) => {
     config.JWT_SECRET,
     { subject: String(user.id), expiresIn: parsed.data.remember ? '30d' : '8h' },
   );
+  const permissions = await effectivePermissionKeys(user.id, user.role_id, user.role_key);
 
   return res.json({
     token,
+    permissions,
     user: {
       id: user.id,
       name: `${user.first_name} ${user.last_name}`.trim(),
@@ -77,7 +80,9 @@ authRouter.get('/me', authenticate, async (req: AuthRequest, res) => {
   );
   const user = rows[0];
   if (!user) return res.status(401).json({ message: 'User no longer exists.' });
+  const permissions = await effectivePermissionKeys(user.id, user.role_id, user.role_key);
   return res.json({
+    permissions,
     user: {
       id: user.id,
       name: `${user.first_name} ${user.last_name}`.trim(),

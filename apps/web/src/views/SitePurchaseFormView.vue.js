@@ -139,9 +139,10 @@ function supplierChanged() { const supplier = suppliers.value.find((item) => ite
 function materialChanged() { const material = materials.value.find((item) => item.id === materialForm.materialId); materialForm.unitId = material?.unitId ?? null; }
 function resetMaterialForm() { Object.assign(materialForm, { id: null, materialId: 0, unitId: null, siteId: null, entryDate: form.purchaseDate || today, quantity: 1, unitPrice: '', discount: '', notes: '' }); }
 function resetExpenseForm() { Object.assign(expenseForm, { id: null, expenseHeadId: null, siteId: null, entryDate: form.purchaseDate || today, amount: '', notes: '' }); }
-function addEntry() { activeTab.value === 'materials' ? resetMaterialForm() : resetExpenseForm(); lineFormOpen.value = true; }
-function editMaterial(item) { Object.assign(materialForm, { id: item.id, materialId: item.materialId, unitId: item.unitId, siteId: item.siteId, entryDate: dateValue(item.entryDate), quantity: Number(item.quantity), unitPrice: Number(item.unitPrice), discount: Number(item.discount || 0), notes: item.notes ?? '' }); lineFormOpen.value = true; }
-function editExpense(item) { Object.assign(expenseForm, { id: item.id, expenseHeadId: item.expenseHeadId, siteId: item.siteId, entryDate: dateValue(item.entryDate), amount: Number(item.amount), notes: item.notes ?? '' }); lineFormOpen.value = true; }
+function closeLineForm() { lineFormOpen.value = false; error.value = ''; }
+function addEntry() { error.value = ''; activeTab.value === 'materials' ? resetMaterialForm() : resetExpenseForm(); lineFormOpen.value = true; }
+function editMaterial(item) { error.value = ''; Object.assign(materialForm, { id: item.id, materialId: item.materialId, unitId: item.unitId, siteId: item.siteId, entryDate: dateValue(item.entryDate), quantity: Number(item.quantity), unitPrice: Number(item.unitPrice), discount: Number(item.discount || 0), notes: item.notes ?? '' }); lineFormOpen.value = true; }
+function editExpense(item) { error.value = ''; Object.assign(expenseForm, { id: item.id, expenseHeadId: item.expenseHeadId, siteId: item.siteId, entryDate: dateValue(item.entryDate), amount: Number(item.amount), notes: item.notes ?? '' }); lineFormOpen.value = true; }
 async function saveHeader() {
     error.value = '';
     saved.value = '';
@@ -714,323 +715,6 @@ if (__VLS_ctx.editing) {
         size: (16),
     }, ...__VLS_functionalComponentArgsRest(__VLS_56));
     (__VLS_ctx.activeTab === 'materials' ? 'Add material' : 'Add expense');
-    if (__VLS_ctx.lineFormOpen && __VLS_ctx.activeTab === 'materials') {
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.form, __VLS_intrinsicElements.form)({
-            ...{ onSubmit: (__VLS_ctx.saveMaterial) },
-            ...{ class: "purchase-line-form" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.header, __VLS_intrinsicElements.header)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
-        const __VLS_59 = {}.PackagePlus;
-        /** @type {[typeof __VLS_components.PackagePlus, ]} */ ;
-        // @ts-ignore
-        const __VLS_60 = __VLS_asFunctionalComponent(__VLS_59, new __VLS_59({
-            size: (18),
-        }));
-        const __VLS_61 = __VLS_60({
-            size: (18),
-        }, ...__VLS_functionalComponentArgsRest(__VLS_60));
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
-        (__VLS_ctx.materialForm.id ? 'Modify material entry' : 'Add material purchase');
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
-            ...{ onClick: (...[$event]) => {
-                    if (!(__VLS_ctx.editing))
-                        return;
-                    if (!(__VLS_ctx.lineFormOpen && __VLS_ctx.activeTab === 'materials'))
-                        return;
-                    __VLS_ctx.lineFormOpen = false;
-                } },
-            type: "button",
-        });
-        const __VLS_63 = {}.X;
-        /** @type {[typeof __VLS_components.X, ]} */ ;
-        // @ts-ignore
-        const __VLS_64 = __VLS_asFunctionalComponent(__VLS_63, new __VLS_63({
-            size: (17),
-        }));
-        const __VLS_65 = __VLS_64({
-            size: (17),
-        }, ...__VLS_functionalComponentArgsRest(__VLS_64));
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
-            ...{ class: "form-grid three" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-            ...{ class: "form-field full" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.b, __VLS_intrinsicElements.b)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
-            ...{ onChange: (__VLS_ctx.materialChanged) },
-            value: (__VLS_ctx.materialForm.materialId),
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-            value: (0),
-            disabled: true,
-        });
-        for (const [item] of __VLS_getVForSourceType((__VLS_ctx.materials))) {
-            __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-                key: (item.id),
-                value: (item.id),
-            });
-            (item.name);
-        }
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-            ...{ class: "form-field" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.b, __VLS_intrinsicElements.b)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
-            type: "date",
-        });
-        (__VLS_ctx.materialForm.entryDate);
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-            ...{ class: "form-field" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
-            value: (__VLS_ctx.materialForm.siteId),
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-            value: (null),
-        });
-        for (const [site] of __VLS_getVForSourceType((__VLS_ctx.availableSites))) {
-            __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-                key: (site.id),
-                value: (site.id),
-            });
-            (site.name);
-        }
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-            ...{ class: "form-field" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
-            value: (__VLS_ctx.materialForm.unitId),
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-            value: (null),
-        });
-        for (const [unit] of __VLS_getVForSourceType((__VLS_ctx.units))) {
-            __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-                key: (unit.id),
-                value: (unit.id),
-            });
-            (unit.name);
-        }
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-            ...{ class: "form-field" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.b, __VLS_intrinsicElements.b)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
-            type: "number",
-            min: "0.0001",
-            step: "0.0001",
-        });
-        (__VLS_ctx.materialForm.quantity);
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-            ...{ class: "form-field" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.b, __VLS_intrinsicElements.b)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
-            type: "number",
-            min: "0",
-            step: "0.0001",
-        });
-        (__VLS_ctx.materialForm.unitPrice);
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-            ...{ class: "form-field" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
-            type: "number",
-            min: "0",
-            step: "0.01",
-        });
-        (__VLS_ctx.materialForm.discount);
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-            ...{ class: "form-field full" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
-            placeholder: "Optional material notes",
-        });
-        (__VLS_ctx.materialForm.notes);
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.footer, __VLS_intrinsicElements.footer)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
-        (__VLS_ctx.money(__VLS_ctx.materialLineTotal));
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
-            ...{ onClick: (...[$event]) => {
-                    if (!(__VLS_ctx.editing))
-                        return;
-                    if (!(__VLS_ctx.lineFormOpen && __VLS_ctx.activeTab === 'materials'))
-                        return;
-                    __VLS_ctx.lineFormOpen = false;
-                } },
-            type: "button",
-            ...{ class: "secondary-button" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
-            ...{ class: "primary-button" },
-            disabled: (__VLS_ctx.lineSaving),
-        });
-        const __VLS_67 = {}.Check;
-        /** @type {[typeof __VLS_components.Check, ]} */ ;
-        // @ts-ignore
-        const __VLS_68 = __VLS_asFunctionalComponent(__VLS_67, new __VLS_67({
-            size: (15),
-        }));
-        const __VLS_69 = __VLS_68({
-            size: (15),
-        }, ...__VLS_functionalComponentArgsRest(__VLS_68));
-        (__VLS_ctx.lineSaving ? 'Saving…' : 'Save material');
-    }
-    if (__VLS_ctx.lineFormOpen && __VLS_ctx.activeTab === 'expenses') {
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.form, __VLS_intrinsicElements.form)({
-            ...{ onSubmit: (__VLS_ctx.saveExpense) },
-            ...{ class: "purchase-line-form" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.header, __VLS_intrinsicElements.header)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
-        const __VLS_71 = {}.ReceiptText;
-        /** @type {[typeof __VLS_components.ReceiptText, ]} */ ;
-        // @ts-ignore
-        const __VLS_72 = __VLS_asFunctionalComponent(__VLS_71, new __VLS_71({
-            size: (18),
-        }));
-        const __VLS_73 = __VLS_72({
-            size: (18),
-        }, ...__VLS_functionalComponentArgsRest(__VLS_72));
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
-        (__VLS_ctx.expenseForm.id ? 'Modify site expense' : 'Add other site expense');
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
-            ...{ onClick: (...[$event]) => {
-                    if (!(__VLS_ctx.editing))
-                        return;
-                    if (!(__VLS_ctx.lineFormOpen && __VLS_ctx.activeTab === 'expenses'))
-                        return;
-                    __VLS_ctx.lineFormOpen = false;
-                } },
-            type: "button",
-        });
-        const __VLS_75 = {}.X;
-        /** @type {[typeof __VLS_components.X, ]} */ ;
-        // @ts-ignore
-        const __VLS_76 = __VLS_asFunctionalComponent(__VLS_75, new __VLS_75({
-            size: (17),
-        }));
-        const __VLS_77 = __VLS_76({
-            size: (17),
-        }, ...__VLS_functionalComponentArgsRest(__VLS_76));
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
-            ...{ class: "form-grid" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-            ...{ class: "form-field full" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
-            value: (__VLS_ctx.expenseForm.expenseHeadId),
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-            value: (null),
-        });
-        for (const [head] of __VLS_getVForSourceType((__VLS_ctx.expenseHeads))) {
-            __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-                key: (head.id),
-                value: (head.id),
-            });
-            (head.name);
-        }
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-            ...{ class: "form-field" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.b, __VLS_intrinsicElements.b)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
-            type: "date",
-        });
-        (__VLS_ctx.expenseForm.entryDate);
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-            ...{ class: "form-field" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
-            value: (__VLS_ctx.expenseForm.siteId),
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-            value: (null),
-        });
-        for (const [site] of __VLS_getVForSourceType((__VLS_ctx.availableSites))) {
-            __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-                key: (site.id),
-                value: (site.id),
-            });
-            (site.name);
-        }
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-            ...{ class: "form-field" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.b, __VLS_intrinsicElements.b)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
-            type: "number",
-            min: "0",
-            step: "0.01",
-        });
-        (__VLS_ctx.expenseForm.amount);
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-            ...{ class: "form-field full" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
-            placeholder: "Expense details",
-        });
-        (__VLS_ctx.expenseForm.notes);
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.footer, __VLS_intrinsicElements.footer)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
-        (__VLS_ctx.money(Number(__VLS_ctx.expenseForm.amount || 0)));
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
-            ...{ onClick: (...[$event]) => {
-                    if (!(__VLS_ctx.editing))
-                        return;
-                    if (!(__VLS_ctx.lineFormOpen && __VLS_ctx.activeTab === 'expenses'))
-                        return;
-                    __VLS_ctx.lineFormOpen = false;
-                } },
-            type: "button",
-            ...{ class: "secondary-button" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
-            ...{ class: "primary-button" },
-            disabled: (__VLS_ctx.lineSaving),
-        });
-        const __VLS_79 = {}.Check;
-        /** @type {[typeof __VLS_components.Check, ]} */ ;
-        // @ts-ignore
-        const __VLS_80 = __VLS_asFunctionalComponent(__VLS_79, new __VLS_79({
-            size: (15),
-        }));
-        const __VLS_81 = __VLS_80({
-            size: (15),
-        }, ...__VLS_functionalComponentArgsRest(__VLS_80));
-        (__VLS_ctx.lineSaving ? 'Saving…' : 'Save expense');
-    }
     __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
         ...{ class: "purchase-lines-table-wrap" },
     });
@@ -1055,24 +739,38 @@ if (__VLS_ctx.editing) {
             __VLS_asFunctionalElement(__VLS_intrinsicElements.tr, __VLS_intrinsicElements.tr)({
                 key: (item.id),
             });
-            __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+            __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({
+                'data-label': "Date",
+            });
             (__VLS_ctx.dateValue(item.entryDate));
-            __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+            __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({
+                'data-label': "Material",
+            });
             __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
             (item.materialName);
             __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
             (item.notes);
-            __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+            __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({
+                'data-label': "Site",
+            });
             (item.siteName || 'General project');
-            __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+            __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({
+                'data-label': "Quantity",
+            });
             (item.quantity);
             (item.unitName);
-            __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+            __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({
+                'data-label': "Price",
+            });
             (__VLS_ctx.money(item.unitPrice));
-            __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+            __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({
+                'data-label': "Total",
+            });
             __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
             (__VLS_ctx.money(item.totalAmount));
-            __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+            __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({
+                'data-label': "Actions",
+            });
             __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
                 ...{ class: "line-actions" },
             });
@@ -1084,16 +782,17 @@ if (__VLS_ctx.editing) {
                             return;
                         __VLS_ctx.editMaterial(item);
                     } },
+                type: "button",
             });
-            const __VLS_83 = {}.Pencil;
+            const __VLS_59 = {}.Pencil;
             /** @type {[typeof __VLS_components.Pencil, ]} */ ;
             // @ts-ignore
-            const __VLS_84 = __VLS_asFunctionalComponent(__VLS_83, new __VLS_83({
+            const __VLS_60 = __VLS_asFunctionalComponent(__VLS_59, new __VLS_59({
                 size: (14),
             }));
-            const __VLS_85 = __VLS_84({
+            const __VLS_61 = __VLS_60({
                 size: (14),
-            }, ...__VLS_functionalComponentArgsRest(__VLS_84));
+            }, ...__VLS_functionalComponentArgsRest(__VLS_60));
             __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
                 ...{ onClick: (...[$event]) => {
                         if (!(__VLS_ctx.editing))
@@ -1102,17 +801,18 @@ if (__VLS_ctx.editing) {
                             return;
                         __VLS_ctx.pendingLineDelete = { kind: 'materials', id: item.id };
                     } },
+                type: "button",
                 ...{ class: "danger" },
             });
-            const __VLS_87 = {}.Trash2;
+            const __VLS_63 = {}.Trash2;
             /** @type {[typeof __VLS_components.Trash2, ]} */ ;
             // @ts-ignore
-            const __VLS_88 = __VLS_asFunctionalComponent(__VLS_87, new __VLS_87({
+            const __VLS_64 = __VLS_asFunctionalComponent(__VLS_63, new __VLS_63({
                 size: (14),
             }));
-            const __VLS_89 = __VLS_88({
+            const __VLS_65 = __VLS_64({
                 size: (14),
-            }, ...__VLS_functionalComponentArgsRest(__VLS_88));
+            }, ...__VLS_functionalComponentArgsRest(__VLS_64));
         }
         if (!__VLS_ctx.materialItems.length) {
             __VLS_asFunctionalElement(__VLS_intrinsicElements.tr, __VLS_intrinsicElements.tr)({});
@@ -1122,15 +822,15 @@ if (__VLS_ctx.editing) {
             __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
                 ...{ class: "site-empty" },
             });
-            const __VLS_91 = {}.PackagePlus;
+            const __VLS_67 = {}.PackagePlus;
             /** @type {[typeof __VLS_components.PackagePlus, ]} */ ;
             // @ts-ignore
-            const __VLS_92 = __VLS_asFunctionalComponent(__VLS_91, new __VLS_91({
+            const __VLS_68 = __VLS_asFunctionalComponent(__VLS_67, new __VLS_67({
                 size: (22),
             }));
-            const __VLS_93 = __VLS_92({
+            const __VLS_69 = __VLS_68({
                 size: (22),
-            }, ...__VLS_functionalComponentArgsRest(__VLS_92));
+            }, ...__VLS_functionalComponentArgsRest(__VLS_68));
             __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
         }
     }
@@ -1154,19 +854,31 @@ if (__VLS_ctx.editing) {
             __VLS_asFunctionalElement(__VLS_intrinsicElements.tr, __VLS_intrinsicElements.tr)({
                 key: (item.id),
             });
-            __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+            __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({
+                'data-label': "Date",
+            });
             (__VLS_ctx.dateValue(item.entryDate));
-            __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+            __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({
+                'data-label': "Expense head",
+            });
             __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
             (item.expenseHeadName);
-            __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+            __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({
+                'data-label': "Site",
+            });
             (item.siteName || 'General project');
-            __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+            __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({
+                'data-label': "Notes",
+            });
             (item.notes || '—');
-            __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+            __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({
+                'data-label': "Amount",
+            });
             __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
             (__VLS_ctx.money(item.amount));
-            __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+            __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({
+                'data-label': "Actions",
+            });
             __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
                 ...{ class: "line-actions" },
             });
@@ -1178,16 +890,17 @@ if (__VLS_ctx.editing) {
                             return;
                         __VLS_ctx.editExpense(item);
                     } },
+                type: "button",
             });
-            const __VLS_95 = {}.Pencil;
+            const __VLS_71 = {}.Pencil;
             /** @type {[typeof __VLS_components.Pencil, ]} */ ;
             // @ts-ignore
-            const __VLS_96 = __VLS_asFunctionalComponent(__VLS_95, new __VLS_95({
+            const __VLS_72 = __VLS_asFunctionalComponent(__VLS_71, new __VLS_71({
                 size: (14),
             }));
-            const __VLS_97 = __VLS_96({
+            const __VLS_73 = __VLS_72({
                 size: (14),
-            }, ...__VLS_functionalComponentArgsRest(__VLS_96));
+            }, ...__VLS_functionalComponentArgsRest(__VLS_72));
             __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
                 ...{ onClick: (...[$event]) => {
                         if (!(__VLS_ctx.editing))
@@ -1196,17 +909,18 @@ if (__VLS_ctx.editing) {
                             return;
                         __VLS_ctx.pendingLineDelete = { kind: 'expenses', id: item.id };
                     } },
+                type: "button",
                 ...{ class: "danger" },
             });
-            const __VLS_99 = {}.Trash2;
+            const __VLS_75 = {}.Trash2;
             /** @type {[typeof __VLS_components.Trash2, ]} */ ;
             // @ts-ignore
-            const __VLS_100 = __VLS_asFunctionalComponent(__VLS_99, new __VLS_99({
+            const __VLS_76 = __VLS_asFunctionalComponent(__VLS_75, new __VLS_75({
                 size: (14),
             }));
-            const __VLS_101 = __VLS_100({
+            const __VLS_77 = __VLS_76({
                 size: (14),
-            }, ...__VLS_functionalComponentArgsRest(__VLS_100));
+            }, ...__VLS_functionalComponentArgsRest(__VLS_76));
         }
         if (!__VLS_ctx.expenseItems.length) {
             __VLS_asFunctionalElement(__VLS_intrinsicElements.tr, __VLS_intrinsicElements.tr)({});
@@ -1216,15 +930,15 @@ if (__VLS_ctx.editing) {
             __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
                 ...{ class: "site-empty" },
             });
-            const __VLS_103 = {}.ReceiptText;
+            const __VLS_79 = {}.ReceiptText;
             /** @type {[typeof __VLS_components.ReceiptText, ]} */ ;
             // @ts-ignore
-            const __VLS_104 = __VLS_asFunctionalComponent(__VLS_103, new __VLS_103({
+            const __VLS_80 = __VLS_asFunctionalComponent(__VLS_79, new __VLS_79({
                 size: (22),
             }));
-            const __VLS_105 = __VLS_104({
+            const __VLS_81 = __VLS_80({
                 size: (22),
-            }, ...__VLS_functionalComponentArgsRest(__VLS_104));
+            }, ...__VLS_functionalComponentArgsRest(__VLS_80));
             __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
         }
     }
@@ -1246,15 +960,15 @@ if (__VLS_ctx.editing) {
                 } },
             disabled: (__VLS_ctx.materialPage === 1),
         });
-        const __VLS_107 = {}.ChevronLeft;
+        const __VLS_83 = {}.ChevronLeft;
         /** @type {[typeof __VLS_components.ChevronLeft, ]} */ ;
         // @ts-ignore
-        const __VLS_108 = __VLS_asFunctionalComponent(__VLS_107, new __VLS_107({
+        const __VLS_84 = __VLS_asFunctionalComponent(__VLS_83, new __VLS_83({
             size: (16),
         }));
-        const __VLS_109 = __VLS_108({
+        const __VLS_85 = __VLS_84({
             size: (16),
-        }, ...__VLS_functionalComponentArgsRest(__VLS_108));
+        }, ...__VLS_functionalComponentArgsRest(__VLS_84));
         __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
         (__VLS_ctx.materialPage);
         (__VLS_ctx.materialPageCount);
@@ -1269,15 +983,15 @@ if (__VLS_ctx.editing) {
                 } },
             disabled: (__VLS_ctx.materialPage === __VLS_ctx.materialPageCount),
         });
-        const __VLS_111 = {}.ChevronRight;
+        const __VLS_87 = {}.ChevronRight;
         /** @type {[typeof __VLS_components.ChevronRight, ]} */ ;
         // @ts-ignore
-        const __VLS_112 = __VLS_asFunctionalComponent(__VLS_111, new __VLS_111({
+        const __VLS_88 = __VLS_asFunctionalComponent(__VLS_87, new __VLS_87({
             size: (16),
         }));
-        const __VLS_113 = __VLS_112({
+        const __VLS_89 = __VLS_88({
             size: (16),
-        }, ...__VLS_functionalComponentArgsRest(__VLS_112));
+        }, ...__VLS_functionalComponentArgsRest(__VLS_88));
     }
     else {
         __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
@@ -1292,15 +1006,15 @@ if (__VLS_ctx.editing) {
                 } },
             disabled: (__VLS_ctx.expensePage === 1),
         });
-        const __VLS_115 = {}.ChevronLeft;
+        const __VLS_91 = {}.ChevronLeft;
         /** @type {[typeof __VLS_components.ChevronLeft, ]} */ ;
         // @ts-ignore
-        const __VLS_116 = __VLS_asFunctionalComponent(__VLS_115, new __VLS_115({
+        const __VLS_92 = __VLS_asFunctionalComponent(__VLS_91, new __VLS_91({
             size: (16),
         }));
-        const __VLS_117 = __VLS_116({
+        const __VLS_93 = __VLS_92({
             size: (16),
-        }, ...__VLS_functionalComponentArgsRest(__VLS_116));
+        }, ...__VLS_functionalComponentArgsRest(__VLS_92));
         __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
         (__VLS_ctx.expensePage);
         (__VLS_ctx.expensePageCount);
@@ -1315,16 +1029,329 @@ if (__VLS_ctx.editing) {
                 } },
             disabled: (__VLS_ctx.expensePage === __VLS_ctx.expensePageCount),
         });
-        const __VLS_119 = {}.ChevronRight;
+        const __VLS_95 = {}.ChevronRight;
         /** @type {[typeof __VLS_components.ChevronRight, ]} */ ;
         // @ts-ignore
-        const __VLS_120 = __VLS_asFunctionalComponent(__VLS_119, new __VLS_119({
+        const __VLS_96 = __VLS_asFunctionalComponent(__VLS_95, new __VLS_95({
             size: (16),
         }));
-        const __VLS_121 = __VLS_120({
+        const __VLS_97 = __VLS_96({
             size: (16),
-        }, ...__VLS_functionalComponentArgsRest(__VLS_120));
+        }, ...__VLS_functionalComponentArgsRest(__VLS_96));
     }
+}
+if (__VLS_ctx.lineFormOpen && __VLS_ctx.activeTab === 'materials') {
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+        ...{ onClick: (__VLS_ctx.closeLineForm) },
+        ...{ class: "modal-backdrop" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.form, __VLS_intrinsicElements.form)({
+        ...{ onSubmit: (__VLS_ctx.saveMaterial) },
+        ...{ class: "purchase-line-form purchase-line-modal" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.header, __VLS_intrinsicElements.header)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
+    const __VLS_99 = {}.PackagePlus;
+    /** @type {[typeof __VLS_components.PackagePlus, ]} */ ;
+    // @ts-ignore
+    const __VLS_100 = __VLS_asFunctionalComponent(__VLS_99, new __VLS_99({
+        size: (18),
+    }));
+    const __VLS_101 = __VLS_100({
+        size: (18),
+    }, ...__VLS_functionalComponentArgsRest(__VLS_100));
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+    (__VLS_ctx.materialForm.id ? 'Modify material entry' : 'Add material purchase');
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
+        ...{ onClick: (__VLS_ctx.closeLineForm) },
+        type: "button",
+    });
+    const __VLS_103 = {}.X;
+    /** @type {[typeof __VLS_components.X, ]} */ ;
+    // @ts-ignore
+    const __VLS_104 = __VLS_asFunctionalComponent(__VLS_103, new __VLS_103({
+        size: (17),
+    }));
+    const __VLS_105 = __VLS_104({
+        size: (17),
+    }, ...__VLS_functionalComponentArgsRest(__VLS_104));
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+        ...{ class: "form-grid three" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
+        ...{ class: "form-field full" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.b, __VLS_intrinsicElements.b)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
+        ...{ onChange: (__VLS_ctx.materialChanged) },
+        value: (__VLS_ctx.materialForm.materialId),
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+        value: (0),
+        disabled: true,
+    });
+    for (const [item] of __VLS_getVForSourceType((__VLS_ctx.materials))) {
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+            key: (item.id),
+            value: (item.id),
+        });
+        (item.name);
+    }
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
+        ...{ class: "form-field" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.b, __VLS_intrinsicElements.b)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
+        type: "date",
+    });
+    (__VLS_ctx.materialForm.entryDate);
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
+        ...{ class: "form-field" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
+        value: (__VLS_ctx.materialForm.siteId),
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+        value: (null),
+    });
+    for (const [site] of __VLS_getVForSourceType((__VLS_ctx.availableSites))) {
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+            key: (site.id),
+            value: (site.id),
+        });
+        (site.name);
+    }
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
+        ...{ class: "form-field" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
+        value: (__VLS_ctx.materialForm.unitId),
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+        value: (null),
+    });
+    for (const [unit] of __VLS_getVForSourceType((__VLS_ctx.units))) {
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+            key: (unit.id),
+            value: (unit.id),
+        });
+        (unit.name);
+    }
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
+        ...{ class: "form-field" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.b, __VLS_intrinsicElements.b)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
+        type: "number",
+        min: "0.0001",
+        step: "0.0001",
+    });
+    (__VLS_ctx.materialForm.quantity);
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
+        ...{ class: "form-field" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.b, __VLS_intrinsicElements.b)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
+        type: "number",
+        min: "0",
+        step: "0.0001",
+    });
+    (__VLS_ctx.materialForm.unitPrice);
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
+        ...{ class: "form-field" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
+        type: "number",
+        min: "0",
+        step: "0.01",
+    });
+    (__VLS_ctx.materialForm.discount);
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
+        ...{ class: "form-field full" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
+        placeholder: "Optional material notes",
+    });
+    (__VLS_ctx.materialForm.notes);
+    if (__VLS_ctx.error) {
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.p, __VLS_intrinsicElements.p)({
+            ...{ class: "form-error modal-error" },
+        });
+        (__VLS_ctx.error);
+    }
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.footer, __VLS_intrinsicElements.footer)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+    (__VLS_ctx.money(__VLS_ctx.materialLineTotal));
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
+        ...{ onClick: (__VLS_ctx.closeLineForm) },
+        type: "button",
+        ...{ class: "secondary-button" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
+        ...{ class: "primary-button" },
+        disabled: (__VLS_ctx.lineSaving),
+    });
+    const __VLS_107 = {}.Check;
+    /** @type {[typeof __VLS_components.Check, ]} */ ;
+    // @ts-ignore
+    const __VLS_108 = __VLS_asFunctionalComponent(__VLS_107, new __VLS_107({
+        size: (15),
+    }));
+    const __VLS_109 = __VLS_108({
+        size: (15),
+    }, ...__VLS_functionalComponentArgsRest(__VLS_108));
+    (__VLS_ctx.lineSaving ? 'Saving…' : __VLS_ctx.materialForm.id ? 'Update material' : 'Add material');
+}
+if (__VLS_ctx.lineFormOpen && __VLS_ctx.activeTab === 'expenses') {
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+        ...{ onClick: (__VLS_ctx.closeLineForm) },
+        ...{ class: "modal-backdrop" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.form, __VLS_intrinsicElements.form)({
+        ...{ onSubmit: (__VLS_ctx.saveExpense) },
+        ...{ class: "purchase-line-form purchase-line-modal purchase-expense-modal" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.header, __VLS_intrinsicElements.header)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
+    const __VLS_111 = {}.ReceiptText;
+    /** @type {[typeof __VLS_components.ReceiptText, ]} */ ;
+    // @ts-ignore
+    const __VLS_112 = __VLS_asFunctionalComponent(__VLS_111, new __VLS_111({
+        size: (18),
+    }));
+    const __VLS_113 = __VLS_112({
+        size: (18),
+    }, ...__VLS_functionalComponentArgsRest(__VLS_112));
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+    (__VLS_ctx.expenseForm.id ? 'Modify site expense' : 'Add other site expense');
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
+        ...{ onClick: (__VLS_ctx.closeLineForm) },
+        type: "button",
+    });
+    const __VLS_115 = {}.X;
+    /** @type {[typeof __VLS_components.X, ]} */ ;
+    // @ts-ignore
+    const __VLS_116 = __VLS_asFunctionalComponent(__VLS_115, new __VLS_115({
+        size: (17),
+    }));
+    const __VLS_117 = __VLS_116({
+        size: (17),
+    }, ...__VLS_functionalComponentArgsRest(__VLS_116));
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+        ...{ class: "form-grid" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
+        ...{ class: "form-field full" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
+        value: (__VLS_ctx.expenseForm.expenseHeadId),
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+        value: (null),
+    });
+    for (const [head] of __VLS_getVForSourceType((__VLS_ctx.expenseHeads))) {
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+            key: (head.id),
+            value: (head.id),
+        });
+        (head.name);
+    }
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
+        ...{ class: "form-field" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.b, __VLS_intrinsicElements.b)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
+        type: "date",
+    });
+    (__VLS_ctx.expenseForm.entryDate);
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
+        ...{ class: "form-field" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
+        value: (__VLS_ctx.expenseForm.siteId),
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+        value: (null),
+    });
+    for (const [site] of __VLS_getVForSourceType((__VLS_ctx.availableSites))) {
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+            key: (site.id),
+            value: (site.id),
+        });
+        (site.name);
+    }
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
+        ...{ class: "form-field" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.b, __VLS_intrinsicElements.b)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
+        type: "number",
+        min: "0",
+        step: "0.01",
+    });
+    (__VLS_ctx.expenseForm.amount);
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
+        ...{ class: "form-field full" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
+        placeholder: "Expense details",
+    });
+    (__VLS_ctx.expenseForm.notes);
+    if (__VLS_ctx.error) {
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.p, __VLS_intrinsicElements.p)({
+            ...{ class: "form-error modal-error" },
+        });
+        (__VLS_ctx.error);
+    }
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.footer, __VLS_intrinsicElements.footer)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+    (__VLS_ctx.money(Number(__VLS_ctx.expenseForm.amount || 0)));
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
+        ...{ onClick: (__VLS_ctx.closeLineForm) },
+        type: "button",
+        ...{ class: "secondary-button" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
+        ...{ class: "primary-button" },
+        disabled: (__VLS_ctx.lineSaving),
+    });
+    const __VLS_119 = {}.Check;
+    /** @type {[typeof __VLS_components.Check, ]} */ ;
+    // @ts-ignore
+    const __VLS_120 = __VLS_asFunctionalComponent(__VLS_119, new __VLS_119({
+        size: (15),
+    }));
+    const __VLS_121 = __VLS_120({
+        size: (15),
+    }, ...__VLS_functionalComponentArgsRest(__VLS_120));
+    (__VLS_ctx.lineSaving ? 'Saving…' : __VLS_ctx.expenseForm.id ? 'Update expense' : 'Add expense');
 }
 if (__VLS_ctx.pendingLineDelete) {
     __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
@@ -1567,32 +1594,6 @@ if (__VLS_ctx.deleteOpen) {
 /** @type {__VLS_StyleScopedClasses['table-search']} */ ;
 /** @type {__VLS_StyleScopedClasses['secondary-button']} */ ;
 /** @type {__VLS_StyleScopedClasses['primary-button']} */ ;
-/** @type {__VLS_StyleScopedClasses['purchase-line-form']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-grid']} */ ;
-/** @type {__VLS_StyleScopedClasses['three']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
-/** @type {__VLS_StyleScopedClasses['full']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
-/** @type {__VLS_StyleScopedClasses['full']} */ ;
-/** @type {__VLS_StyleScopedClasses['secondary-button']} */ ;
-/** @type {__VLS_StyleScopedClasses['primary-button']} */ ;
-/** @type {__VLS_StyleScopedClasses['purchase-line-form']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-grid']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
-/** @type {__VLS_StyleScopedClasses['full']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
-/** @type {__VLS_StyleScopedClasses['full']} */ ;
-/** @type {__VLS_StyleScopedClasses['secondary-button']} */ ;
-/** @type {__VLS_StyleScopedClasses['primary-button']} */ ;
 /** @type {__VLS_StyleScopedClasses['purchase-lines-table-wrap']} */ ;
 /** @type {__VLS_StyleScopedClasses['site-table']} */ ;
 /** @type {__VLS_StyleScopedClasses['purchase-lines-table']} */ ;
@@ -1608,6 +1609,41 @@ if (__VLS_ctx.deleteOpen) {
 /** @type {__VLS_StyleScopedClasses['site-empty']} */ ;
 /** @type {__VLS_StyleScopedClasses['table-pagination']} */ ;
 /** @type {__VLS_StyleScopedClasses['purchase-line-pagination']} */ ;
+/** @type {__VLS_StyleScopedClasses['modal-backdrop']} */ ;
+/** @type {__VLS_StyleScopedClasses['purchase-line-form']} */ ;
+/** @type {__VLS_StyleScopedClasses['purchase-line-modal']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-grid']} */ ;
+/** @type {__VLS_StyleScopedClasses['three']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
+/** @type {__VLS_StyleScopedClasses['full']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
+/** @type {__VLS_StyleScopedClasses['full']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-error']} */ ;
+/** @type {__VLS_StyleScopedClasses['modal-error']} */ ;
+/** @type {__VLS_StyleScopedClasses['secondary-button']} */ ;
+/** @type {__VLS_StyleScopedClasses['primary-button']} */ ;
+/** @type {__VLS_StyleScopedClasses['modal-backdrop']} */ ;
+/** @type {__VLS_StyleScopedClasses['purchase-line-form']} */ ;
+/** @type {__VLS_StyleScopedClasses['purchase-line-modal']} */ ;
+/** @type {__VLS_StyleScopedClasses['purchase-expense-modal']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-grid']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
+/** @type {__VLS_StyleScopedClasses['full']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
+/** @type {__VLS_StyleScopedClasses['full']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-error']} */ ;
+/** @type {__VLS_StyleScopedClasses['modal-error']} */ ;
+/** @type {__VLS_StyleScopedClasses['secondary-button']} */ ;
+/** @type {__VLS_StyleScopedClasses['primary-button']} */ ;
 /** @type {__VLS_StyleScopedClasses['modal-backdrop']} */ ;
 /** @type {__VLS_StyleScopedClasses['delete-modal']} */ ;
 /** @type {__VLS_StyleScopedClasses['modal-close']} */ ;
@@ -1688,6 +1724,7 @@ const __VLS_self = (await import('vue')).defineComponent({
             loadLines: loadLines,
             supplierChanged: supplierChanged,
             materialChanged: materialChanged,
+            closeLineForm: closeLineForm,
             addEntry: addEntry,
             editMaterial: editMaterial,
             editExpense: editExpense,

@@ -14,7 +14,7 @@ const purchaseSummary = {
     7: [286, 3337487.8, 1034, 2213124], 8: [449, 5522657.02, 1672, 3576971], 9: [6, 573213, 26, 1056155],
     10: [5, 1273260, 31, 2116247], 11: [274, 2316988.4, 717, 1181275],
 };
-export const supplierOptions = legacySuppliers.recordset.map((item) => ({ id: Number(item.ID), code: item.CODE, name: item.SNAME, address: [item.ADDRESS_1, item.ADDRESS_2].filter(Boolean).join(', '), phone: item.PHONE ?? '' }));
+export const supplierOptions = legacySuppliers.recordset.map((item) => ({ id: Number(item.ID), code: item.CODE, name: item.SNAME, address: [item.ADDRESS_1, item.ADDRESS_2].filter(Boolean).join(', '), phone: item.PHONE ?? '', supplierType: item.TYP }));
 export const unitOptions = legacyUnits.recordset.map((item) => ({ id: Number(item.ID), name: item.UMNAME, code: item.CODE }));
 export const materialOptions = legacyMaterials.recordset.map((item) => ({ id: Number(item.ID), name: item.RMNAME, unitId: item.UOM, unitName: unitOptions.find((unit) => unit.id === Number(item.UOM))?.name ?? '' }));
 export const expenseHeadOptions = legacyExpenseHeads.recordset.map((item) => ({ id: Number(item.ID), name: item.EXPNAME }));

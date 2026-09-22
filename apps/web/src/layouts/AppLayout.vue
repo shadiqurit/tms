@@ -14,7 +14,7 @@ const mobileOpen = ref(false);
 const profileOpen = ref(false);
 
 const title = computed(() => {
-  if (route.path === '/dashboard') return 'Good evening, Sadiq';
+  if (route.path === '/dashboard') return `Good evening, ${auth.user?.name.split(' ')[0] ?? 'there'}`;
   if (route.path === '/projects') return 'Projects';
   if (route.name === 'project-new') return 'New project';
   if (route.name === 'project-edit') return 'Edit project';
@@ -27,9 +27,8 @@ const title = computed(() => {
   if (route.name === 'employees') return 'Employees';
   if (route.name === 'employee-new') return 'New employee';
   if (route.name === 'employee-edit') return 'Edit employee';
-  if (route.name === 'pre-award-expenses') return 'Pre-award expenses';
-  if (route.name === 'project-expenses') return 'Project costs';
-  if (route.name === 'pre-award-expense-new' || route.name === 'project-expense-new') return 'New expense';
+  if (route.name === 'project-costs') return 'Project Costs';
+  if (route.name === 'project-cost-new') return 'New project cost';
   if (route.name === 'expense-edit') return 'Modify expense';
   if (route.name === 'expense-setup') return 'Expense setup';
   if (route.name === 'site-purchases') return 'Site engineer purchases';
@@ -38,7 +37,14 @@ const title = computed(() => {
   if (route.name === 'corporate-purchases') return 'Corporate purchases';
   if (route.name === 'corporate-purchase-new') return 'New corporate purchase';
   if (route.name === 'corporate-purchase-edit') return 'Corporate purchase';
+  if (route.name === 'corporate-transfers') return 'Corporate transfers';
+  if (route.name === 'corporate-transfer-new') return 'New corporate transfer';
+  if (route.name === 'corporate-transfer-edit') return 'Corporate transfer';
+  if (route.name === 'master-data') return 'Master setup';
+  if (route.name === 'users') return 'User setup';
+  if (route.name === 'menus') return 'Menu setup';
   if (route.path === '/admin/access') return 'Access control';
+  if (route.name === 'forbidden') return 'Access denied';
   return route.path.split('/').filter(Boolean).at(-1)?.replaceAll('-', ' ') ?? 'Overview';
 });
 

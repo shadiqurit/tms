@@ -1,21 +1,33 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { ChevronDown } from 'lucide-vue-next';
 import { navigation } from '../data/navigation';
+import { api } from '../services/api';
+import { useAuthStore } from '../stores/auth';
+import type { NavItem } from '../types';
 import AppIcon from './AppIcon.vue';
 
 defineProps<{ collapsed: boolean }>();
 const emit = defineEmits<{ navigate: [] }>();
 const route = useRoute();
+const auth = useAuthStore();
 const openGroups = ref<number[]>([]);
+const configuredNavigation = ref<NavItem[]>(navigation);
 
-function containsRoute(item: typeof navigation[number]) {
+function allowed(item: NavItem) { return auth.hasPermission(item.permission); }
+const visibleNavigation = computed<NavItem[]>(() => configuredNavigation.value.flatMap((item) => {
+  if (!item.children) return allowed(item) ? [item] : [];
+  const children = item.children.filter(allowed);
+  return children.length && allowed(item) ? [{ ...item, children }] : [];
+}));
+
+function containsRoute(item: NavItem) {
   return item.route === route.path || item.children?.some((child) => child.route === route.path);
 }
 
 watch(() => route.path, () => {
-  const active = navigation.find((item) => containsRoute(item));
+  const active = visibleNavigation.value.find((item) => containsRoute(item));
   if (active?.children && !openGroups.value.includes(active.id)) openGroups.value.push(active.id);
 }, { immediate: true });
 
@@ -26,11 +38,27 @@ function toggle(id: number) {
 }
 
 const isOpen = computed(() => (id: number) => openGroups.value.includes(id));
+
+async function loadNavigation() {
+  try {
+    const result = await api<{ items: NavItem[] }>('/navigation');
+    configuredNavigation.value = result.items;
+  } catch {
+    configuredNavigation.value = navigation;
+  }
+}
+function navigationChanged() { void loadNavigation(); }
+onMounted(() => {
+  void loadNavigation();
+  window.addEventListener('tms:navigation-changed', navigationChanged);
+});
+onBeforeUnmount(() => window.removeEventListener('tms:navigation-changed', navigationChanged));
+watch(() => auth.permissions.join('|'), () => void loadNavigation());
 </script>
 
 <template>
   <nav class="side-nav" aria-label="Main navigation">
-    <template v-for="item in navigation" :key="item.id">
+    <template v-for="item in visibleNavigation" :key="item.id">
       <RouterLink
         v-if="!item.children"
         :to="item.route!"

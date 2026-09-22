@@ -19,10 +19,11 @@ export interface ExpenseTypeRecord {
 
 export interface ExpenseLineRecord {
   id: number;
-  expenseTypeId: number;
-  expenseTypeName: string;
-  phase: ExpensePhase;
-  refundable: boolean;
+  costId: number;
+  costName: string;
+  phase: ExpensePhase | null;
+  returnable: boolean;
+  returnableSource: 'YES' | 'NO' | null;
   quantity: number | null;
   unitName: string;
   amount: number;
@@ -52,7 +53,7 @@ export interface ExpenseRecord {
 
 interface LegacyExpenseType { ID: number; EXPNAME: string; COST_TIME: string | null; TYP: string; RATE: number | null; AMT: number | null; RET: number | null }
 interface LegacyExpensePayment { ID: number; PAY_NO: string | null; PAY_TO: string | null; SUP_ADD: string | null; PDATE: string; PAY_TYPE: string | null; CHALLAN: string | null; CH_DATE: string | null; NOTES: string | null; PRJ_ID: number }
-interface LegacyExpenseLine { ID: number; PID: number; COST_ID: number | null; QTY: number | null; UOM: string | null; AMT: number | null; DISCOUNT: number | null; RTN_AMT: number | null; TOTAL: number | null; RTN_DATE: string | null; NOTES: string | null }
+interface LegacyExpenseLine { ID: number; PID: number; COST_ID: number | null; CTYPE: string | null; QTY: number | null; UOM: string | null; AMT: number | null; DISCOUNT: number | null; RTN_AMT: number | null; TOTAL: number | null; RTN_DATE: string | null; NOTES: string | null }
 
 const legacyTypes = legacyExpenseTypes.recordset as LegacyExpenseType[];
 const legacyLines = legacyExpenseLines.recordset as LegacyExpenseLine[];
@@ -60,8 +61,8 @@ const legacyLines = legacyExpenseLines.recordset as LegacyExpenseLine[];
 export const expenseTypes: ExpenseTypeRecord[] = legacyTypes.map((item) => ({
   id: Number(item.ID),
   name: item.EXPNAME,
-  phase: item.COST_TIME === 'Before' ? 'pre_award' : 'execution',
-  refundable: item.TYP === 'YES',
+  phase: String(item.COST_TIME ?? '').trim().toUpperCase() === 'BEFORE' ? 'pre_award' : 'execution',
+  refundable: String(item.TYP ?? '').trim().toUpperCase() === 'YES',
   defaultRate: item.RATE,
   defaultAmount: item.AMT,
   defaultReturnAmount: item.RET,
@@ -74,8 +75,9 @@ export const expenseRecords: ExpenseRecord[] = (legacyExpensePayments.recordset 
   const lines = legacyLines.filter((line) => Number(line.PID) === Number(item.ID)).map((line) => {
     const type = expenseTypes.find((typeItem) => typeItem.id === Number(line.COST_ID));
     return {
-      id: Number(line.ID), expenseTypeId: Number(line.COST_ID || 0), expenseTypeName: type?.name ?? 'Unspecified expense',
-      phase: type?.phase ?? 'pre_award', refundable: type?.refundable ?? false, quantity: line.QTY,
+      id: Number(line.ID), costId: Number(line.COST_ID || 0), costName: type?.name ?? 'Unspecified expense',
+      phase: type?.phase ?? null, returnable: line.CTYPE === 'YES',
+      returnableSource: line.CTYPE === 'YES' ? 'YES' : line.CTYPE === 'NO' ? 'NO' : null, quantity: line.QTY,
       unitName: line.UOM ?? '', amount: Number(line.AMT ?? 0), discount: Number(line.DISCOUNT ?? 0),
       returnedAmount: Number(line.RTN_AMT ?? 0), totalAmount: Number(line.TOTAL ?? 0),
       returnDate: line.RTN_DATE ?? '', notes: line.NOTES ?? '',

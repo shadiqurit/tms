@@ -13,6 +13,10 @@ import { employeesRouter } from './routes/employees.js';
 import { expensesRouter } from './routes/expenses.js';
 import { sitePurchasesRouter } from './routes/site-purchases.js';
 import { corporatePurchasesRouter } from './routes/corporate-purchases.js';
+import { corporateTransfersRouter } from './routes/corporate-transfers.js';
+import { masterDataRouter } from './routes/master-data.js';
+import { usersRouter } from './routes/users.js';
+import { menusRouter } from './routes/menus.js';
 
 const app = express();
 app.disable('x-powered-by');
@@ -39,6 +43,10 @@ app.use('/api/employees', employeesRouter);
 app.use('/api/expenses', expensesRouter);
 app.use('/api/site-purchases', sitePurchasesRouter);
 app.use('/api/corporate-purchases', corporatePurchasesRouter);
+app.use('/api/corporate-transfers', corporateTransfersRouter);
+app.use('/api/master-data', masterDataRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/menus', menusRouter);
 
 app.use((_req, res) => res.status(404).json({ message: 'Route not found.' }));
 app.use((error: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {

@@ -34,14 +34,14 @@ export interface SitePurchaseRecord {
   expenseTotal: number;
 }
 
-export interface PurchaseOption { id: number; name: string; code?: string | null; address?: string; phone?: string; unitId?: number | null; unitName?: string }
+export interface PurchaseOption { id: number; name: string; code?: string | null; address?: string; phone?: string; supplierType?: string | null; unitId?: number | null; unitName?: string }
 export interface EmployeeProjectOption { employeeId: number; projectId: number }
 export interface PurchaseLinePage<T> { items: T[]; page: number; pageSize: number; total: number }
 export interface MaterialLineRecord { id: number; purchaseId?: number; materialId: number; materialName: string; unitId: number | null; unitName: string; siteId: number | null; siteName: string; entryDate: string; quantity: number; unitPrice: number; discount: number; totalAmount: number; notes: string }
 export interface SiteExpenseLineRecord { id: number; purchaseId?: number; expenseHeadId: number | null; expenseHeadName: string; siteId: number | null; siteName: string; entryDate: string; amount: number; notes: string }
 
 interface LegacyPurchase { ID: number; PUR_NO: string | null; SUPP_ID: number | null; LOC_SUPP: string | null; SUP_ADD: string | null; ODATE: string; PUR_TYPE: string; CHALLAN: string | null; CH_DATE: string | null; NOTES: string | null; PRJ_ID: number; SE_ID: number }
-interface LegacySupplier { ID: number; CODE: string | null; SNAME: string; ADDRESS_1: string | null; ADDRESS_2: string | null; PHONE: string | null }
+interface LegacySupplier { ID: number; CODE: string | null; SNAME: string; ADDRESS_1: string | null; ADDRESS_2: string | null; PHONE: string | null; TYP: string | null }
 interface LegacyMaterial { ID: number; RMNAME: string; UOM: number | null }
 interface LegacyUnit { ID: number; UMNAME: string; CODE: string | null }
 interface LegacyHead { ID: number; EXPNAME: string }
@@ -54,7 +54,7 @@ const purchaseSummary: Record<number, [number, number, number, number]> = {
   10: [5, 1273260, 31, 2116247], 11: [274, 2316988.4, 717, 1181275],
 };
 
-export const supplierOptions: PurchaseOption[] = (legacySuppliers.recordset as LegacySupplier[]).map((item) => ({ id: Number(item.ID), code: item.CODE, name: item.SNAME, address: [item.ADDRESS_1, item.ADDRESS_2].filter(Boolean).join(', '), phone: item.PHONE ?? '' }));
+export const supplierOptions: PurchaseOption[] = (legacySuppliers.recordset as LegacySupplier[]).map((item) => ({ id: Number(item.ID), code: item.CODE, name: item.SNAME, address: [item.ADDRESS_1, item.ADDRESS_2].filter(Boolean).join(', '), phone: item.PHONE ?? '', supplierType: item.TYP }));
 export const unitOptions: PurchaseOption[] = (legacyUnits.recordset as LegacyUnit[]).map((item) => ({ id: Number(item.ID), name: item.UMNAME, code: item.CODE }));
 export const materialOptions: PurchaseOption[] = (legacyMaterials.recordset as LegacyMaterial[]).map((item) => ({ id: Number(item.ID), name: item.RMNAME, unitId: item.UOM, unitName: unitOptions.find((unit) => unit.id === Number(item.UOM))?.name ?? '' }));
 export const expenseHeadOptions: PurchaseOption[] = (legacyExpenseHeads.recordset as LegacyHead[]).map((item) => ({ id: Number(item.ID), name: item.EXPNAME }));

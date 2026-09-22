@@ -18,5 +18,6 @@ export interface NavItem {
   route?: string;
   icon: string;
   badge?: string;
+  permission?: string | string[];
   children?: NavItem[];
 }

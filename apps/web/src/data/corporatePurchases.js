@@ -2,12 +2,10 @@ import legacyPurchases from '../../../../Data/COR_PURCHASE_MST.json';
 import legacyLines from '../../../../Data/COR_PURCHASE_DTL.json';
 import legacyProducts from '../../../../Data/CORP_PRODUCTS.json';
 import legacyCategories from '../../../../Data/T_CATEGORIES.json';
-import legacySubcategories from '../../../../Data/T_SUBCAT.json';
 import { projects } from './projects';
 import { projectSites } from './projectSites';
 import { supplierOptions, unitOptions } from './sitePurchases';
 export const corporateCategories = legacyCategories.recordset.map((item) => ({ id: Number(item.ID), name: item.CNAME }));
-export const corporateSubcategories = legacySubcategories.recordset.map((item) => ({ id: Number(item.ID), categoryId: Number(item.CAT_ID), name: item.SCNAME }));
 export const corporateProducts = legacyProducts.recordset.map((item) => ({
     id: Number(item.ID), name: item.PNAME, categoryId: item.CAT_ID ? Number(item.CAT_ID) : null,
     unitId: item.UOM ? Number(item.UOM) : null, unitName: unitOptions.find((unit) => unit.id === Number(item.UOM))?.name ?? '',
@@ -15,14 +13,12 @@ export const corporateProducts = legacyProducts.recordset.map((item) => ({
 }));
 export const corporateLines = legacyLines.recordset.map((item) => {
     const category = corporateCategories.find((entry) => entry.id === Number(item.CAT_ID));
-    const subcategory = corporateSubcategories.find((entry) => entry.id === Number(item.SUB_CAT_ID));
     const product = corporateProducts.find((entry) => entry.id === Number(item.PROD_ID));
     const unit = unitOptions.find((entry) => entry.id === Number(item.UOM));
     const site = projectSites.find((entry) => entry.id === Number(item.SITE_ID));
     return {
         id: Number(item.ID), purchaseId: Number(item.PID), categoryId: item.CAT_ID ? Number(item.CAT_ID) : null,
-        categoryName: category?.name ?? '', subcategoryId: item.SUB_CAT_ID ? Number(item.SUB_CAT_ID) : null,
-        subcategoryName: subcategory?.name ?? '', productId: item.PROD_ID ? Number(item.PROD_ID) : null,
+        categoryName: category?.name ?? '', productId: item.PROD_ID ? Number(item.PROD_ID) : null,
         productName: product?.name ?? category?.name ?? 'Unspecified item', unitId: item.UOM ? Number(item.UOM) : null,
         unitName: unit?.name ?? '', siteId: item.SITE_ID ? Number(item.SITE_ID) : null, siteName: site?.name ?? '',
         quantity: Number(item.QTY ?? 0), unitPrice: Number(item.PRICE ?? 0), discount: Number(item.DISCOUNT ?? 0),

@@ -65,7 +65,7 @@ const recentProjects = [
             <div><i class="pre"></i><span>Pre-award</span><strong>13%</strong></div>
           </div>
         </div>
-        <RouterLink to="/expenses/project" class="panel-action">Open expense register <ArrowRight :size="15" /></RouterLink>
+        <RouterLink to="/expenses/project-costs" class="panel-action">Open project costs <ArrowRight :size="15" /></RouterLink>
       </article>
     </div>
 

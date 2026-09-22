@@ -26,7 +26,6 @@ const purchaseSchema = z.object({
 });
 const lineSchema = z.object({
   categoryId: z.number().int().positive().optional().nullable(),
-  subcategoryId: z.number().int().positive().optional().nullable(),
   productId: z.number().int().positive(),
   unitId: z.number().int().positive().optional().nullable(),
   siteId: z.number().int().positive().optional().nullable(),
@@ -88,13 +87,6 @@ async function validateLine(
   if (item.categoryId && product.categoryId && Number(product.categoryId) !== item.categoryId) {
     return { error: 'The selected product does not belong to this category.' };
   }
-  if (item.subcategoryId) {
-    const [subcategories] = await connection.query<RowDataPacket[]>(
-      'SELECT id FROM app_corporate_subcategories WHERE id = ? AND company_id = ? AND category_id = ? AND status = \'active\' LIMIT 1',
-      [item.subcategoryId, user.companyId, categoryId],
-    );
-    if (!subcategories[0]) return { error: 'The selected subcategory is invalid.' };
-  }
   if (item.unitId) {
     const [units] = await connection.query<RowDataPacket[]>('SELECT id FROM app_units WHERE id = ? AND company_id = ? LIMIT 1', [item.unitId, user.companyId]);
     if (!units[0]) return { error: 'The selected unit is invalid.' };
@@ -129,15 +121,14 @@ corporatePurchasesRouter.get('/options', requirePermission('corporate_purchases.
   );
   const [suppliers] = await db.query<RowDataPacket[]>('SELECT id, code, name, address, phone FROM app_suppliers WHERE company_id = ? AND status = \'active\' ORDER BY name', [req.user!.companyId]);
   const [categories] = await db.query<RowDataPacket[]>('SELECT id, name FROM app_corporate_categories WHERE company_id = ? AND status = \'active\' ORDER BY name', [req.user!.companyId]);
-  const [subcategories] = await db.query<RowDataPacket[]>('SELECT id, category_id AS categoryId, name FROM app_corporate_subcategories WHERE company_id = ? AND status = \'active\' ORDER BY name', [req.user!.companyId]);
   const [products] = await db.query<RowDataPacket[]>(
     `SELECT cp.id, cp.category_id AS categoryId, cp.unit_id AS unitId, cp.name,
             cp.description, cp.default_price AS defaultPrice, u.name AS unitName
        FROM app_corporate_products cp LEFT JOIN app_units u ON u.id = cp.unit_id
       WHERE cp.company_id = ? AND cp.status = 'active' ORDER BY cp.name`, [req.user!.companyId],
   );
-  const [units] = await db.query<RowDataPacket[]>('SELECT id, name, code FROM app_units WHERE company_id = ? ORDER BY name', [req.user!.companyId]);
-  return res.json({ projects, sites, suppliers, categories, subcategories, products, units });
+  const [units] = await db.query<RowDataPacket[]>('SELECT id, name, code FROM app_units WHERE company_id = ? AND status = \'active\' ORDER BY name', [req.user!.companyId]);
+  return res.json({ projects, sites, suppliers, categories, products, units });
 });
 
 corporatePurchasesRouter.get('/', requirePermission('corporate_purchases.view'), async (req: AuthRequest, res) => {
@@ -247,13 +238,11 @@ corporatePurchasesRouter.get('/:id/lines', requirePermission('corporate_purchase
   const like = `%${search}%`;
   const [rows] = await db.query<RowDataPacket[]>(
     `SELECT cpl.id, cpl.category_id AS categoryId, c.name AS categoryName,
-            cpl.subcategory_id AS subcategoryId, sc.name AS subcategoryName,
             cpl.product_id AS productId, COALESCE(pr.name, c.name, 'Unspecified item') AS productName,
             cpl.unit_id AS unitId, u.name AS unitName, cpl.site_id AS siteId, ps.name AS siteName,
             cpl.quantity, cpl.unit_price AS unitPrice, cpl.discount, cpl.total_amount AS totalAmount, cpl.notes
        FROM app_corporate_purchase_lines cpl
        LEFT JOIN app_corporate_categories c ON c.id = cpl.category_id
-       LEFT JOIN app_corporate_subcategories sc ON sc.id = cpl.subcategory_id
        LEFT JOIN app_corporate_products pr ON pr.id = cpl.product_id
        LEFT JOIN app_units u ON u.id = cpl.unit_id
        LEFT JOIN app_project_sites ps ON ps.id = cpl.site_id
@@ -286,10 +275,10 @@ corporatePurchasesRouter.post('/:id/lines', requirePermission('corporate_purchas
     const totalAmount = Math.max(0, item.quantity * item.unitPrice - (item.discount ?? 0));
     const [result] = await connection.query<ResultSetHeader>(
       `INSERT INTO app_corporate_purchase_lines
-         (purchase_id, category_id, subcategory_id, product_id, unit_id, site_id,
+         (purchase_id, category_id, product_id, unit_id, site_id,
           quantity, unit_price, discount, total_amount, notes)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [purchaseId, validation.categoryId ?? null, item.subcategoryId ?? null, item.productId,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [purchaseId, validation.categoryId ?? null, item.productId,
         item.unitId ?? null, item.siteId ?? null, item.quantity, item.unitPrice,
         item.discount ?? 0, totalAmount, emptyToNull(item.notes)],
     );
@@ -313,10 +302,10 @@ corporatePurchasesRouter.put('/:id/lines/:lineId', requirePermission('corporate_
     const item = parsed.data;
     const totalAmount = Math.max(0, item.quantity * item.unitPrice - (item.discount ?? 0));
     const [result] = await connection.query<ResultSetHeader>(
-      `UPDATE app_corporate_purchase_lines SET category_id = ?, subcategory_id = ?, product_id = ?,
+      `UPDATE app_corporate_purchase_lines SET category_id = ?, subcategory_id = NULL, product_id = ?,
          unit_id = ?, site_id = ?, quantity = ?, unit_price = ?, discount = ?, total_amount = ?, notes = ?
        WHERE id = ? AND purchase_id = ?`,
-      [validation.categoryId ?? null, item.subcategoryId ?? null, item.productId, item.unitId ?? null,
+      [validation.categoryId ?? null, item.productId, item.unitId ?? null,
         item.siteId ?? null, item.quantity, item.unitPrice, item.discount ?? 0, totalAmount,
         emptyToNull(item.notes), lineId, purchaseId],
     );

@@ -36,7 +36,7 @@ async function submit() {
         <h1>Every project.<br /><em>One clear view.</em></h1>
         <p>Keep sites, spending, materials, and teams connected—from tender preparation to final handover.</p>
         <div class="story-points">
-          <div><CheckCircle2 :size="19" /><span><strong>Control project costs</strong><small>Separate pre-award and execution spending.</small></span></div>
+          <div><CheckCircle2 :size="19" /><span><strong>Control project costs</strong><small>Manage before, project, and returnable costs together.</small></span></div>
           <div><CheckCircle2 :size="19" /><span><strong>Work across every site</strong><small>Track 93 active locations from one workspace.</small></span></div>
           <div><CheckCircle2 :size="19" /><span><strong>Give the right access</strong><small>Role and project-based permissions for every user.</small></span></div>
         </div>

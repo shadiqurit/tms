@@ -169,7 +169,7 @@ sitePurchasesRouter.get('/options', requirePermission('site_purchases.view'), as
        FROM app_materials m LEFT JOIN app_units u ON u.id = m.unit_id
       WHERE m.company_id = ? AND m.status = 'active' ORDER BY m.name`, [req.user!.companyId],
   );
-  const [units] = await db.query<RowDataPacket[]>('SELECT id, name, code FROM app_units WHERE company_id = ? ORDER BY name', [req.user!.companyId]);
+  const [units] = await db.query<RowDataPacket[]>('SELECT id, name, code FROM app_units WHERE company_id = ? AND status = \'active\' ORDER BY name', [req.user!.companyId]);
   const [expenseHeads] = await db.query<RowDataPacket[]>('SELECT id, name FROM app_engineer_expense_heads WHERE company_id = ? AND status = \'active\' ORDER BY name', [req.user!.companyId]);
   const [sites] = await db.query<RowDataPacket[]>(
     `SELECT s.id, s.project_id AS projectId, s.name, s.address

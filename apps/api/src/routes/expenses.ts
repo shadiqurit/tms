@@ -20,7 +20,8 @@ const expenseTypeSchema = z.object({
   active: z.boolean(),
 });
 const expenseLineSchema = z.object({
-  expenseTypeId: z.number().int().positive(),
+  costId: z.number().int().positive(),
+  returnable: z.boolean().optional(),
   quantity: z.number().nonnegative().optional().nullable(),
   unitName: optionalText(40),
   amount: z.number().nonnegative(),
@@ -68,14 +69,30 @@ async function accessibleExpensePayment(user: NonNullable<AuthRequest['user']>, 
   return Boolean(rows[0]);
 }
 
-async function validExpenseTypes(connection: PoolConnection, companyId: number, typeIds: number[]) {
-  const uniqueIds = [...new Set(typeIds)];
+interface ResolvedExpenseType {
+  id: number;
+  returnable: boolean;
+}
+
+async function resolveExpenseTypes(connection: PoolConnection, companyId: number, costIds: number[]) {
+  const uniqueIds = [...new Set(costIds)];
   const placeholders = uniqueIds.map(() => '?').join(',');
   const [rows] = await connection.query<RowDataPacket[]>(
-    `SELECT id FROM app_expense_types WHERE company_id = ? AND active = 1 AND id IN (${placeholders})`,
+    `SELECT expense_type.id, expense_type.legacy_id AS costId,
+            UPPER(TRIM(COALESCE(source_cost.typ, ''))) = 'YES' AS returnable
+       FROM app_expense_types expense_type
+       JOIN expcost source_cost
+         ON CAST(source_cost.id AS UNSIGNED) = expense_type.legacy_id
+        AND CAST(source_cost.com_id AS UNSIGNED) = expense_type.company_id
+      WHERE expense_type.company_id = ? AND expense_type.active = 1
+        AND expense_type.legacy_id IN (${placeholders})`,
     [companyId, ...uniqueIds],
   );
-  return rows.length === uniqueIds.length;
+  if (rows.length !== uniqueIds.length) return null;
+  return new Map<number, ResolvedExpenseType>(rows.map((row) => [
+    Number(row.costId),
+    { id: Number(row.id), returnable: Boolean(row.returnable) },
+  ]));
 }
 
 expensesRouter.get('/types', requirePermission('expense_setup.view'), async (req: AuthRequest, res) => {
@@ -164,35 +181,51 @@ expensesRouter.get('/options', requirePermission('expenses.view'), async (req: A
     [req.user!.id, req.user!.companyId, req.user!.roleKey],
   );
   const [expenseTypes] = await db.query<RowDataPacket[]>(
-    `SELECT id, name, phase, refundable = 1 AS refundable, default_amount AS defaultAmount,
-            default_return_amount AS defaultReturnAmount
-       FROM app_expense_types WHERE company_id = ? AND active = 1 ORDER BY phase, name`,
-    [req.user!.companyId],
+    `SELECT CAST(source_cost.id AS UNSIGNED) AS id, source_cost.expname AS name,
+            CASE WHEN UPPER(TRIM(COALESCE(source_cost.cost_time, ''))) = 'BEFORE' THEN 'pre_award' ELSE 'execution' END AS phase,
+            UPPER(TRIM(COALESCE(source_cost.typ, ''))) = 'YES' AS refundable,
+            CAST(source_cost.amt AS DECIMAL(18,2)) AS defaultAmount,
+            CAST(source_cost.ret AS DECIMAL(18,2)) AS defaultReturnAmount,
+            TRUE AS active, 0 AS usageCount
+       FROM expcost source_cost
+       JOIN app_expense_types expense_type
+         ON expense_type.company_id = ?
+        AND expense_type.legacy_id = CAST(source_cost.id AS UNSIGNED)
+        AND expense_type.active = 1
+      WHERE CAST(source_cost.com_id AS UNSIGNED) = ?
+      ORDER BY phase, source_cost.expname`,
+    [req.user!.companyId, req.user!.companyId],
   );
   return res.json({ projects, expenseTypes });
 });
 
 expensesRouter.get('/', requirePermission('expenses.view'), async (req: AuthRequest, res) => {
-  const phase = req.query.phase === 'pre_award' ? 'pre_award' : req.query.phase === 'execution' ? 'execution' : null;
-  if (!phase) return res.status(400).json({ message: 'Choose pre-award or project expenses.' });
   const [rows] = await db.query<RowDataPacket[]>(
     `SELECT ep.id, ep.payment_no AS paymentNo, ep.payment_date AS paymentDate, ep.pay_to AS payTo,
             ep.reference_no AS referenceNo, ep.notes, ep.status, p.id AS projectId,
             COALESCE(p.package_no, p.code, CONCAT('#', p.id)) AS projectCode, p.name AS projectName,
             COUNT(epl.id) AS lineCount, COALESCE(SUM(epl.amount), 0) AS grossAmount,
-            COALESCE(SUM(epl.returned_amount), 0) AS returnedAmount,
+            SUM(CASE WHEN UPPER(TRIM(COALESCE(source_cost.cost_time, ''))) = 'BEFORE' THEN 1 ELSE 0 END) AS beforeCostCount,
+            SUM(CASE WHEN source_cost.id IS NOT NULL AND UPPER(TRIM(COALESCE(source_cost.cost_time, ''))) <> 'BEFORE' THEN 1 ELSE 0 END) AS projectCostCount,
+            SUM(CASE WHEN epl.returnable = 1 THEN 1 ELSE 0 END) AS returnableLineCount,
+            SUM(CASE WHEN epl.returnable = 0 THEN 1 ELSE 0 END) AS nonReturnableLineCount,
+            SUM(CASE WHEN epl.returnable IS NULL THEN 1 ELSE 0 END) AS unspecifiedReturnableCount,
+            COALESCE(SUM(CASE WHEN epl.returnable = 1 THEN epl.returned_amount ELSE 0 END), 0) AS returnedAmount,
             COALESCE(SUM(epl.total_amount), 0) AS totalAmount
        FROM app_expense_payments ep
        JOIN app_projects p ON p.id = ep.project_id
        JOIN app_expense_payment_lines epl ON epl.payment_id = ep.id
-       JOIN app_expense_types et ON et.id = epl.expense_type_id AND et.phase = ?
+       LEFT JOIN app_expense_types et ON et.id = epl.expense_type_id
+       LEFT JOIN expcost source_cost
+         ON CAST(source_cost.id AS UNSIGNED) = epl.cost_id
+        AND CAST(source_cost.com_id AS UNSIGNED) = ep.company_id
        LEFT JOIN app_user_projects up ON up.project_id = p.id AND up.user_id = ?
       WHERE ep.company_id = ? AND (? = 'programmer' OR up.user_id IS NOT NULL)
       GROUP BY ep.id, p.id
       ORDER BY ep.payment_date DESC, ep.id DESC`,
-    [phase, req.user!.id, req.user!.companyId, req.user!.roleKey],
+    [req.user!.id, req.user!.companyId, req.user!.roleKey],
   );
-  return res.json({ expenses: rows, phase });
+  return res.json({ expenses: rows });
 });
 
 expensesRouter.get('/:id', requirePermission('expenses.view'), async (req: AuthRequest, res) => {
@@ -212,28 +245,52 @@ expensesRouter.get('/:id', requirePermission('expenses.view'), async (req: AuthR
   );
   if (!headers[0]) return res.status(404).json({ message: 'Expense voucher not found.' });
   const [lines] = await db.query<RowDataPacket[]>(
-    `SELECT epl.id, epl.expense_type_id AS expenseTypeId, et.name AS expenseTypeName, et.phase,
-            et.refundable = 1 AS refundable, epl.quantity, epl.unit_name AS unitName,
+    `SELECT epl.id, epl.cost_id AS costId, COALESCE(source_cost.expname, et.name) AS costName,
+            CASE
+              WHEN UPPER(TRIM(COALESCE(source_cost.cost_time, ''))) = 'BEFORE' THEN 'pre_award'
+              WHEN source_cost.id IS NOT NULL THEN 'execution'
+              ELSE et.phase
+            END AS phase,
+            COALESCE(epl.returnable, et.refundable) = 1 AS returnable, epl.quantity, epl.unit_name AS unitName,
             epl.amount, epl.discount, epl.returned_amount AS returnedAmount,
             epl.total_amount AS totalAmount, epl.return_date AS returnDate, epl.notes
        FROM app_expense_payment_lines epl
+       JOIN app_expense_payments ep ON ep.id = epl.payment_id
        LEFT JOIN app_expense_types et ON et.id = epl.expense_type_id
+       LEFT JOIN expcost source_cost
+         ON CAST(source_cost.id AS UNSIGNED) = epl.cost_id
+        AND CAST(source_cost.com_id AS UNSIGNED) = ep.company_id
       WHERE epl.payment_id = ? ORDER BY et.phase, epl.id`,
     [id],
   );
-  return res.json({ expense: { ...headers[0], lines } });
+  return res.json({
+    expense: {
+      ...headers[0],
+      lines: lines.map((line) => ({ ...line, returnable: Boolean(line.returnable) })),
+    },
+  });
 });
 
-async function saveLines(connection: PoolConnection, paymentId: number, lines: z.infer<typeof expenseLineSchema>[]) {
+async function saveLines(
+  connection: PoolConnection,
+  paymentId: number,
+  companyId: number,
+  lines: z.infer<typeof expenseLineSchema>[],
+  expenseTypes: Map<number, ResolvedExpenseType>,
+) {
   for (const line of lines) {
-    const totalAmount = Math.max(0, line.amount - (line.discount ?? 0) - (line.returnedAmount ?? 0));
+    const expenseType = expenseTypes.get(line.costId)!;
+    const returnable = line.returnable ?? expenseType.returnable ?? false;
+    const returnedAmount = returnable ? (line.returnedAmount ?? 0) : 0;
+    const totalAmount = Math.max(0, line.amount - (line.discount ?? 0) - returnedAmount);
     await connection.query(
       `INSERT INTO app_expense_payment_lines
-         (payment_id, expense_type_id, quantity, unit_name, amount, discount, returned_amount,
+         (payment_id, company_id, expense_type_id, cost_id, returnable, quantity, unit_name, amount, discount, returned_amount,
           total_amount, return_date, notes)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [paymentId, line.expenseTypeId, line.quantity ?? null, emptyToNull(line.unitName), line.amount,
-        line.discount ?? null, line.returnedAmount ?? null, totalAmount, emptyToNull(line.returnDate),
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [paymentId, companyId, expenseType.id, line.costId, returnable ? 1 : 0, line.quantity ?? null,
+        emptyToNull(line.unitName), line.amount, line.discount ?? null, returnedAmount, totalAmount,
+        returnable ? emptyToNull(line.returnDate) : null,
         emptyToNull(line.notes)],
     );
   }
@@ -247,9 +304,10 @@ expensesRouter.post('/', requirePermission('expenses.manage'), async (req: AuthR
   const connection = await db.getConnection();
   try {
     await connection.beginTransaction();
-    if (!(await validExpenseTypes(connection, req.user!.companyId, item.lines.map((line) => line.expenseTypeId)))) {
+    const expenseTypes = await resolveExpenseTypes(connection, req.user!.companyId, item.lines.map((line) => line.costId));
+    if (!expenseTypes) {
       await connection.rollback();
-      return res.status(400).json({ message: 'One or more expense types are invalid or inactive.' });
+      return res.status(400).json({ message: 'One or more COST_ID values do not exist in EXPCOST or are inactive.' });
     }
     const [result] = await connection.query<ResultSetHeader>(
       `INSERT INTO app_expense_payments
@@ -260,7 +318,7 @@ expensesRouter.post('/', requirePermission('expenses.manage'), async (req: AuthR
         emptyToNull(item.payeeAddress), item.paymentDate, emptyToNull(item.paymentType),
         emptyToNull(item.referenceNo), emptyToNull(item.referenceDate), emptyToNull(item.notes), item.status],
     );
-    await saveLines(connection, result.insertId, item.lines);
+    await saveLines(connection, result.insertId, req.user!.companyId, item.lines, expenseTypes);
     await connection.query(
       `INSERT INTO app_audit_logs (company_id, user_id, action, entity_type, entity_id, after_json)
        VALUES (?, ?, 'create', 'expense_payment', ?, ?)`,
@@ -291,9 +349,10 @@ expensesRouter.put('/:id', requirePermission('expenses.manage'), async (req: Aut
       await connection.rollback();
       return res.status(404).json({ message: 'Expense voucher not found.' });
     }
-    if (!(await validExpenseTypes(connection, req.user!.companyId, item.lines.map((line) => line.expenseTypeId)))) {
+    const expenseTypes = await resolveExpenseTypes(connection, req.user!.companyId, item.lines.map((line) => line.costId));
+    if (!expenseTypes) {
       await connection.rollback();
-      return res.status(400).json({ message: 'One or more expense types are invalid or inactive.' });
+      return res.status(400).json({ message: 'One or more COST_ID values do not exist in EXPCOST or are inactive.' });
     }
     await connection.query(
       `UPDATE app_expense_payments SET project_id = ?, payment_no = ?, pay_to = ?, payee_address = ?,
@@ -304,7 +363,7 @@ expensesRouter.put('/:id', requirePermission('expenses.manage'), async (req: Aut
         emptyToNull(item.referenceDate), emptyToNull(item.notes), item.status, id, req.user!.companyId],
     );
     await connection.query('DELETE FROM app_expense_payment_lines WHERE payment_id = ?', [id]);
-    await saveLines(connection, id, item.lines);
+    await saveLines(connection, id, req.user!.companyId, item.lines, expenseTypes);
     await connection.query(
       `INSERT INTO app_audit_logs (company_id, user_id, action, entity_type, entity_id, before_json, after_json)
        VALUES (?, ?, 'update', 'expense_payment', ?, ?, ?)`,

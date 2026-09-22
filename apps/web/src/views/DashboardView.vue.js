@@ -295,11 +295,11 @@ const __VLS_44 = {}.RouterLink;
 /** @type {[typeof __VLS_components.RouterLink, typeof __VLS_components.RouterLink, ]} */ ;
 // @ts-ignore
 const __VLS_45 = __VLS_asFunctionalComponent(__VLS_44, new __VLS_44({
-    to: "/expenses/project",
+    to: "/expenses/project-costs",
     ...{ class: "panel-action" },
 }));
 const __VLS_46 = __VLS_45({
-    to: "/expenses/project",
+    to: "/expenses/project-costs",
     ...{ class: "panel-action" },
 }, ...__VLS_functionalComponentArgsRest(__VLS_45));
 __VLS_47.slots.default;

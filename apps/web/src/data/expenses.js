@@ -7,8 +7,8 @@ const legacyLines = legacyExpenseLines.recordset;
 export const expenseTypes = legacyTypes.map((item) => ({
     id: Number(item.ID),
     name: item.EXPNAME,
-    phase: item.COST_TIME === 'Before' ? 'pre_award' : 'execution',
-    refundable: item.TYP === 'YES',
+    phase: String(item.COST_TIME ?? '').trim().toUpperCase() === 'BEFORE' ? 'pre_award' : 'execution',
+    refundable: String(item.TYP ?? '').trim().toUpperCase() === 'YES',
     defaultRate: item.RATE,
     defaultAmount: item.AMT,
     defaultReturnAmount: item.RET,
@@ -20,8 +20,9 @@ export const expenseRecords = legacyExpensePayments.recordset.map((item) => {
     const lines = legacyLines.filter((line) => Number(line.PID) === Number(item.ID)).map((line) => {
         const type = expenseTypes.find((typeItem) => typeItem.id === Number(line.COST_ID));
         return {
-            id: Number(line.ID), expenseTypeId: Number(line.COST_ID || 0), expenseTypeName: type?.name ?? 'Unspecified expense',
-            phase: type?.phase ?? 'pre_award', refundable: type?.refundable ?? false, quantity: line.QTY,
+            id: Number(line.ID), costId: Number(line.COST_ID || 0), costName: type?.name ?? 'Unspecified expense',
+            phase: type?.phase ?? null, returnable: line.CTYPE === 'YES',
+            returnableSource: line.CTYPE === 'YES' ? 'YES' : line.CTYPE === 'NO' ? 'NO' : null, quantity: line.QTY,
             unitName: line.UOM ?? '', amount: Number(line.AMT ?? 0), discount: Number(line.DISCOUNT ?? 0),
             returnedAmount: Number(line.RTN_AMT ?? 0), totalAmount: Number(line.TOTAL ?? 0),
             returnDate: line.RTN_DATE ?? '', notes: line.NOTES ?? '',
