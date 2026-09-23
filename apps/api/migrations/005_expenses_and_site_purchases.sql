@@ -137,7 +137,7 @@ CREATE TABLE IF NOT EXISTS app_site_purchase_materials (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   legacy_id BIGINT NULL,
   purchase_id BIGINT UNSIGNED NOT NULL,
-  material_id BIGINT UNSIGNED NOT NULL,
+  material_id BIGINT UNSIGNED NULL,
   unit_id BIGINT UNSIGNED NULL,
   site_id BIGINT UNSIGNED NULL,
   entry_date DATE NOT NULL,

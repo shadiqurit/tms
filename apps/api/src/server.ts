@@ -17,6 +17,7 @@ import { corporateTransfersRouter } from './routes/corporate-transfers.js';
 import { masterDataRouter } from './routes/master-data.js';
 import { usersRouter } from './routes/users.js';
 import { menusRouter } from './routes/menus.js';
+import { engineerDepositsRouter } from './routes/engineer-deposits.js';
 
 const app = express();
 app.disable('x-powered-by');
@@ -47,6 +48,7 @@ app.use('/api/corporate-transfers', corporateTransfersRouter);
 app.use('/api/master-data', masterDataRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/menus', menusRouter);
+app.use('/api/engineer-deposits', engineerDepositsRouter);
 
 app.use((_req, res) => res.status(404).json({ message: 'Route not found.' }));
 app.use((error: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {

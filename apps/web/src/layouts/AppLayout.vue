@@ -40,6 +40,8 @@ const title = computed(() => {
   if (route.name === 'corporate-transfers') return 'Corporate transfers';
   if (route.name === 'corporate-transfer-new') return 'New corporate transfer';
   if (route.name === 'corporate-transfer-edit') return 'Corporate transfer';
+  if (route.name === 'engineer-deposits') return 'Engineer deposits';
+  if (route.name === 'engineer-deposit-ledger') return 'Engineer balance ledger';
   if (route.name === 'master-data') return 'Master setup';
   if (route.name === 'users') return 'User setup';
   if (route.name === 'menus') return 'Menu setup';

@@ -37,7 +37,7 @@ export interface SitePurchaseRecord {
 export interface PurchaseOption { id: number; name: string; code?: string | null; address?: string; phone?: string; supplierType?: string | null; unitId?: number | null; unitName?: string }
 export interface EmployeeProjectOption { employeeId: number; projectId: number }
 export interface PurchaseLinePage<T> { items: T[]; page: number; pageSize: number; total: number }
-export interface MaterialLineRecord { id: number; purchaseId?: number; materialId: number; materialName: string; unitId: number | null; unitName: string; siteId: number | null; siteName: string; entryDate: string; quantity: number; unitPrice: number; discount: number; totalAmount: number; notes: string }
+export interface MaterialLineRecord { id: number; purchaseId?: number; materialId: number | null; materialName: string; unitId: number | null; unitName: string; siteId: number | null; siteName: string; entryDate: string; quantity: number; unitPrice: number; discount: number; totalAmount: number; notes: string }
 export interface SiteExpenseLineRecord { id: number; purchaseId?: number; expenseHeadId: number | null; expenseHeadName: string; siteId: number | null; siteName: string; entryDate: string; amount: number; notes: string }
 
 interface LegacyPurchase { ID: number; PUR_NO: string | null; SUPP_ID: number | null; LOC_SUPP: string | null; SUP_ADD: string | null; ODATE: string; PUR_TYPE: string; CHALLAN: string | null; CH_DATE: string | null; NOTES: string | null; PRJ_ID: number; SE_ID: number }

@@ -33,7 +33,7 @@ export const navigation: NavItem[] = [
   },
   {
     id: 6, label: 'Finance', icon: 'Landmark', children: [
-      { id: 61, label: 'Bills & deposits', route: '/finance/bills', icon: 'Files', permission: 'menu.eng.deposit.view' },
+      { id: 61, label: 'Engineer deposits', route: '/finance/engineer-deposits', icon: 'WalletCards', permission: 'engineer_deposits.view' },
       { id: 62, label: 'Loans', route: '/finance/loans', icon: 'HandCoins', permission: 'menu.loan.view' },
       { id: 63, label: 'Banks', route: '/finance/banks', icon: 'Landmark', permission: 'menu.bank.setup.view' },
     ],

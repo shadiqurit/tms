@@ -513,6 +513,21 @@ body { font-size: 14px; line-height: 1.5; }
 .module-placeholder { position: relative; min-height: 430px; padding: 80px 50px; overflow: hidden; text-align: center; display: flex; flex-direction: column; align-items: center; }
 .module-placeholder > span { width: 54px; height: 54px; display: grid; place-items: center; border-radius: 14px; color: var(--forest-600); background: #e6f3ee; }.module-placeholder > p:first-of-type { margin-top: 20px; color: var(--forest-600); font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }.module-placeholder h2 { margin-top: 8px; font: 700 28px 'Manrope'; text-transform: capitalize; }.module-placeholder > p:nth-of-type(2) { max-width: 460px; margin-top: 10px; color: #7e8a85; font-size: 12px; line-height: 1.6; }.module-placeholder > a { margin-top: 24px; display: flex; align-items: center; gap: 7px; color: var(--forest-600); font-size: 11px; font-weight: 700; }.placeholder-mark { position: absolute; right: -20px; bottom: -25px; color: #f1f6f4; transform: rotate(-12deg); }
 
+/* Engineer deposits and balance ledger */
+.deposit-stat-grid { margin-bottom: 16px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 13px; }
+.deposit-stat-grid article { min-height: 128px; padding: 17px 18px; display: grid; grid-template-columns: 37px 1fr; grid-template-rows: auto auto auto; gap: 3px 11px; align-items: center; }
+.deposit-stat-grid article > span { width: 37px; height: 37px; grid-row: 1 / 4; display: grid; place-items: center; border-radius: 9px; color: #23644f; background: #e2f2eb; }
+.deposit-stat-grid article.spent > span { color: #9b6131; background: #faeee2; }.deposit-stat-grid article.warning > span { color: #a14742; background: #f8e7e5; }
+.deposit-stat-grid small { color: #84918c; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+.deposit-stat-grid strong { color: var(--ink); font: 700 20px 'Manrope'; }.deposit-stat-grid em { color: #8d9894; font-size: 9px; font-style: normal; }
+.deposit-ledger-table { min-width: 1260px; }.deposit-engineer { min-width: 205px; display: flex; align-items: center; gap: 9px; }.deposit-engineer > span { width: 35px; height: 35px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 9px; color: var(--forest-700); background: #e4f2ec; font-size: 10px; font-weight: 800; }.deposit-engineer > div, .deposit-money { display: grid; gap: 3px; }.deposit-engineer strong { color: var(--ink); font-size: 12px; }.deposit-engineer small, .deposit-money small { color: #8b9691; font-size: 9px; }.deposit-money strong { color: #596761; font-size: 11px; }.deposit-money.credit strong { color: #28705a; }
+.deposit-balance { color: #267059; white-space: nowrap; }.deposit-balance.negative { color: #b34e47; }.deposit-date { white-space: nowrap; color: #75817c; }
+.deposit-entry-modal { width: min(680px, calc(100vw - 30px)); }.deposit-entry-modal > .form-grid { padding: 20px; }.deposit-entry-modal > .form-error { margin: 0 20px 12px; }.deposit-entry-modal > footer { padding: 14px 20px; display: flex; justify-content: flex-end; gap: 9px; border-top: 1px solid #e8ecea; }
+.ledger-hero { margin-top: 13px; padding: 19px 20px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }.ledger-person { min-width: 0; display: flex; align-items: center; gap: 13px; }.ledger-person > span { width: 50px; height: 50px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 13px; color: var(--forest-700); background: #dff0e8; font: 800 14px 'Manrope'; }.ledger-person small { color: var(--forest-600); font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; }.ledger-person h2 { margin-top: 3px; font: 700 19px 'Manrope'; }.ledger-person p { max-width: 720px; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #78847f; font-size: 10px; }.ledger-actions { flex: 0 0 auto; display: flex; gap: 8px; }
+.ledger-balance-grid { margin-top: 14px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }.ledger-balance-grid article { min-height: 104px; padding: 15px; display: flex; align-items: center; gap: 11px; }.ledger-balance-grid article > span { width: 35px; height: 35px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 9px; color: #276b56; background: #e4f2ec; }.ledger-balance-grid article > div { min-width: 0; display: grid; gap: 3px; }.ledger-balance-grid small { color: #899590; font-size: 9px; text-transform: uppercase; letter-spacing: .04em; }.ledger-balance-grid strong { overflow: hidden; text-overflow: ellipsis; color: var(--ink); font: 700 16px 'Manrope'; }.ledger-balance-grid em { color: #8b9691; font-size: 8px; font-style: normal; }.ledger-balance-grid .net { border-color: #cbe2d8; background: #f3faf7; }.ledger-balance-grid .net strong { color: #236c54; }.ledger-balance-grid .net.negative { border-color: #edcfca; background: #fff7f6; }.ledger-balance-grid .net.negative > span { color: #ad4e46; background: #f8e5e2; }.ledger-balance-grid .net.negative strong { color: #ad4e46; }
+.ledger-explanation { margin-top: 13px; padding: 12px 15px; display: flex; align-items: flex-start; gap: 10px; color: #557168; background: #f3f8f6; }.ledger-explanation svg { flex: 0 0 auto; color: var(--forest-600); }.ledger-explanation p { font-size: 10px; line-height: 1.55; }.ledger-explanation strong { color: #315c4e; }
+.ledger-toolbar { margin-top: 13px; }.engineer-transaction-table { min-width: 1320px; }.ledger-kind { display: grid; gap: 5px; }.ledger-kind > span { width: max-content; padding: 4px 7px; border-radius: 9px; color: #28705a; background: #e3f2ec; font-size: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }.ledger-kind > span.material { color: #8a642b; background: #faf0df; }.ledger-kind > span.expense { color: #8a514a; background: #f6e9e7; }.ledger-kind small { color: #7f8b86; white-space: nowrap; }.ledger-reference { color: var(--forest-600); font-size: 10px; font-weight: 800; text-decoration: underline; text-underline-offset: 2px; }.ledger-reference.plain { color: #56655f; text-decoration: none; }.ledger-site { display: block; min-width: 120px; max-width: 180px; color: #6e7c76; }.ledger-description { min-width: 230px; max-width: 330px; display: grid; gap: 4px; }.ledger-description strong { color: #44534d; font-size: 11px; }.ledger-description small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #8e9994; font-size: 9px; }.ledger-credit { color: #237057; white-space: nowrap; }.ledger-debit { color: #a45a50; white-space: nowrap; }
+
 /* Component typography overrides */
 .back-link { font-size: 12px; }
 .form-page-head h2 { font-size: 23px; }.form-page-head p { font-size: 13px; }
@@ -532,6 +547,7 @@ body { font-size: 14px; line-height: 1.5; }
 .module-placeholder > p:first-of-type { font-size: 11px; }.module-placeholder > p:nth-of-type(2) { font-size: 13px; }.module-placeholder > a { font-size: 12px; }
 
 @media (max-width: 1120px) {
+  .ledger-balance-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .stat-grid { grid-template-columns: repeat(2, 1fr); }
   .project-card-grid { grid-template-columns: repeat(2, 1fr); }
   .project-row { grid-template-columns: 38px minmax(150px, 1fr) 45px 70px; }
@@ -543,6 +559,7 @@ body { font-size: 14px; line-height: 1.5; }
 }
 
 @media (max-width: 820px) {
+  .deposit-stat-grid { grid-template-columns: 1fr; }.ledger-hero { align-items: flex-start; }.ledger-person p { white-space: normal; }.ledger-actions { flex-direction: column; }
   .login-page { grid-template-columns: 1fr; }
   .login-story { display: none; }
   .login-form-side { min-height: 100vh; display: flex; flex-direction: column; align-items: stretch; padding: 28px 24px; }
@@ -577,6 +594,7 @@ body { font-size: 14px; line-height: 1.5; }
 }
 
 @media (max-width: 590px) {
+  .ledger-hero { flex-direction: column; }.ledger-actions { width: 100%; flex-direction: row; }.ledger-actions button { flex: 1; }.ledger-balance-grid { grid-template-columns: 1fr; }.deposit-entry-modal { width: 100%; max-height: calc(100vh - 20px); }.deposit-entry-modal > .form-grid { padding: 15px; }.deposit-entry-modal > footer { padding: 12px 15px; }.deposit-entry-modal > footer button { flex: 1; }
   .page-heading p { display: none; }
   .page-heading h1 { font-size: 16px; }
   .topbar-actions { gap: 5px; }

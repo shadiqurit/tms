@@ -29,12 +29,16 @@ const routeByPage: Record<string, string> = {
   '9': '/expenses/setup', '12': '/admin/master-data', '14': '/workforce/employees',
   '15': '/expenses/project-costs', '24': '/purchases/site-engineer', '25': '/projects/sites',
   '26': '/expenses/setup', '50': '/finance/providers', '55': '/admin/master-data',
-  '56': '/purchases/corporate', '63': '/billing', '80': '/admin/banks',
+  '30': '/finance/engineer-deposits', '56': '/purchases/corporate', '63': '/billing', '80': '/admin/banks',
   '70': '/purchases/transfers',
   '99': '/admin/menus', '992': '/admin/access', '902': '/reports/engineers',
   '903': '/reports/loans', '904': '/reports/mason-payments', '905': '/reports/corporate',
   '906': '/reports/final', '67': '/reports/summary',
 };
+
+function legacyDateTime(value: string | number | null | undefined) {
+  return typeof value === 'string' ? value.replace('T', ' ') : value;
+}
 
 async function upsertId(table: string, legacyId: number, sql: string, values: unknown[]) {
   await db.query(sql, values);
@@ -124,6 +128,9 @@ async function main() {
       ['site_purchases.view', 'View site engineer purchases', 'Procurement'],
       ['site_purchases.manage', 'Create and modify site engineer purchases', 'Procurement'],
       ['site_purchases.delete', 'Delete site engineer purchases', 'Procurement'],
+      ['engineer_deposits.view', 'View engineer deposits and balances', 'Finance'],
+      ['engineer_deposits.manage', 'Manage engineer deposits', 'Finance'],
+      ['engineer_deposits.delete', 'Delete engineer deposits', 'Finance'],
       ['corporate_purchases.view', 'View corporate purchases', 'Procurement'],
       ['corporate_purchases.manage', 'Create and modify corporate purchases', 'Procurement'],
       ['corporate_purchases.delete', 'Delete corporate purchases', 'Procurement'],
@@ -185,6 +192,7 @@ async function main() {
     await inheritLegacyMenuAccess(7, ['expense_setup.view', 'expense_setup.manage']);
     await inheritLegacyMenuAccess(27, ['expense_setup.view', 'expense_setup.manage']);
     await inheritLegacyMenuAccess(29, ['site_purchases.view', 'site_purchases.manage']);
+    await inheritLegacyMenuAccess(21, ['engineer_deposits.view', 'engineer_deposits.manage']);
     await inheritLegacyMenuAccess(14, ['corporate_purchases.view', 'corporate_purchases.manage']);
     await inheritLegacyMenuAccess(41, ['corporate_transfers.view', 'corporate_transfers.manage']);
     const programmerId = [...roleMap.entries()].find(([legacy]) => legacy === 0)?.[1];
@@ -561,7 +569,7 @@ async function main() {
     for (const row of await records('PURCHASE_DTL.json')) {
       const purchaseId = sitePurchaseMap.get(Number(row.PID));
       const materialId = materialMap.get(Number(row.PROD_ID));
-      if (!purchaseId || !materialId) continue;
+      if (!purchaseId) continue;
       await connection.query(
         `INSERT INTO app_site_purchase_materials
            (legacy_id, purchase_id, material_id, unit_id, site_id, entry_date, quantity,
@@ -571,7 +579,7 @@ async function main() {
            unit_id=VALUES(unit_id), site_id=VALUES(site_id), entry_date=VALUES(entry_date),
            quantity=VALUES(quantity), unit_price=VALUES(unit_price), discount=VALUES(discount),
            total_amount=VALUES(total_amount), notes=VALUES(notes)`,
-        [row.ID, purchaseId, materialId, unitMap.get(Number(row.UOM)) ?? null,
+        [row.ID, purchaseId, materialId ?? null, unitMap.get(Number(row.UOM)) ?? null,
           Number(row.SITE_ID) === 0 ? null : (siteMap.get(Number(row.SITE_ID)) ?? null),
           row.P_DATE ?? sitePurchaseDateMap.get(Number(row.PID)) ?? row.ENT_DATE,
           row.QTY ?? 0, row.PRICE ?? 0, row.DISCOUNT ?? 0, row.TOTAL ?? 0, row.NOTES],
@@ -590,6 +598,46 @@ async function main() {
           Number(row.SITE_ID) === 0 ? null : (siteMap.get(Number(row.SITE_ID)) ?? null),
           row.P_DATE ?? sitePurchaseDateMap.get(Number(row.PID)) ?? row.ENT_DATE,
           row.TOTAL ?? 0, row.NOTES],
+      );
+    }
+
+    const engineerAccountMap = new Map<number, number>();
+    for (const row of await records('DEPOSIT.json')) {
+      const projectId = projectMap.get(Number(row.PRJ_ID));
+      const employeeId = employeeMap.get(Number(row.ENG_ID));
+      if (!projectId || !employeeId) continue;
+      await connection.query(
+        `INSERT INTO app_engineer_accounts
+           (legacy_id, company_id, project_id, employee_id, opened_on, legacy_amount,
+            legacy_created_by, legacy_created_at, legacy_updated_by, legacy_updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+         ON DUPLICATE KEY UPDATE project_id=VALUES(project_id), employee_id=VALUES(employee_id),
+           opened_on=VALUES(opened_on), legacy_amount=VALUES(legacy_amount),
+           legacy_created_by=VALUES(legacy_created_by), legacy_created_at=VALUES(legacy_created_at),
+           legacy_updated_by=VALUES(legacy_updated_by), legacy_updated_at=VALUES(legacy_updated_at)`,
+        [row.ID, companyId, projectId, employeeId, row.CDATE, row.AMT, row.ENT_BY,
+          legacyDateTime(row.ENT_DATE), row.UPD_BY, legacyDateTime(row.UPD_DATE)],
+      );
+      const [[saved]] = await connection.query<RowDataPacket[]>(
+        'SELECT id FROM app_engineer_accounts WHERE company_id = ? AND legacy_id = ?', [companyId, row.ID],
+      );
+      engineerAccountMap.set(Number(row.ID), Number(saved!.id));
+    }
+    for (const row of await records('DEPOSIT_DTL.json')) {
+      const accountId = engineerAccountMap.get(Number(row.PID));
+      if (!accountId) continue;
+      await connection.query(
+        `INSERT INTO app_engineer_deposits
+           (legacy_id, account_id, project_id, site_id, deposit_date, amount,
+            legacy_created_by, legacy_created_at, legacy_updated_by, legacy_updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+         ON DUPLICATE KEY UPDATE account_id=VALUES(account_id), project_id=VALUES(project_id),
+           site_id=VALUES(site_id), deposit_date=VALUES(deposit_date), amount=VALUES(amount),
+           legacy_created_by=VALUES(legacy_created_by), legacy_created_at=VALUES(legacy_created_at),
+           legacy_updated_by=VALUES(legacy_updated_by), legacy_updated_at=VALUES(legacy_updated_at)`,
+        [row.ID, accountId, projectMap.get(Number(row.PRJ_ID)) ?? null,
+          siteMap.get(Number(row.SITE_ID)) ?? null, row.DDATE, row.AMT,
+          row.ENT_BY, legacyDateTime(row.ENT_DATE), row.UPD_BY, legacyDateTime(row.UPD_DATE)],
       );
     }
 

@@ -63,6 +63,10 @@ const title = computed(() => {
         return 'New corporate transfer';
     if (route.name === 'corporate-transfer-edit')
         return 'Corporate transfer';
+    if (route.name === 'engineer-deposits')
+        return 'Engineer deposits';
+    if (route.name === 'engineer-deposit-ledger')
+        return 'Engineer balance ledger';
     if (route.name === 'master-data')
         return 'Master setup';
     if (route.name === 'users')

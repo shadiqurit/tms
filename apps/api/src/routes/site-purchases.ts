@@ -303,12 +303,12 @@ sitePurchasesRouter.get('/:id/materials', requirePermission('site_purchases.view
   const search = String(req.query.search ?? '').trim();
   const like = `%${search}%`;
   const [rows] = await db.query<RowDataPacket[]>(
-    `SELECT spm.id, spm.material_id AS materialId, m.name AS materialName, spm.unit_id AS unitId,
+    `SELECT spm.id, spm.material_id AS materialId, COALESCE(m.name, 'Unspecified legacy material') AS materialName, spm.unit_id AS unitId,
             u.name AS unitName, spm.site_id AS siteId, s.name AS siteName, spm.entry_date AS entryDate,
             spm.quantity, spm.unit_price AS unitPrice, spm.discount,
             spm.total_amount AS totalAmount, spm.notes
        FROM app_site_purchase_materials spm
-       JOIN app_materials m ON m.id = spm.material_id
+       LEFT JOIN app_materials m ON m.id = spm.material_id
        LEFT JOIN app_units u ON u.id = spm.unit_id
        LEFT JOIN app_project_sites s ON s.id = spm.site_id
       WHERE spm.purchase_id = ? AND (? = '' OR m.name LIKE ? OR s.name LIKE ? OR spm.notes LIKE ?)
@@ -317,7 +317,7 @@ sitePurchasesRouter.get('/:id/materials', requirePermission('site_purchases.view
   );
   const [[total]] = await db.query<RowDataPacket[]>(
     `SELECT COUNT(*) AS count FROM app_site_purchase_materials spm
-       JOIN app_materials m ON m.id = spm.material_id LEFT JOIN app_project_sites s ON s.id = spm.site_id
+       LEFT JOIN app_materials m ON m.id = spm.material_id LEFT JOIN app_project_sites s ON s.id = spm.site_id
       WHERE spm.purchase_id = ? AND (? = '' OR m.name LIKE ? OR s.name LIKE ? OR spm.notes LIKE ?)`,
     [purchaseId, search, like, like, like],
   );
