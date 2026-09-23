@@ -602,7 +602,20 @@ async function main() {
     }
 
     const engineerAccountMap = new Map<number, number>();
-    for (const row of await records('DEPOSIT.json')) {
+    const engineerWalletMap = new Map<number, number>();
+    for (const employeeId of employeeMap.values()) {
+      await connection.query(
+        `INSERT INTO app_engineer_wallets (company_id, employee_id) VALUES (?, ?)
+         ON DUPLICATE KEY UPDATE id = id`, [companyId, employeeId],
+      );
+      const [[wallet]] = await connection.query<RowDataPacket[]>(
+        'SELECT id FROM app_engineer_wallets WHERE company_id = ? AND employee_id = ?', [companyId, employeeId],
+      );
+      engineerWalletMap.set(employeeId, Number(wallet!.id));
+    }
+    const legacyEngineerHeaders = await records('DEPOSIT.json');
+    const engineerByHeader = new Map(legacyEngineerHeaders.map((item) => [Number(item.ID), Number(item.ENG_ID)]));
+    for (const row of legacyEngineerHeaders) {
       const projectId = projectMap.get(Number(row.PRJ_ID));
       const employeeId = employeeMap.get(Number(row.ENG_ID));
       if (!projectId || !employeeId) continue;
@@ -626,16 +639,19 @@ async function main() {
     for (const row of await records('DEPOSIT_DTL.json')) {
       const accountId = engineerAccountMap.get(Number(row.PID));
       if (!accountId) continue;
+      const employeeId = employeeMap.get(engineerByHeader.get(Number(row.PID)) ?? -1);
+      const walletId = employeeId ? engineerWalletMap.get(employeeId) : undefined;
+      if (!walletId) continue;
       await connection.query(
         `INSERT INTO app_engineer_deposits
-           (legacy_id, account_id, project_id, site_id, deposit_date, amount,
-            legacy_created_by, legacy_created_at, legacy_updated_by, legacy_updated_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-         ON DUPLICATE KEY UPDATE account_id=VALUES(account_id), project_id=VALUES(project_id),
-           site_id=VALUES(site_id), deposit_date=VALUES(deposit_date), amount=VALUES(amount),
-           legacy_created_by=VALUES(legacy_created_by), legacy_created_at=VALUES(legacy_created_at),
-           legacy_updated_by=VALUES(legacy_updated_by), legacy_updated_at=VALUES(legacy_updated_at)`,
-        [row.ID, accountId, projectMap.get(Number(row.PRJ_ID)) ?? null,
+           (legacy_id, account_id, wallet_id, project_id, site_id, deposit_date, amount,
+             legacy_created_by, legacy_created_at, legacy_updated_by, legacy_updated_at)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          ON DUPLICATE KEY UPDATE account_id=VALUES(account_id), wallet_id=VALUES(wallet_id), project_id=VALUES(project_id),
+            site_id=VALUES(site_id), deposit_date=VALUES(deposit_date), amount=VALUES(amount),
+            legacy_created_by=VALUES(legacy_created_by), legacy_created_at=VALUES(legacy_created_at),
+            legacy_updated_by=VALUES(legacy_updated_by), legacy_updated_at=VALUES(legacy_updated_at)`,
+        [row.ID, accountId, walletId, projectMap.get(Number(row.PRJ_ID)) ?? null,
           siteMap.get(Number(row.SITE_ID)) ?? null, row.DDATE, row.AMT,
           row.ENT_BY, legacyDateTime(row.ENT_DATE), row.UPD_BY, legacyDateTime(row.UPD_DATE)],
       );

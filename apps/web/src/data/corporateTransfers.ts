@@ -12,6 +12,7 @@ export interface CorporateTransferRecord {
   receiveProjectId: number; receiveProjectName: string; receiveProjectCode: string;
   receiveSiteId: number | null; receiveSiteName: string;
   status: 'draft' | 'posted' | 'cancelled'; itemCount: number; totalQuantity: number; totalAmount: number;
+  productNames?: string[];
 }
 
 export interface CorporateTransferLineRecord {
@@ -56,6 +57,7 @@ export const corporateTransferRecords: CorporateTransferRecord[] = (legacyTransf
     receiveSiteId: item.RCV_SITE_ID ? Number(item.RCV_SITE_ID) : null, receiveSiteName: receiveSite?.name ?? '',
     status: 'posted', itemCount: lines.length, totalQuantity: lines.reduce((sum, line) => sum + line.quantity, 0),
     totalAmount: lines.reduce((sum, line) => sum + line.totalAmount, 0),
+    productNames: [...new Set(lines.map((line) => line.productName))].slice(0, 2),
   };
 });
 

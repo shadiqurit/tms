@@ -4,15 +4,12 @@ import { ArrowDownToLine, ArrowLeft, BanknoteArrowDown, ChevronLeft, ChevronRigh
 import { api } from '../services/api';
 import { useAuthStore } from '../stores/auth';
 import { addDemoEngineerDeposit, deleteDemoEngineerDeposit, getDemoEngineerLedger, updateDemoEngineerDeposit } from '../data/engineerDeposits';
-import { projectSites } from '../data/projectSites';
 const route = useRoute();
 const auth = useAuthStore();
 const demoMode = import.meta.env.VITE_DEMO_MODE !== 'false';
 const employeeId = Number(route.params.employeeId);
-const projectId = Number(route.params.projectId);
 const ledger = ref(null);
 const transactions = ref([]);
-const sites = ref(projectSites.filter((item) => item.projectId === projectId).map((item) => ({ id: item.id, projectId: item.projectId, name: item.name })));
 const loading = ref(false);
 const saving = ref(false);
 const error = ref('');
@@ -21,36 +18,75 @@ const showForm = ref(false);
 const editingId = ref(null);
 const search = ref('');
 const typeFilter = ref('all');
+const projectFilter = ref(0);
+const siteFilter = ref('all');
 const page = ref(1);
 const pageSize = 30;
 const today = new Date().toISOString().slice(0, 10);
-const form = reactive({ employeeId, projectId, siteId: null, depositDate: today, amount: 0, referenceNo: '', notes: '' });
+const form = reactive({ employeeId, depositDate: today, amount: 0, referenceNo: '', notes: '' });
 const canManage = computed(() => auth.hasPermission('engineer_deposits.manage'));
 const canDelete = computed(() => auth.hasPermission('engineer_deposits.delete'));
-const filtered = computed(() => { const term = search.value.trim().toLowerCase(); return transactions.value.filter((item) => (typeFilter.value === 'all' || item.type === typeFilter.value) && (!term || [item.referenceNo, item.description, item.notes, item.siteName, item.transactionDate].some((value) => String(value ?? '').toLowerCase().includes(term)))); });
+const canManagePurchases = computed(() => auth.hasPermission('site_purchases.manage'));
+const spending = computed(() => transactions.value.filter((item) => item.type !== 'deposit'));
+const projectSpending = computed(() => {
+    const result = new Map();
+    for (const item of spending.value) {
+        if (!item.projectId)
+            continue;
+        let project = result.get(item.projectId);
+        if (!project) {
+            project = { id: item.projectId, code: item.projectCode ?? `#${item.projectId}`, name: item.projectName ?? '', materials: 0, expenses: 0, total: 0, lines: 0, sites: new Set() };
+            result.set(item.projectId, project);
+        }
+        project.total += Number(item.debit);
+        project.lines++;
+        if (item.type === 'material')
+            project.materials += Number(item.debit);
+        else
+            project.expenses += Number(item.debit);
+        if (item.siteId)
+            project.sites.add(item.siteId);
+    }
+    return [...result.values()].sort((a, b) => b.total - a.total);
+});
+const availableSites = computed(() => {
+    const sites = new Map();
+    for (const item of spending.value)
+        if ((!projectFilter.value || item.projectId === projectFilter.value) && item.siteId)
+            sites.set(item.siteId, item.siteName || `Site #${item.siteId}`);
+    return [...sites].sort((a, b) => a[1].localeCompare(b[1]));
+});
+const scopedSpending = computed(() => spending.value.filter((item) => (!projectFilter.value || item.projectId === projectFilter.value) && (siteFilter.value === 'all' || (siteFilter.value === 'unassigned' ? !item.siteId : String(item.siteId) === siteFilter.value))));
+const spendingTotal = computed(() => Math.round(scopedSpending.value.reduce((sum, item) => sum + item.debit * 100, 0)) / 100);
+const scopeActive = computed(() => Boolean(projectFilter.value) || siteFilter.value !== 'all');
+const filtered = computed(() => {
+    const term = search.value.trim().toLowerCase();
+    return transactions.value.filter((item) => {
+        if (scopeActive.value && item.type === 'deposit')
+            return false;
+        if (projectFilter.value && item.projectId !== projectFilter.value)
+            return false;
+        if (siteFilter.value !== 'all' && (siteFilter.value === 'unassigned' ? Boolean(item.siteId) : String(item.siteId) !== siteFilter.value))
+            return false;
+        return (typeFilter.value === 'all' || item.type === typeFilter.value) &&
+            (!term || [item.referenceNo, item.projectName, item.projectCode, item.description, item.notes, item.siteName, item.transactionDate].some((value) => String(value ?? '').toLowerCase().includes(term)));
+    });
+});
 const pageCount = computed(() => Math.max(1, Math.ceil(filtered.value.length / pageSize)));
 const visible = computed(() => filtered.value.slice((page.value - 1) * pageSize, page.value * pageSize));
 const counts = computed(() => ({ deposits: transactions.value.filter((item) => item.type === 'deposit').length, materials: transactions.value.filter((item) => item.type === 'material').length, expenses: transactions.value.filter((item) => item.type === 'expense').length }));
-watch([search, typeFilter], () => { page.value = 1; });
+watch([search, typeFilter, projectFilter, siteFilter], () => { page.value = 1; });
+watch(projectFilter, () => { siteFilter.value = 'all'; typeFilter.value = 'all'; });
+watch(siteFilter, () => { if (siteFilter.value !== 'all')
+    typeFilter.value = 'all'; });
 onMounted(load);
 async function load() {
     loading.value = true;
     error.value = '';
     try {
-        if (demoMode) {
-            const result = getDemoEngineerLedger(employeeId, projectId);
-            ledger.value = result.ledger;
-            transactions.value = result.transactions;
-        }
-        else {
-            const [result, options] = await Promise.all([
-                api(`/engineer-deposits/ledger?employeeId=${employeeId}&projectId=${projectId}`),
-                api('/engineer-deposits/options'),
-            ]);
-            ledger.value = result.ledger;
-            transactions.value = result.transactions;
-            sites.value = options.sites.filter((item) => item.projectId === projectId);
-        }
+        const result = demoMode ? getDemoEngineerLedger(employeeId) : await api(`/engineer-deposits/ledger?employeeId=${employeeId}`);
+        ledger.value = result.ledger;
+        transactions.value = result.transactions;
     }
     catch (reason) {
         error.value = reason instanceof Error ? reason.message : 'Could not load the engineer ledger.';
@@ -61,8 +97,8 @@ async function load() {
 }
 function money(value) { return new Intl.NumberFormat('en-BD', { style: 'currency', currency: 'BDT', minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(Number(value)); }
 function date(value) { return value ? new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(value)) : 'Date not recorded'; }
-function openNew() { editingId.value = null; Object.assign(form, { employeeId, projectId, siteId: null, depositDate: today, amount: 0, referenceNo: '', notes: '' }); formError.value = ''; showForm.value = true; }
-function openEdit(item) { editingId.value = item.id; Object.assign(form, { employeeId, projectId, siteId: item.siteId, depositDate: item.transactionDate ?? '', amount: item.credit, referenceNo: item.referenceNo ?? '', notes: item.notes ?? '' }); formError.value = ''; showForm.value = true; }
+function openNew() { editingId.value = null; Object.assign(form, { employeeId, depositDate: today, amount: 0, referenceNo: '', notes: '' }); formError.value = ''; showForm.value = true; }
+function openEdit(item) { editingId.value = item.id; Object.assign(form, { employeeId, depositDate: item.transactionDate ?? '', amount: item.credit, referenceNo: item.referenceNo ?? '', notes: item.notes ?? '' }); formError.value = ''; showForm.value = true; }
 async function saveDeposit() {
     formError.value = '';
     if (!form.depositDate || Number(form.amount) <= 0) {
@@ -108,11 +144,11 @@ function exportLedger() {
     if (!ledger.value)
         return;
     const quote = (value) => `"${String(value ?? '').replaceAll('"', '""')}"`;
-    const rows = [['Date', 'Type', 'Reference', 'Site', 'Details', 'Credit', 'Debit', 'Balance'], ...transactions.value.map((item) => [item.transactionDate, item.type, item.referenceNo, item.siteName, item.description, item.credit, item.debit, item.balance])];
-    const blob = new Blob([rows.map((row) => row.map(quote).join(',')).join('\r\n')], { type: 'text/csv;charset=utf-8' });
+    const rows = [['Date', 'Type', 'Reference', 'Project', 'Site', 'Details', 'Deposit', 'Spent', 'Overall running balance'], ...filtered.value.map((item) => [item.transactionDate, item.type, item.referenceNo, item.projectName, item.siteName, item.description, item.credit, item.debit, item.balance])];
+    const blob = new Blob(['\uFEFF', rows.map((row) => row.map(quote).join(',')).join('\r\n')], { type: 'text/csv;charset=utf-8' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = `${ledger.value.employeeCode || ledger.value.employeeId}-${ledger.value.projectCode}-ledger.csv`;
+    link.download = `${ledger.value.employeeCode || ledger.value.employeeId}-engineer-ledger.csv`;
     link.click();
     URL.revokeObjectURL(link.href);
 }
@@ -171,8 +207,6 @@ if (__VLS_ctx.ledger) {
     (__VLS_ctx.ledger.employeeName);
     __VLS_asFunctionalElement(__VLS_intrinsicElements.p, __VLS_intrinsicElements.p)({});
     (__VLS_ctx.ledger.employeeCode || `Employee #${__VLS_ctx.ledger.employeeId}`);
-    (__VLS_ctx.ledger.projectCode);
-    (__VLS_ctx.ledger.projectName);
     __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
         ...{ class: "ledger-actions" },
     });
@@ -189,20 +223,44 @@ if (__VLS_ctx.ledger) {
     const __VLS_10 = __VLS_9({
         size: (16),
     }, ...__VLS_functionalComponentArgsRest(__VLS_9));
+    if (__VLS_ctx.canManagePurchases) {
+        const __VLS_12 = {}.RouterLink;
+        /** @type {[typeof __VLS_components.RouterLink, typeof __VLS_components.RouterLink, ]} */ ;
+        // @ts-ignore
+        const __VLS_13 = __VLS_asFunctionalComponent(__VLS_12, new __VLS_12({
+            to: ({ path: '/purchases/site-engineer/new', query: { employeeId: __VLS_ctx.employeeId, projectId: __VLS_ctx.projectFilter || undefined, entry: 'expense' } }),
+            ...{ class: "secondary-button" },
+        }));
+        const __VLS_14 = __VLS_13({
+            to: ({ path: '/purchases/site-engineer/new', query: { employeeId: __VLS_ctx.employeeId, projectId: __VLS_ctx.projectFilter || undefined, entry: 'expense' } }),
+            ...{ class: "secondary-button" },
+        }, ...__VLS_functionalComponentArgsRest(__VLS_13));
+        __VLS_15.slots.default;
+        const __VLS_16 = {}.CircleDollarSign;
+        /** @type {[typeof __VLS_components.CircleDollarSign, ]} */ ;
+        // @ts-ignore
+        const __VLS_17 = __VLS_asFunctionalComponent(__VLS_16, new __VLS_16({
+            size: (16),
+        }));
+        const __VLS_18 = __VLS_17({
+            size: (16),
+        }, ...__VLS_functionalComponentArgsRest(__VLS_17));
+        var __VLS_15;
+    }
     if (__VLS_ctx.canManage) {
         __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
             ...{ onClick: (__VLS_ctx.openNew) },
             ...{ class: "primary-button" },
         });
-        const __VLS_12 = {}.Plus;
+        const __VLS_20 = {}.Plus;
         /** @type {[typeof __VLS_components.Plus, ]} */ ;
         // @ts-ignore
-        const __VLS_13 = __VLS_asFunctionalComponent(__VLS_12, new __VLS_12({
+        const __VLS_21 = __VLS_asFunctionalComponent(__VLS_20, new __VLS_20({
             size: (17),
         }));
-        const __VLS_14 = __VLS_13({
+        const __VLS_22 = __VLS_21({
             size: (17),
-        }, ...__VLS_functionalComponentArgsRest(__VLS_13));
+        }, ...__VLS_functionalComponentArgsRest(__VLS_21));
     }
     __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
         ...{ class: "ledger-balance-grid" },
@@ -211,15 +269,15 @@ if (__VLS_ctx.ledger) {
         ...{ class: "panel" },
     });
     __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-    const __VLS_16 = {}.ArrowDownToLine;
+    const __VLS_24 = {}.ArrowDownToLine;
     /** @type {[typeof __VLS_components.ArrowDownToLine, ]} */ ;
     // @ts-ignore
-    const __VLS_17 = __VLS_asFunctionalComponent(__VLS_16, new __VLS_16({
+    const __VLS_25 = __VLS_asFunctionalComponent(__VLS_24, new __VLS_24({
         size: (18),
     }));
-    const __VLS_18 = __VLS_17({
+    const __VLS_26 = __VLS_25({
         size: (18),
-    }, ...__VLS_functionalComponentArgsRest(__VLS_17));
+    }, ...__VLS_functionalComponentArgsRest(__VLS_25));
     __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
     __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
     __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
@@ -230,15 +288,15 @@ if (__VLS_ctx.ledger) {
         ...{ class: "panel" },
     });
     __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-    const __VLS_20 = {}.PackageSearch;
+    const __VLS_28 = {}.PackageSearch;
     /** @type {[typeof __VLS_components.PackageSearch, ]} */ ;
     // @ts-ignore
-    const __VLS_21 = __VLS_asFunctionalComponent(__VLS_20, new __VLS_20({
+    const __VLS_29 = __VLS_asFunctionalComponent(__VLS_28, new __VLS_28({
         size: (18),
     }));
-    const __VLS_22 = __VLS_21({
+    const __VLS_30 = __VLS_29({
         size: (18),
-    }, ...__VLS_functionalComponentArgsRest(__VLS_21));
+    }, ...__VLS_functionalComponentArgsRest(__VLS_29));
     __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
     __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
     __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
@@ -249,15 +307,15 @@ if (__VLS_ctx.ledger) {
         ...{ class: "panel" },
     });
     __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-    const __VLS_24 = {}.CircleDollarSign;
+    const __VLS_32 = {}.CircleDollarSign;
     /** @type {[typeof __VLS_components.CircleDollarSign, ]} */ ;
     // @ts-ignore
-    const __VLS_25 = __VLS_asFunctionalComponent(__VLS_24, new __VLS_24({
+    const __VLS_33 = __VLS_asFunctionalComponent(__VLS_32, new __VLS_32({
         size: (18),
     }));
-    const __VLS_26 = __VLS_25({
+    const __VLS_34 = __VLS_33({
         size: (18),
-    }, ...__VLS_functionalComponentArgsRest(__VLS_25));
+    }, ...__VLS_functionalComponentArgsRest(__VLS_33));
     __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
     __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
     __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
@@ -269,54 +327,143 @@ if (__VLS_ctx.ledger) {
         ...{ class: ({ negative: __VLS_ctx.ledger.balance < 0 }) },
     });
     __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-    const __VLS_28 = {}.WalletCards;
+    const __VLS_36 = {}.WalletCards;
     /** @type {[typeof __VLS_components.WalletCards, ]} */ ;
     // @ts-ignore
-    const __VLS_29 = __VLS_asFunctionalComponent(__VLS_28, new __VLS_28({
+    const __VLS_37 = __VLS_asFunctionalComponent(__VLS_36, new __VLS_36({
         size: (18),
     }));
-    const __VLS_30 = __VLS_29({
+    const __VLS_38 = __VLS_37({
         size: (18),
-    }, ...__VLS_functionalComponentArgsRest(__VLS_29));
+    }, ...__VLS_functionalComponentArgsRest(__VLS_37));
     __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
     __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
     __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
     (__VLS_ctx.money(__VLS_ctx.ledger.balance));
     __VLS_asFunctionalElement(__VLS_intrinsicElements.em, __VLS_intrinsicElements.em)({});
-    (__VLS_ctx.ledger.balance < 0 ? 'Overspent — review required' : 'Available with engineer');
+    (__VLS_ctx.ledger.balance < 0 ? 'Overdrawn — review required' : 'Available with engineer');
     __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
         ...{ class: "ledger-explanation panel" },
     });
-    const __VLS_32 = {}.BanknoteArrowDown;
+    const __VLS_40 = {}.BanknoteArrowDown;
     /** @type {[typeof __VLS_components.BanknoteArrowDown, ]} */ ;
     // @ts-ignore
-    const __VLS_33 = __VLS_asFunctionalComponent(__VLS_32, new __VLS_32({
+    const __VLS_41 = __VLS_asFunctionalComponent(__VLS_40, new __VLS_40({
         size: (19),
     }));
-    const __VLS_34 = __VLS_33({
+    const __VLS_42 = __VLS_41({
         size: (19),
-    }, ...__VLS_functionalComponentArgsRest(__VLS_33));
+    }, ...__VLS_functionalComponentArgsRest(__VLS_41));
     __VLS_asFunctionalElement(__VLS_intrinsicElements.p, __VLS_intrinsicElements.p)({});
     __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.section, __VLS_intrinsicElements.section)({
+        ...{ class: "panel engineer-project-summary" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.header, __VLS_intrinsicElements.header)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.h3, __VLS_intrinsicElements.h3)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.p, __VLS_intrinsicElements.p)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+        ...{ class: "site-table-wrap" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.table, __VLS_intrinsicElements.table)({
+        ...{ class: "site-table engineer-project-table" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.thead, __VLS_intrinsicElements.thead)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.tr, __VLS_intrinsicElements.tr)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.th, __VLS_intrinsicElements.th)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.th, __VLS_intrinsicElements.th)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.th, __VLS_intrinsicElements.th)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.th, __VLS_intrinsicElements.th)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.th, __VLS_intrinsicElements.th)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.th, __VLS_intrinsicElements.th)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.tbody, __VLS_intrinsicElements.tbody)({});
+    for (const [project] of __VLS_getVForSourceType((__VLS_ctx.projectSpending))) {
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.tr, __VLS_intrinsicElements.tr)({
+            key: (project.id),
+        });
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+            ...{ class: "site-project-cell" },
+        });
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+        (project.code);
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+        (project.name);
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+        (__VLS_ctx.money(project.materials));
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+        (__VLS_ctx.money(project.expenses));
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+        (__VLS_ctx.money(project.total));
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+        (project.sites.size);
+        (project.lines);
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
+            ...{ onClick: (...[$event]) => {
+                    if (!(__VLS_ctx.ledger))
+                        return;
+                    __VLS_ctx.projectFilter = project.id;
+                } },
+            ...{ class: "secondary-button small" },
+        });
+    }
+    if (!__VLS_ctx.projectSpending.length) {
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.tr, __VLS_intrinsicElements.tr)({});
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({
+            colspan: "6",
+        });
+    }
     __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
         ...{ class: "site-toolbar panel ledger-toolbar" },
     });
     __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
         ...{ class: "table-search" },
     });
-    const __VLS_36 = {}.Search;
+    const __VLS_44 = {}.Search;
     /** @type {[typeof __VLS_components.Search, ]} */ ;
     // @ts-ignore
-    const __VLS_37 = __VLS_asFunctionalComponent(__VLS_36, new __VLS_36({
+    const __VLS_45 = __VLS_asFunctionalComponent(__VLS_44, new __VLS_44({
         size: (17),
     }));
-    const __VLS_38 = __VLS_37({
+    const __VLS_46 = __VLS_45({
         size: (17),
-    }, ...__VLS_functionalComponentArgsRest(__VLS_37));
+    }, ...__VLS_functionalComponentArgsRest(__VLS_45));
     __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
-        placeholder: "Search reference, site, details, notes, or date…",
+        placeholder: "Search reference, project, site, detail, or date…",
     });
     (__VLS_ctx.search);
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
+        value: (__VLS_ctx.projectFilter),
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+        value: (0),
+    });
+    for (const [project] of __VLS_getVForSourceType((__VLS_ctx.projectSpending))) {
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+            key: (project.id),
+            value: (project.id),
+        });
+        (project.code);
+        (project.name);
+    }
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
+        value: (__VLS_ctx.siteFilter),
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+        value: "all",
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+        value: "unassigned",
+    });
+    for (const [site] of __VLS_getVForSourceType((__VLS_ctx.availableSites))) {
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
+            key: (site[0]),
+            value: (String(site[0])),
+        });
+        (site[1]);
+    }
     __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
         value: (__VLS_ctx.typeFilter),
     });
@@ -332,6 +479,18 @@ if (__VLS_ctx.ledger) {
     __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
         value: "expense",
     });
+    if (__VLS_ctx.scopeActive) {
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+            ...{ class: "panel engineer-spending-scope" },
+        });
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+        (__VLS_ctx.money(__VLS_ctx.spendingTotal));
+        (__VLS_ctx.projectFilter ? 'project' : 'engineer');
+        (__VLS_ctx.siteFilter !== 'all' ? ' / site selection' : '');
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+        (__VLS_ctx.scopedSpending.length);
+    }
     __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
         ...{ class: "site-table-wrap panel ledger-table-wrap" },
     });
@@ -340,6 +499,7 @@ if (__VLS_ctx.ledger) {
     });
     __VLS_asFunctionalElement(__VLS_intrinsicElements.thead, __VLS_intrinsicElements.thead)({});
     __VLS_asFunctionalElement(__VLS_intrinsicElements.tr, __VLS_intrinsicElements.tr)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.th, __VLS_intrinsicElements.th)({});
     __VLS_asFunctionalElement(__VLS_intrinsicElements.th, __VLS_intrinsicElements.th)({});
     __VLS_asFunctionalElement(__VLS_intrinsicElements.th, __VLS_intrinsicElements.th)({});
     __VLS_asFunctionalElement(__VLS_intrinsicElements.th, __VLS_intrinsicElements.th)({});
@@ -367,21 +527,21 @@ if (__VLS_ctx.ledger) {
         __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
         (__VLS_ctx.date(item.transactionDate));
         __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
-        if (item.purchaseId) {
-            const __VLS_40 = {}.RouterLink;
+        if (item.purchaseId && __VLS_ctx.canManagePurchases) {
+            const __VLS_48 = {}.RouterLink;
             /** @type {[typeof __VLS_components.RouterLink, typeof __VLS_components.RouterLink, ]} */ ;
             // @ts-ignore
-            const __VLS_41 = __VLS_asFunctionalComponent(__VLS_40, new __VLS_40({
+            const __VLS_49 = __VLS_asFunctionalComponent(__VLS_48, new __VLS_48({
                 to: (`/purchases/site-engineer/${item.purchaseId}/edit`),
                 ...{ class: "ledger-reference" },
             }));
-            const __VLS_42 = __VLS_41({
+            const __VLS_50 = __VLS_49({
                 to: (`/purchases/site-engineer/${item.purchaseId}/edit`),
                 ...{ class: "ledger-reference" },
-            }, ...__VLS_functionalComponentArgsRest(__VLS_41));
-            __VLS_43.slots.default;
+            }, ...__VLS_functionalComponentArgsRest(__VLS_49));
+            __VLS_51.slots.default;
             (item.referenceNo);
-            var __VLS_43;
+            var __VLS_51;
         }
         else {
             __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({
@@ -393,7 +553,12 @@ if (__VLS_ctx.ledger) {
         __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({
             ...{ class: "ledger-site" },
         });
-        (item.siteName || 'Project-wide');
+        (item.type === 'deposit' ? 'Overall deposit' : `${item.projectCode || ''} ${item.projectName || ''}`);
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({
+            ...{ class: "ledger-site" },
+        });
+        (item.type === 'deposit' ? '—' : item.siteName || 'No site recorded');
         __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
         __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
             ...{ class: "ledger-description" },
@@ -449,15 +614,15 @@ if (__VLS_ctx.ledger) {
                     ...{ class: "line-edit" },
                     'aria-label': "Edit deposit",
                 });
-                const __VLS_44 = {}.Pencil;
+                const __VLS_52 = {}.Pencil;
                 /** @type {[typeof __VLS_components.Pencil, ]} */ ;
                 // @ts-ignore
-                const __VLS_45 = __VLS_asFunctionalComponent(__VLS_44, new __VLS_44({
+                const __VLS_53 = __VLS_asFunctionalComponent(__VLS_52, new __VLS_52({
                     size: (14),
                 }));
-                const __VLS_46 = __VLS_45({
+                const __VLS_54 = __VLS_53({
                     size: (14),
-                }, ...__VLS_functionalComponentArgsRest(__VLS_45));
+                }, ...__VLS_functionalComponentArgsRest(__VLS_53));
             }
             if (__VLS_ctx.canDelete) {
                 __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
@@ -473,35 +638,35 @@ if (__VLS_ctx.ledger) {
                     ...{ class: "line-delete" },
                     'aria-label': "Delete deposit",
                 });
-                const __VLS_48 = {}.Trash2;
+                const __VLS_56 = {}.Trash2;
                 /** @type {[typeof __VLS_components.Trash2, ]} */ ;
                 // @ts-ignore
-                const __VLS_49 = __VLS_asFunctionalComponent(__VLS_48, new __VLS_48({
+                const __VLS_57 = __VLS_asFunctionalComponent(__VLS_56, new __VLS_56({
                     size: (14),
                 }));
-                const __VLS_50 = __VLS_49({
+                const __VLS_58 = __VLS_57({
                     size: (14),
-                }, ...__VLS_functionalComponentArgsRest(__VLS_49));
+                }, ...__VLS_functionalComponentArgsRest(__VLS_57));
             }
         }
     }
     if (!__VLS_ctx.visible.length) {
         __VLS_asFunctionalElement(__VLS_intrinsicElements.tr, __VLS_intrinsicElements.tr)({});
         __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({
-            colspan: "8",
+            colspan: "9",
         });
         __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
             ...{ class: "site-empty" },
         });
-        const __VLS_52 = {}.WalletCards;
+        const __VLS_60 = {}.WalletCards;
         /** @type {[typeof __VLS_components.WalletCards, ]} */ ;
         // @ts-ignore
-        const __VLS_53 = __VLS_asFunctionalComponent(__VLS_52, new __VLS_52({
+        const __VLS_61 = __VLS_asFunctionalComponent(__VLS_60, new __VLS_60({
             size: (24),
         }));
-        const __VLS_54 = __VLS_53({
+        const __VLS_62 = __VLS_61({
             size: (24),
-        }, ...__VLS_functionalComponentArgsRest(__VLS_53));
+        }, ...__VLS_functionalComponentArgsRest(__VLS_61));
         __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
         __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
     }
@@ -524,15 +689,15 @@ if (__VLS_ctx.ledger) {
                 } },
             disabled: (__VLS_ctx.page === 1),
         });
-        const __VLS_56 = {}.ChevronLeft;
+        const __VLS_64 = {}.ChevronLeft;
         /** @type {[typeof __VLS_components.ChevronLeft, ]} */ ;
         // @ts-ignore
-        const __VLS_57 = __VLS_asFunctionalComponent(__VLS_56, new __VLS_56({
+        const __VLS_65 = __VLS_asFunctionalComponent(__VLS_64, new __VLS_64({
             size: (16),
         }));
-        const __VLS_58 = __VLS_57({
+        const __VLS_66 = __VLS_65({
             size: (16),
-        }, ...__VLS_functionalComponentArgsRest(__VLS_57));
+        }, ...__VLS_functionalComponentArgsRest(__VLS_65));
         __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
         (__VLS_ctx.page);
         (__VLS_ctx.pageCount);
@@ -546,15 +711,15 @@ if (__VLS_ctx.ledger) {
                 } },
             disabled: (__VLS_ctx.page === __VLS_ctx.pageCount),
         });
-        const __VLS_60 = {}.ChevronRight;
+        const __VLS_68 = {}.ChevronRight;
         /** @type {[typeof __VLS_components.ChevronRight, ]} */ ;
         // @ts-ignore
-        const __VLS_61 = __VLS_asFunctionalComponent(__VLS_60, new __VLS_60({
+        const __VLS_69 = __VLS_asFunctionalComponent(__VLS_68, new __VLS_68({
             size: (16),
         }));
-        const __VLS_62 = __VLS_61({
+        const __VLS_70 = __VLS_69({
             size: (16),
-        }, ...__VLS_functionalComponentArgsRest(__VLS_61));
+        }, ...__VLS_functionalComponentArgsRest(__VLS_69));
     }
 }
 if (__VLS_ctx.showForm) {
@@ -572,21 +737,20 @@ if (__VLS_ctx.showForm) {
     });
     __VLS_asFunctionalElement(__VLS_intrinsicElements.header, __VLS_intrinsicElements.header)({});
     __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-    const __VLS_64 = {}.ArrowDownToLine;
+    const __VLS_72 = {}.ArrowDownToLine;
     /** @type {[typeof __VLS_components.ArrowDownToLine, ]} */ ;
     // @ts-ignore
-    const __VLS_65 = __VLS_asFunctionalComponent(__VLS_64, new __VLS_64({
+    const __VLS_73 = __VLS_asFunctionalComponent(__VLS_72, new __VLS_72({
         size: (18),
     }));
-    const __VLS_66 = __VLS_65({
+    const __VLS_74 = __VLS_73({
         size: (18),
-    }, ...__VLS_functionalComponentArgsRest(__VLS_65));
+    }, ...__VLS_functionalComponentArgsRest(__VLS_73));
     __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
     __VLS_asFunctionalElement(__VLS_intrinsicElements.h3, __VLS_intrinsicElements.h3)({});
     (__VLS_ctx.editingId ? 'Modify deposit' : 'Add deposit');
     __VLS_asFunctionalElement(__VLS_intrinsicElements.p, __VLS_intrinsicElements.p)({});
     (__VLS_ctx.ledger?.employeeName);
-    (__VLS_ctx.ledger?.projectCode);
     __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
         ...{ onClick: (...[$event]) => {
                 if (!(__VLS_ctx.showForm))
@@ -596,15 +760,15 @@ if (__VLS_ctx.showForm) {
         type: "button",
         ...{ class: "modal-close" },
     });
-    const __VLS_68 = {}.X;
+    const __VLS_76 = {}.X;
     /** @type {[typeof __VLS_components.X, ]} */ ;
     // @ts-ignore
-    const __VLS_69 = __VLS_asFunctionalComponent(__VLS_68, new __VLS_68({
+    const __VLS_77 = __VLS_asFunctionalComponent(__VLS_76, new __VLS_76({
         size: (18),
     }));
-    const __VLS_70 = __VLS_69({
+    const __VLS_78 = __VLS_77({
         size: (18),
-    }, ...__VLS_functionalComponentArgsRest(__VLS_69));
+    }, ...__VLS_functionalComponentArgsRest(__VLS_77));
     __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
         ...{ class: "form-grid two" },
     });
@@ -631,24 +795,7 @@ if (__VLS_ctx.showForm) {
     });
     (__VLS_ctx.form.amount);
     __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-        ...{ class: "form-field" },
-    });
-    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-    __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
-        value: (__VLS_ctx.form.siteId),
-    });
-    __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-        value: (null),
-    });
-    for (const [site] of __VLS_getVForSourceType((__VLS_ctx.sites))) {
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-            key: (site.id),
-            value: (site.id),
-        });
-        (site.name);
-    }
-    __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-        ...{ class: "form-field" },
+        ...{ class: "form-field full" },
     });
     __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
     __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
@@ -700,6 +847,7 @@ if (__VLS_ctx.showForm) {
 /** @type {__VLS_StyleScopedClasses['ledger-person']} */ ;
 /** @type {__VLS_StyleScopedClasses['ledger-actions']} */ ;
 /** @type {__VLS_StyleScopedClasses['secondary-button']} */ ;
+/** @type {__VLS_StyleScopedClasses['secondary-button']} */ ;
 /** @type {__VLS_StyleScopedClasses['primary-button']} */ ;
 /** @type {__VLS_StyleScopedClasses['ledger-balance-grid']} */ ;
 /** @type {__VLS_StyleScopedClasses['panel']} */ ;
@@ -709,10 +857,20 @@ if (__VLS_ctx.showForm) {
 /** @type {__VLS_StyleScopedClasses['net']} */ ;
 /** @type {__VLS_StyleScopedClasses['ledger-explanation']} */ ;
 /** @type {__VLS_StyleScopedClasses['panel']} */ ;
+/** @type {__VLS_StyleScopedClasses['panel']} */ ;
+/** @type {__VLS_StyleScopedClasses['engineer-project-summary']} */ ;
+/** @type {__VLS_StyleScopedClasses['site-table-wrap']} */ ;
+/** @type {__VLS_StyleScopedClasses['site-table']} */ ;
+/** @type {__VLS_StyleScopedClasses['engineer-project-table']} */ ;
+/** @type {__VLS_StyleScopedClasses['site-project-cell']} */ ;
+/** @type {__VLS_StyleScopedClasses['secondary-button']} */ ;
+/** @type {__VLS_StyleScopedClasses['small']} */ ;
 /** @type {__VLS_StyleScopedClasses['site-toolbar']} */ ;
 /** @type {__VLS_StyleScopedClasses['panel']} */ ;
 /** @type {__VLS_StyleScopedClasses['ledger-toolbar']} */ ;
 /** @type {__VLS_StyleScopedClasses['table-search']} */ ;
+/** @type {__VLS_StyleScopedClasses['panel']} */ ;
+/** @type {__VLS_StyleScopedClasses['engineer-spending-scope']} */ ;
 /** @type {__VLS_StyleScopedClasses['site-table-wrap']} */ ;
 /** @type {__VLS_StyleScopedClasses['panel']} */ ;
 /** @type {__VLS_StyleScopedClasses['ledger-table-wrap']} */ ;
@@ -723,6 +881,7 @@ if (__VLS_ctx.showForm) {
 /** @type {__VLS_StyleScopedClasses['ledger-reference']} */ ;
 /** @type {__VLS_StyleScopedClasses['ledger-reference']} */ ;
 /** @type {__VLS_StyleScopedClasses['plain']} */ ;
+/** @type {__VLS_StyleScopedClasses['ledger-site']} */ ;
 /** @type {__VLS_StyleScopedClasses['ledger-site']} */ ;
 /** @type {__VLS_StyleScopedClasses['ledger-description']} */ ;
 /** @type {__VLS_StyleScopedClasses['ledger-credit']} */ ;
@@ -742,7 +901,7 @@ if (__VLS_ctx.showForm) {
 /** @type {__VLS_StyleScopedClasses['form-field']} */ ;
 /** @type {__VLS_StyleScopedClasses['form-field']} */ ;
 /** @type {__VLS_StyleScopedClasses['form-field']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
+/** @type {__VLS_StyleScopedClasses['full']} */ ;
 /** @type {__VLS_StyleScopedClasses['form-field']} */ ;
 /** @type {__VLS_StyleScopedClasses['full']} */ ;
 /** @type {__VLS_StyleScopedClasses['form-error']} */ ;
@@ -766,9 +925,9 @@ const __VLS_self = (await import('vue')).defineComponent({
             Trash2: Trash2,
             WalletCards: WalletCards,
             X: X,
+            employeeId: employeeId,
             ledger: ledger,
             transactions: transactions,
-            sites: sites,
             loading: loading,
             saving: saving,
             error: error,
@@ -777,11 +936,19 @@ const __VLS_self = (await import('vue')).defineComponent({
             editingId: editingId,
             search: search,
             typeFilter: typeFilter,
+            projectFilter: projectFilter,
+            siteFilter: siteFilter,
             page: page,
             pageSize: pageSize,
             form: form,
             canManage: canManage,
             canDelete: canDelete,
+            canManagePurchases: canManagePurchases,
+            projectSpending: projectSpending,
+            availableSites: availableSites,
+            scopedSpending: scopedSpending,
+            spendingTotal: spendingTotal,
+            scopeActive: scopeActive,
             filtered: filtered,
             pageCount: pageCount,
             visible: visible,

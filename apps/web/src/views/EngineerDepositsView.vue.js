@@ -4,20 +4,12 @@ import { ArrowDownToLine, ChevronLeft, ChevronRight, CircleDollarSign, Landmark,
 import { api } from '../services/api';
 import { useAuthStore } from '../stores/auth';
 import { addDemoEngineerDeposit, buildDemoEngineerAccounts } from '../data/engineerDeposits';
-import { employeeProjectOptions } from '../data/sitePurchases';
 import { employeeOptions } from '../data/assignments';
-import { projects } from '../data/projects';
-import { projectSites } from '../data/projectSites';
 const auth = useAuthStore();
 const router = useRouter();
 const demoMode = import.meta.env.VITE_DEMO_MODE !== 'false';
 const accounts = ref(buildDemoEngineerAccounts());
-const projectOptions = ref(projects.map((item) => ({ id: item.id, code: item.code, name: item.name })));
-const employeeOptionsByProject = ref(employeeProjectOptions.map((assignment) => {
-    const employee = employeeOptions.find((item) => item.id === assignment.employeeId);
-    return { id: assignment.employeeId, employeeCode: employee?.employeeCode ?? '', name: employee?.name ?? `Engineer #${assignment.employeeId}`, projectId: assignment.projectId };
-}));
-const siteOptions = ref(projectSites.map((item) => ({ id: item.id, projectId: item.projectId, name: item.name })));
+const employees = ref(employeeOptions.map((item) => ({ id: item.id, employeeCode: item.employeeCode, name: item.name })));
 const loading = ref(false);
 const saving = ref(false);
 const error = ref('');
@@ -28,14 +20,12 @@ const balanceFilter = ref('all');
 const page = ref(1);
 const pageSize = 12;
 const today = new Date().toISOString().slice(0, 10);
-const form = reactive({ employeeId: 0, projectId: 0, siteId: null, depositDate: today, amount: 0, referenceNo: '', notes: '' });
+const form = reactive({ employeeId: 0, depositDate: today, amount: 0, referenceNo: '', notes: '' });
 const canManage = computed(() => auth.hasPermission('engineer_deposits.manage'));
-const filteredEmployees = computed(() => employeeOptionsByProject.value.filter((item) => item.projectId === form.projectId));
-const filteredSites = computed(() => siteOptions.value.filter((item) => item.projectId === form.projectId));
 const filtered = computed(() => {
     const term = search.value.trim().toLowerCase();
     return accounts.value.filter((item) => {
-        const matchesSearch = !term || [item.employeeName, item.employeeCode, item.projectName, item.projectCode].some((value) => String(value ?? '').toLowerCase().includes(term));
+        const matchesSearch = !term || [item.employeeName, item.employeeCode].some((value) => String(value ?? '').toLowerCase().includes(term));
         const matchesBalance = balanceFilter.value === 'all' || (balanceFilter.value === 'available' && item.balance >= 0) || (balanceFilter.value === 'overspent' && item.balance < 0);
         return matchesSearch && matchesBalance;
     });
@@ -44,9 +34,6 @@ const pageCount = computed(() => Math.max(1, Math.ceil(filtered.value.length / p
 const visible = computed(() => filtered.value.slice((page.value - 1) * pageSize, page.value * pageSize));
 const totals = computed(() => accounts.value.reduce((result, item) => ({ deposited: result.deposited + Number(item.deposited), purchased: result.purchased + Number(item.purchased), balance: result.balance + Number(item.balance), transactions: result.transactions + Number(item.depositCount) }), { deposited: 0, purchased: 0, balance: 0, transactions: 0 }));
 watch([search, balanceFilter], () => { page.value = 1; });
-watch(() => form.projectId, () => { if (!filteredEmployees.value.some((item) => item.id === form.employeeId))
-    form.employeeId = 0; if (!filteredSites.value.some((item) => item.id === form.siteId))
-    form.siteId = null; });
 onMounted(async () => {
     if (demoMode)
         return;
@@ -57,9 +44,7 @@ onMounted(async () => {
             api('/engineer-deposits/options'),
         ]);
         accounts.value = summary.accounts;
-        projectOptions.value = options.projects;
-        employeeOptionsByProject.value = options.employees;
-        siteOptions.value = options.sites;
+        employees.value = options.employees;
     }
     catch (reason) {
         error.value = reason instanceof Error ? reason.message : 'Could not load engineer balances.';
@@ -68,13 +53,13 @@ onMounted(async () => {
         loading.value = false;
     }
 });
-function money(value) { return new Intl.NumberFormat('en-BD', { style: 'currency', currency: 'BDT', maximumFractionDigits: 0 }).format(Number(value)); }
+function money(value) { return new Intl.NumberFormat('en-BD', { style: 'currency', currency: 'BDT', minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(Number(value)); }
 function date(value) { return value ? new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(value)) : 'No activity'; }
-function openForm() { Object.assign(form, { employeeId: 0, projectId: 0, siteId: null, depositDate: today, amount: 0, referenceNo: '', notes: '' }); formError.value = ''; showForm.value = true; }
+function openForm() { Object.assign(form, { employeeId: 0, depositDate: today, amount: 0, referenceNo: '', notes: '' }); formError.value = ''; showForm.value = true; }
 async function saveDeposit() {
     formError.value = '';
-    if (!form.projectId || !form.employeeId || !form.depositDate || Number(form.amount) <= 0) {
-        formError.value = 'Select the project and engineer, then enter a positive deposit amount.';
+    if (!form.employeeId || !form.depositDate || Number(form.amount) <= 0) {
+        formError.value = 'Select an engineer and enter a positive deposit amount.';
         return;
     }
     saving.value = true;
@@ -86,7 +71,7 @@ async function saveDeposit() {
         showForm.value = false;
         if (demoMode)
             accounts.value = buildDemoEngineerAccounts();
-        await router.push(`/finance/engineer-deposits/${form.employeeId}/${form.projectId}`);
+        await router.push(`/finance/engineer-deposits/${form.employeeId}`);
     }
     catch (reason) {
         formError.value = reason instanceof Error ? reason.message : 'Could not save the deposit.';
@@ -213,7 +198,7 @@ const __VLS_22 = __VLS_21({
     size: (17),
 }, ...__VLS_functionalComponentArgsRest(__VLS_21));
 __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
-    placeholder: "Search engineer, employee code, or project…",
+    placeholder: "Search engineer or employee code…",
 });
 (__VLS_ctx.search);
 __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
@@ -262,7 +247,7 @@ else {
     __VLS_asFunctionalElement(__VLS_intrinsicElements.tbody, __VLS_intrinsicElements.tbody)({});
     for (const [item] of __VLS_getVForSourceType((__VLS_ctx.visible))) {
         __VLS_asFunctionalElement(__VLS_intrinsicElements.tr, __VLS_intrinsicElements.tr)({
-            key: (`${item.employeeId}-${item.projectId}`),
+            key: (item.employeeId),
         });
         __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
         __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
@@ -277,14 +262,6 @@ else {
         (item.employeeCode || `Employee #${item.employeeId}`);
         __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
         __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
-            ...{ class: "site-project-cell" },
-        });
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
-        (item.projectCode);
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
-        (item.projectName);
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
             ...{ class: "deposit-money credit" },
         });
         __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
@@ -292,25 +269,20 @@ else {
         __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
         (item.depositCount);
         __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
-            ...{ class: "deposit-money" },
-        });
         __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
         (__VLS_ctx.money(item.materialTotal));
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
         __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
-            ...{ class: "deposit-money" },
-        });
         __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
         (__VLS_ctx.money(item.expenseTotal));
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
         __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
         __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({
             ...{ class: "deposit-balance" },
             ...{ class: ({ negative: item.balance < 0 }) },
         });
         (__VLS_ctx.money(item.balance));
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
+        (item.projectCount);
+        (item.purchaseCount);
         __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({});
         __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({
             ...{ class: "deposit-date" },
@@ -321,11 +293,11 @@ else {
         /** @type {[typeof __VLS_components.RouterLink, typeof __VLS_components.RouterLink, ]} */ ;
         // @ts-ignore
         const __VLS_25 = __VLS_asFunctionalComponent(__VLS_24, new __VLS_24({
-            to: (`/finance/engineer-deposits/${item.employeeId}/${item.projectId}`),
+            to: (`/finance/engineer-deposits/${item.employeeId}`),
             ...{ class: "secondary-button small" },
         }));
         const __VLS_26 = __VLS_25({
-            to: (`/finance/engineer-deposits/${item.employeeId}/${item.projectId}`),
+            to: (`/finance/engineer-deposits/${item.employeeId}`),
             ...{ class: "secondary-button small" },
         }, ...__VLS_functionalComponentArgsRest(__VLS_25));
         __VLS_27.slots.default;
@@ -448,43 +420,21 @@ if (__VLS_ctx.showForm) {
         ...{ class: "form-grid two" },
     });
     __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-        ...{ class: "form-field" },
-    });
-    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-    __VLS_asFunctionalElement(__VLS_intrinsicElements.b, __VLS_intrinsicElements.b)({});
-    __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
-        value: (__VLS_ctx.form.projectId),
-        required: true,
-    });
-    __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-        value: (0),
-        disabled: true,
-    });
-    for (const [project] of __VLS_getVForSourceType((__VLS_ctx.projectOptions))) {
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-            key: (project.id),
-            value: (project.id),
-        });
-        (project.code);
-        (project.name);
-    }
-    __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-        ...{ class: "form-field" },
+        ...{ class: "form-field full" },
     });
     __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
     __VLS_asFunctionalElement(__VLS_intrinsicElements.b, __VLS_intrinsicElements.b)({});
     __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
         value: (__VLS_ctx.form.employeeId),
         required: true,
-        disabled: (!__VLS_ctx.form.projectId),
     });
     __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
         value: (0),
         disabled: true,
     });
-    for (const [employee] of __VLS_getVForSourceType((__VLS_ctx.filteredEmployees))) {
+    for (const [employee] of __VLS_getVForSourceType((__VLS_ctx.employees))) {
         __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-            key: (`${employee.id}-${employee.projectId}`),
+            key: (employee.id),
             value: (employee.id),
         });
         (employee.employeeCode || `#${employee.id}`);
@@ -514,25 +464,7 @@ if (__VLS_ctx.showForm) {
     });
     (__VLS_ctx.form.amount);
     __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-        ...{ class: "form-field" },
-    });
-    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
-    __VLS_asFunctionalElement(__VLS_intrinsicElements.select, __VLS_intrinsicElements.select)({
-        value: (__VLS_ctx.form.siteId),
-        disabled: (!__VLS_ctx.form.projectId),
-    });
-    __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-        value: (null),
-    });
-    for (const [site] of __VLS_getVForSourceType((__VLS_ctx.filteredSites))) {
-        __VLS_asFunctionalElement(__VLS_intrinsicElements.option, __VLS_intrinsicElements.option)({
-            key: (site.id),
-            value: (site.id),
-        });
-        (site.name);
-    }
-    __VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
-        ...{ class: "form-field" },
+        ...{ class: "form-field full" },
     });
     __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
     __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
@@ -597,11 +529,8 @@ if (__VLS_ctx.showForm) {
 /** @type {__VLS_StyleScopedClasses['deposit-ledger-table']} */ ;
 /** @type {__VLS_StyleScopedClasses['sr-only']} */ ;
 /** @type {__VLS_StyleScopedClasses['deposit-engineer']} */ ;
-/** @type {__VLS_StyleScopedClasses['site-project-cell']} */ ;
 /** @type {__VLS_StyleScopedClasses['deposit-money']} */ ;
 /** @type {__VLS_StyleScopedClasses['credit']} */ ;
-/** @type {__VLS_StyleScopedClasses['deposit-money']} */ ;
-/** @type {__VLS_StyleScopedClasses['deposit-money']} */ ;
 /** @type {__VLS_StyleScopedClasses['deposit-balance']} */ ;
 /** @type {__VLS_StyleScopedClasses['deposit-date']} */ ;
 /** @type {__VLS_StyleScopedClasses['secondary-button']} */ ;
@@ -615,11 +544,11 @@ if (__VLS_ctx.showForm) {
 /** @type {__VLS_StyleScopedClasses['form-grid']} */ ;
 /** @type {__VLS_StyleScopedClasses['two']} */ ;
 /** @type {__VLS_StyleScopedClasses['form-field']} */ ;
+/** @type {__VLS_StyleScopedClasses['full']} */ ;
 /** @type {__VLS_StyleScopedClasses['form-field']} */ ;
 /** @type {__VLS_StyleScopedClasses['form-field']} */ ;
 /** @type {__VLS_StyleScopedClasses['form-field']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-field']} */ ;
+/** @type {__VLS_StyleScopedClasses['full']} */ ;
 /** @type {__VLS_StyleScopedClasses['form-field']} */ ;
 /** @type {__VLS_StyleScopedClasses['full']} */ ;
 /** @type {__VLS_StyleScopedClasses['form-error']} */ ;
@@ -639,7 +568,7 @@ const __VLS_self = (await import('vue')).defineComponent({
             WalletCards: WalletCards,
             X: X,
             accounts: accounts,
-            projectOptions: projectOptions,
+            employees: employees,
             loading: loading,
             saving: saving,
             error: error,
@@ -651,8 +580,6 @@ const __VLS_self = (await import('vue')).defineComponent({
             pageSize: pageSize,
             form: form,
             canManage: canManage,
-            filteredEmployees: filteredEmployees,
-            filteredSites: filteredSites,
             filtered: filtered,
             pageCount: pageCount,
             visible: visible,

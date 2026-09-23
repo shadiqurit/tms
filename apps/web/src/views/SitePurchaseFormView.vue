@@ -26,14 +26,14 @@ const units = ref<PurchaseOption[]>([...demoUnits]);
 const expenseHeads = ref<PurchaseOption[]>([...demoExpenseHeads]);
 const sites = ref<SiteOption[]>(demoSites.map(({ id, projectId, name, address }) => ({ id, projectId, name, address })));
 const loading = ref(false); const saving = ref(false); const saved = ref(''); const error = ref('');
-const activeTab = ref<EntryTab>('materials'); const lineFormOpen = ref(false); const lineSaving = ref(false);
+const activeTab = ref<EntryTab>(route.query.entry === 'expense' ? 'expenses' : 'materials'); const lineFormOpen = ref(false); const lineSaving = ref(false);
 const materialItems = ref<MaterialLineRecord[]>([]); const expenseItems = ref<SiteExpenseLineRecord[]>([]);
 const materialPage = ref(1); const expensePage = ref(1); const pageSize = 20; const materialTotalRows = ref(0); const expenseTotalRows = ref(0);
 const lineSearch = ref(''); const pendingLineDelete = ref<{ kind: EntryTab; id: number } | null>(null); const lineDeleting = ref(false);
 const deleteOpen = ref(false); const deleteLoading = ref(false); const deleteCheck = ref<{ canDelete: boolean; references: { materials: number; expenses: number } } | null>(null); const deleting = ref(false); const deleteText = ref('');
 const counts = reactive({ materialCount: 0, materialTotal: 0, expenseCount: 0, expenseTotal: 0 });
 const today = new Date().toISOString().slice(0, 10);
-const form = reactive({ projectId: Number(route.query.projectId || 0), employeeId: 0, supplierId: null as number | null, purchaseNo: '', localSupplier: '', supplierAddress: '', purchaseDate: today, purchaseType: 'local' as 'local' | 'corporate', challanNo: '', challanDate: '', notes: '', status: 'posted' as 'draft' | 'posted' | 'cancelled' });
+const form = reactive({ projectId: Number(route.query.projectId || 0), employeeId: Number(route.query.employeeId || 0), supplierId: null as number | null, purchaseNo: '', localSupplier: '', supplierAddress: '', purchaseDate: today, purchaseType: 'local' as 'local' | 'corporate', challanNo: '', challanDate: '', notes: '', status: 'posted' as 'draft' | 'posted' | 'cancelled' });
 const materialForm = reactive({ id: null as number | null, materialId: 0, unitId: null as number | null, siteId: null as number | null, entryDate: today, quantity: 1 as number | '', unitPrice: '' as number | '', discount: '' as number | '', notes: '' });
 const expenseForm = reactive({ id: null as number | null, expenseHeadId: null as number | null, siteId: null as number | null, entryDate: today, amount: '' as number | '', notes: '' });
 

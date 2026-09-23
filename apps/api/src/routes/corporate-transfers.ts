@@ -272,7 +272,26 @@ corporateTransfersRouter.get('/', requirePermission('corporate_transfers.view'),
       ORDER BY ct.transfer_date DESC, ct.id DESC`,
     [req.user!.companyId, req.user!.roleKey, req.user!.id, search, like, like, like, like, like],
   );
-  return res.json({ transfers: rows });
+  const productNamesByTransfer = new Map<number, string[]>();
+  if (rows.length) {
+    const [products] = await db.query<RowDataPacket[]>(
+      `SELECT ctl.transfer_id AS transferId, COALESCE(p.name, c.name, 'Unspecified item') AS productName
+         FROM app_corporate_transfer_lines ctl
+         LEFT JOIN app_corporate_products p ON p.id = ctl.product_id
+         LEFT JOIN app_corporate_categories c ON c.id = ctl.category_id
+        WHERE ctl.transfer_id IN (?)
+        ORDER BY ctl.transfer_id, ctl.id`,
+      [rows.map((row) => row.id)],
+    );
+    for (const product of products) {
+      const transferId = Number(product.transferId);
+      const names = productNamesByTransfer.get(transferId) ?? [];
+      const name = String(product.productName);
+      if (names.length < 2 && !names.includes(name)) names.push(name);
+      productNamesByTransfer.set(transferId, names);
+    }
+  }
+  return res.json({ transfers: rows.map((row) => ({ ...row, productNames: productNamesByTransfer.get(Number(row.id)) ?? [] })) });
 });
 
 corporateTransfersRouter.post('/', requirePermission('corporate_transfers.manage'), async (req: AuthRequest, res) => {
